@@ -1,25 +1,23 @@
-import { frame } from ".";
-import { CANVAS, FAST_FORWARD_DIV, TILE_SIZE } from "../consts";
+import { TILE_SIZE } from "../consts";
 import { level01 } from "../levels";
-import { activeTower, construction, game, id, money, mouse } from "../state";
-// eslint-disable-next-line
-import { TowerBlueprint, towerBlueprints, towers } from "../towers";
-import { getValueAtPosition } from "../utils";
-
-const handleFastForwardToggle = () => {
-  game.toggleFastForward();
-  FAST_FORWARD_DIV.innerHTML = game.isFastForward ? ">" : ">>";
-};
+import { TowerBlueprint } from "../state/models/TowerBlueprint"; // eslint-disable-line
+import { store } from "../state/RootStore";
+import { towerBlueprints, towers } from "../towers";
+import { arePositionsEqual, getValueAtPosition } from "../utils";
 
 const handleConstructionPreview = (blueprint: TowerBlueprint) => {
-  activeTower.set(null);
-  if (blueprint.cost <= money.value) {
-    construction.setBlueprint(blueprint);
-    construction.showPreview();
+  const { game, construction } = store;
+  const { setBlueprint, setIsVisible, setActiveTower } = construction;
+  const { money } = game;
+  setActiveTower(null);
+  if (blueprint.cost <= money) {
+    setBlueprint(blueprint);
+    setIsVisible(true);
   }
 };
 
 const handleMouseMove = (event: MouseEvent) => {
+  const { mouse } = store;
   const { offsetX, offsetY } = event;
   const currentTile = {
     x: Math.floor(offsetX / TILE_SIZE),
@@ -28,40 +26,44 @@ const handleMouseMove = (event: MouseEvent) => {
   mouse.setPosition(currentTile);
 };
 
-const handleMouseLeave = () => {
-  mouse.setPosition(null);
-};
-
 export const handleEscape = () => {
-  construction.hidePreview();
-  activeTower.set(null);
+  const { construction } = store;
+  const { setIsVisible, setActiveTower } = construction;
+  setIsVisible(false);
+  setActiveTower(null);
 };
 
 const handleMouseClick = () => {
+  const { mouse, construction } = store;
   const { position } = mouse;
-  const { blueprint, displayPreview } = construction;
+  const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
 
   // Set active tower click
-  if (getValueAtPosition(position, level01.map) === 4) {
-    construction.hidePreview();
-    activeTower.set(position);
+  if (getValueAtPosition(position, level01.map) === 5) {
+    const { game } = store;
+    const { towers } = game;
+    const tower = towers.find(tower => arePositionsEqual(tower.position, position));
+    setIsVisible(false);
+    setActiveTower(tower);
     return;
   }
 
   // Idle click
-  if (getValueAtPosition(position, level01.map) !== 0 || !displayPreview || !blueprint) {
+  if (getValueAtPosition(position, level01.map) !== 0 || !isVisible || !blueprint) {
     handleEscape();
     return;
   }
 
   // Construction click
   const { cost } = blueprint;
-  money.decreaseBy(cost);
-  level01.map[position.y][position.x] = 4;
+  const { game } = store;
+  const { decreaseMoneyBy } = game;
+  decreaseMoneyBy(cost);
+  level01.map[position.y][position.x] = 5;
   towers.push({
     ...blueprint,
-    id: id.get(),
-    position,
+    id: "todo uidv4",
+    position: { x: position.x, y: position.y },
     isFiring: false,
   });
 
@@ -69,15 +71,16 @@ const handleMouseClick = () => {
 };
 
 const handleKeyDown = (e: KeyboardEvent) => {
-  if (e.key === "p") {
-    game.togglePaused();
-    requestAnimationFrame(frame);
-  }
-  if (e.key === "f") {
-    handleFastForwardToggle();
-  }
+  const { engine } = store;
+  const { isFastForward, setIsFastForward, isPaused, setIsPaused } = engine;
   if (e.key === "Escape") {
     handleEscape();
+  }
+  if (e.key === "f") {
+    setIsFastForward(!isFastForward);
+  }
+  if (e.key === "p") {
+    setIsPaused(!isPaused);
   }
   if (isFinite(Number(e.key))) {
     const index = Number(e.key) - 1;
@@ -88,14 +91,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
 };
 
 export const registerEventHandlers = () => {
-  CANVAS.addEventListener("mousemove", handleMouseMove);
-  CANVAS.addEventListener("mouseleave", handleMouseLeave);
-  CANVAS.addEventListener("click", handleMouseClick);
+  document.addEventListener("mousemove", handleMouseMove);
+  document.addEventListener("click", handleMouseClick);
   document.addEventListener("keydown", handleKeyDown);
-  FAST_FORWARD_DIV.addEventListener("click", handleFastForwardToggle);
-  towerBlueprints.forEach(tower => {
-    document.querySelector(`.tower-slot.${tower.type}`).addEventListener("click", () => {
-      handleConstructionPreview(tower);
-    });
-  });
 };

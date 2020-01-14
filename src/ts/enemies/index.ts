@@ -1,71 +1,60 @@
-import { CTX, HEADQUARTERS, SPAWN_LOCATION, TILE_SIZE } from "../consts";
-import { finishLevel } from "../engine";
-// eslint-disable-next-line
-import { level01, Position } from "../levels";
-import { hqHealth, id, money, tick, waves } from "../state";
-// eslint-disable-next-line
-import { Color } from "../towers";
-import { arePositionsEqual, breadthFirstSearch, getUniquePosition, move } from "../utils";
+import { CTX, HEADQUARTERS, TILE_SIZE } from "../consts";
+import { level01 } from "../levels";
+import { Enemy } from "../state/models/Enemy"; // eslint-disable-line
+import { EnemyBlueprint } from "../state/models/EnemyBlueprint"; // eslint-disable-line
+import { Position } from "../state/models/Position"; // eslint-disable-line
+import { store } from "../state/RootStore";
+import { Color } from "../towers"; // eslint-disable-line
+import { arePositionsEqual, breadthFirstSearch, move } from "../utils";
 
 export type Route = Position[];
 
 export type EnemyType = "normal" | "heavy";
 
-export interface EnemyBlueprint {
-  type: EnemyType;
-  color: Color;
-  originalHealth: number;
-  health: number;
-  radius: number;
-  reward: number;
-  speed: number;
-  intervalInTicks: number;
-}
-
-export interface Enemy extends EnemyBlueprint {
-  id: number;
-  position: Position;
-  route: Route;
-  isUnderFire: boolean;
-}
-
 const callNextWave = () => {
-  if (waves.value < level01.waves.length - 1) {
-    waves.increase();
+  const { game } = store;
+  const { currentWave, setCurrentWave } = game;
+  if (currentWave < level01.waves.length - 1) {
+    setCurrentWave(currentWave + 1);
   }
 };
 
-export const spawnEnemy = (enemyBlueprint: EnemyBlueprint) => {
-  activeEnemies.push({
+export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: Position) => {
+  const newEnemy = {
     ...enemyBlueprint,
-    id: id.get(),
+    id: "test",
     isUnderFire: false,
-    position: getUniquePosition(level01.map, 2),
+    position: { x: spawnLocation.x, y: spawnLocation.y },
+    health: enemyBlueprint.originalHealth,
     route: breadthFirstSearch({
       end: HEADQUARTERS,
       map: level01.map,
-      start: SPAWN_LOCATION,
+      start: { x: spawnLocation.x, y: spawnLocation.y },
     }),
-  });
+  };
+  activeEnemies.push(newEnemy);
 };
-
+//
 export const spawnEnemies = () => {
-  if (tick.value % 30 === 0) {
-    if (level01.waves[waves.value]) {
-      if (level01.waves[waves.value].amount) {
-        level01.waves[waves.value].amount--;
-        const blueprint = enemyBlueprints.find(
-          enemy => enemy.type === level01.waves[waves.value].type,
-        );
-        spawnEnemy(blueprint);
-      }
+  const { engine, game } = store;
+  const { tick, waveTick, incrementWaveTick } = engine;
+  const { currentWave } = game;
+  if (tick % 30 === 0) {
+    if (level01.waves[currentWave]) {
+      const wave = level01.waves[currentWave];
+      wave.forEach(subWave => {
+        if (subWave.amount) {
+          subWave.amount--;
+          const blueprint = enemyBlueprints.find(enemy => enemy.type === subWave.type);
+          spawnEnemy(blueprint, subWave.spawnLocation());
+        }
+      });
     }
   }
-  if (level01.waves[waves.value].amount < 1) {
-    tick.increaseWaveTick();
-    if (tick.waveTick % 1200 === 0) {
+  if (level01.waves[currentWave].every(subWave => subWave.amount < 1)) {
+    incrementWaveTick();
+    if (waveTick > 1 && waveTick % 1200 === 0) {
       callNextWave();
-      tick.waveTick = 0;
     }
   }
 };
@@ -73,16 +62,18 @@ export const spawnEnemies = () => {
 export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
     const { position, route, health, reward, speed } = enemy;
+    const { game } = store;
+    const { increaseMoneyBy, decreaseHealth, currentWave } = game;
     if (health <= 0) {
-      money.increaseBy(reward);
+      increaseMoneyBy(reward);
     }
     if (arePositionsEqual(position, HEADQUARTERS)) {
-      hqHealth.decrease();
+      decreaseHealth();
     }
     if (arePositionsEqual(position, HEADQUARTERS) || health <= 0) {
       enemies.splice(enemies.indexOf(enemy), 1);
-      if (waves.value === level01.waves.length - 1 && enemies.length === 0) {
-        finishLevel();
+      if (currentWave === level01.waves.length - 1 && enemies.length === 0) {
+        // console.log("game won!");
       }
       return null;
     }
@@ -131,7 +122,6 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     color: "red",
     radius: 0.05,
     originalHealth: 75,
-    health: 75,
     reward: 2,
     speed: 2.5,
     intervalInTicks: 30,
@@ -141,7 +131,6 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     color: "pink",
     radius: 0.05,
     originalHealth: 150,
-    health: 150,
     reward: 3,
     speed: 2,
     intervalInTicks: 25,

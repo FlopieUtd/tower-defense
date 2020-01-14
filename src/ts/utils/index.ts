@@ -31,7 +31,7 @@ export const getAdjacentPositions = (position: Position, map: Map) => {
   const directions = [left, right, up, down];
   return directions.filter(
     (position: Position) =>
-      getValueAtPosition(position, map) > 0 && getValueAtPosition(position, map) < 4,
+      getValueAtPosition(position, map) > 0 && getValueAtPosition(position, map) < 5,
   );
 };
 
@@ -56,7 +56,7 @@ export const breadthFirstSearch = (problem: { map: Map; start: Position; end: Po
     }
   }
   // No path possible
-  return [];
+  throw new Error("No path possible with BFS!");
 };
 
 export const areColliding = (a: Circle, b: Circle) => {
@@ -65,7 +65,7 @@ export const areColliding = (a: Circle, b: Circle) => {
   const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
   return distance < a.radius + b.radius;
 };
-
+// // //
 export const move = (current: Position, next: Position, speed: number) => {
   const moveSpeed = speed / 100;
   if (current.x < next.x) {

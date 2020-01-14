@@ -1,7 +1,7 @@
-import { CANVAS, STARTING_HQ_HEALTH, STARTING_MONEY, TILE_SIZE } from "../consts";
+import { CANVAS, TILE_SIZE } from "../consts";
 import { activeEnemies, renderEnemies, spawnEnemies, updateEnemies } from "../enemies";
 import { level01, renderBuildings, renderMap } from "../levels";
-import { activeTower, game, hqHealth, money, tick, waves } from "../state";
+import { store } from "../state/RootStore";
 import {
   renderActiveTowerUI,
   renderConstructionUI,
@@ -9,35 +9,46 @@ import {
   towers,
   updateTowers,
 } from "../towers";
-import { initializeUI } from "../ui";
 import { registerEventHandlers } from "./event_handlers";
 
-const checkGameState = () => {
-  if (hqHealth.value <= 0) {
-    // tslint:disable-next-line
-    console.log("game over!");
-    game.setGameOver(true);
+const checkGameState = (health: number) => {
+  if (health <= 0) {
+    const { engine } = store;
+    const { setIsGameOver } = engine;
+    setIsGameOver(true);
   }
 };
 
-export const finishLevel = () => {
-  // tslint:disable-next-line
-  console.log("level won!");
+export const getStars = (health: number) => {
+  if (health === 20) {
+    return 3;
+  }
+  if (health >= 12) {
+    return 2;
+  }
+  if (health >= 6) {
+    return 1;
+  }
+  return 0;
 };
 
 const update = () => {
-  tick.increase();
+  const { engine } = store;
+  const { incrementTick } = engine;
+  incrementTick();
   spawnEnemies();
   updateEnemies(activeEnemies);
   updateTowers(towers, activeEnemies);
 };
 
 const render = () => {
+  const { construction } = store;
+  const { activeTower } = construction;
   renderMap(level01.map);
   renderTowers(towers);
   renderEnemies(activeEnemies);
   renderConstructionUI();
-  renderActiveTowerUI(activeTower.value);
+  renderActiveTowerUI(activeTower);
   renderBuildings(level01.map);
 };
 
@@ -49,20 +60,23 @@ let last = timestamp();
 let delta = 0;
 
 export const frame = () => {
+  const { engine, game } = store;
+  const { isPaused, isFastForward, isGameOver } = engine;
+  const { health } = game;
   const now = timestamp();
-  const step = game.isFastForward ? 1 / 240 : 1 / 60;
+  const step = isFastForward ? 1 / 240 : 1 / 60;
   delta = delta + Math.min(1, (now - last) / 1000);
   while (delta > step) {
     delta = delta - step;
-    if (!game.isPaused && !game.isGameOver) {
+    if (!isPaused && !isGameOver) {
       update();
     }
   }
   last = now;
 
   render();
-  checkGameState();
-  if (!game.isGameOver) {
+  checkGameState(health);
+  if (!isGameOver) {
     requestAnimationFrame(frame);
   }
 };
@@ -75,13 +89,12 @@ const initializeCanvas = canvas => {
 };
 
 export const startGame = () => {
+  const { game } = store;
+  const { setCurrentWave } = game;
   initializeCanvas(CANVAS);
-  initializeUI();
   registerEventHandlers();
 
-  money.set(STARTING_MONEY);
-  hqHealth.set(STARTING_HQ_HEALTH);
-  waves.set(0);
+  setCurrentWave(0);
 
   requestAnimationFrame(frame);
 };

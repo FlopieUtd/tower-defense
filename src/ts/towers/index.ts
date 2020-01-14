@@ -1,27 +1,13 @@
 import { CTX, TILE_SIZE } from "../consts";
-// eslint-disable-next-line
-import { Enemy } from "../enemies";
-// eslint-disable-next-line
-import { level01, Position } from "../levels";
-import { construction, money, mouse } from "../state";
+import { level01 } from "../levels";
+import { Enemy } from "../state/models/Enemy"; // eslint-disable-line
+import { Tower } from "../state/models/Tower"; // eslint-disable-line
+import { TowerBlueprint } from "../state/models/TowerBlueprint"; // eslint-disable-line
+import { store } from "../state/RootStore";
 import { areColliding, getValueAtPosition } from "../utils";
 
 export type TowerType = "turret" | "flamethrower";
 export type Color = "blue" | "red" | "pink";
-
-export interface TowerBlueprint {
-  radius: number;
-  damagePerFrame: number;
-  type: TowerType;
-  cost: number;
-  color: Color;
-}
-
-export interface Tower extends TowerBlueprint {
-  id: number;
-  position: Position;
-  isFiring: boolean;
-}
 
 export const towerBlueprints: TowerBlueprint[] = [
   {
@@ -49,7 +35,7 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
         enemiesInReach.push(enemy);
       }
     });
-    enemiesInReach.sort((a, b) => a.id - b.id);
+    enemiesInReach.sort((a, b) => a.route.length - b.route.length);
     if (enemiesInReach.length) {
       tower.isFiring = true;
       const { damagePerFrame } = tower;
@@ -93,19 +79,16 @@ export const renderActiveTowerUI = (tower: Tower) => {
 };
 
 export const renderConstructionUI = () => {
-  const { displayPreview, blueprint } = construction;
+  const { mouse, construction } = store;
+  const { isVisible, blueprint } = construction;
   if (!blueprint) {
     return;
   }
   const { cost, color, radius } = blueprint;
   const { position } = mouse;
-  const { value } = money;
-  if (
-    displayPreview &&
-    position &&
-    getValueAtPosition(position, level01.map) === 0 &&
-    cost <= value
-  ) {
+  const { game } = store;
+  const { money } = game;
+  if (isVisible && position && getValueAtPosition(position, level01.map) === 0 && cost <= money) {
     CTX.fillStyle = "rgba(255,255,255,.1)";
     CTX.beginPath();
     CTX.arc(
@@ -125,8 +108,8 @@ export const renderConstructionUI = () => {
       TILE_SIZE - 20,
     );
   }
-  if (cost > value) {
-    construction.hidePreview();
+  if (cost > money) {
+    construction.setIsVisible(false);
   }
 };
 
