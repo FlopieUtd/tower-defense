@@ -1,8 +1,7 @@
 import { TILE_SIZE } from "../consts";
-import { level01 } from "../levels";
 import { TowerBlueprint } from "../state/models/TowerBlueprint"; // eslint-disable-line
 import { store } from "../state/RootStore";
-import { towerBlueprints, towers } from "../towers";
+import { constructTower, towerBlueprints } from "../towers";
 import { arePositionsEqual, getValueAtPosition } from "../utils";
 
 const handleConstructionPreview = (blueprint: TowerBlueprint) => {
@@ -34,14 +33,13 @@ export const handleEscape = () => {
 };
 
 const handleMouseClick = () => {
-  const { mouse, construction } = store;
+  const { mouse, construction, game } = store;
   const { position } = mouse;
   const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
+  const { level, towers, decreaseMoneyBy } = game;
 
   // Set active tower click
-  if (getValueAtPosition(position, level01.map) === 5) {
-    const { game } = store;
-    const { towers } = game;
+  if (getValueAtPosition(position, level.map) === 5) {
     const tower = towers.find(tower => arePositionsEqual(tower.position, position));
     setIsVisible(false);
     setActiveTower(tower);
@@ -49,23 +47,15 @@ const handleMouseClick = () => {
   }
 
   // Idle click
-  if (getValueAtPosition(position, level01.map) !== 0 || !isVisible || !blueprint) {
+  if (getValueAtPosition(position, level.map) !== 0 || !isVisible || !blueprint) {
     handleEscape();
     return;
   }
 
   // Construction click
   const { cost } = blueprint;
-  const { game } = store;
-  const { decreaseMoneyBy } = game;
   decreaseMoneyBy(cost);
-  level01.map[position.y][position.x] = 5;
-  towers.push({
-    ...blueprint,
-    id: "todo uidv4",
-    position: { x: position.x, y: position.y },
-    isFiring: false,
-  });
+  constructTower(blueprint);
 
   construction.setPosition(null);
 };

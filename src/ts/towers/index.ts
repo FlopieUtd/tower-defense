@@ -1,5 +1,5 @@
+import { uuid } from "uuidv4";
 import { CTX, TILE_SIZE } from "../consts";
-import { level01 } from "../levels";
 import { Enemy } from "../state/models/Enemy"; // eslint-disable-line
 import { Tower } from "../state/models/Tower"; // eslint-disable-line
 import { TowerBlueprint } from "../state/models/TowerBlueprint"; // eslint-disable-line
@@ -12,36 +12,101 @@ export type Color = "blue" | "red" | "pink";
 export const towerBlueprints: TowerBlueprint[] = [
   {
     type: "turret",
-    damagePerFrame: 1,
+    damagePerShot: 8,
+    shootsEveryNthTick: 8,
     radius: 1.5,
     cost: 100,
     color: "blue",
+    armorPiercing: false,
+    targetsAir: true,
+    targetsGround: true,
   },
   {
     type: "flamethrower",
-    damagePerFrame: 2,
+    damagePerShot: 2,
+    shootsEveryNthTick: 1,
     radius: 1.2,
     cost: 150,
     color: "red",
+    armorPiercing: false,
+    targetsAir: false,
+    targetsGround: true,
   },
+  // {
+  //   type: "sniper",
+  //   damagePerShot: 150,
+  //   shootsEveryNthTick: 120,
+  //   radius: 3,
+  //   cost: 150,
+  //   color: "cyan",
+  //   armorPiercing: false,
+  //   targetsAir: false,
+  //   targetsGround: true,
+  // },
+  // {
+  //   type: "canon",
+  //   damagePerShot: 200,
+  //   shootsEveryNthTick: 120,
+  //   radius: 2,
+  //   cost: 150,
+  //   color: "purple",
+  //   armorPiercing: true,
+  //   targetsAir: false,
+  //   targetsGround: true,
+  // },
+  // {
+  //   type: "anti-air",
+  //   damagePerShot: 50,
+  //   shootsEveryNthTick: 20,
+  //   radius: 2,
+  //   cost: 150,
+  //   color: "yellow",
+  //   armorPiercing: false,
+  //   targetsGround: false,
+  //   targetsAir: true,
+  // },
 ];
+
+export const constructTower = (blueprint: TowerBlueprint) => {
+  const { mouse, game } = store;
+  const { position } = mouse;
+  const { addTower, level } = game;
+  level.setValueOnMap(position, 5);
+  const ticksUntilNextShot = blueprint.shootsEveryNthTick;
+  const tower = {
+    ...blueprint,
+    id: uuid(),
+    position: { x: position.x, y: position.y },
+    isFiring: false,
+    originalTicksUntilNextShot: ticksUntilNextShot,
+    ticksUntilNextShot,
+  };
+  addTower(Tower.create(tower));
+};
 
 export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
   towers.forEach(tower => {
-    tower.isFiring = false;
+    const { setIsFiring, decrementTicksUntilNextshot, setTicksUntilNextShot } = tower;
+    setIsFiring(false);
     const enemiesInReach: Enemy[] = [];
-    enemies.forEach(enemy => {
-      if (areColliding(tower, enemy)) {
-        enemiesInReach.push(enemy);
+    if (tower.ticksUntilNextShot > 0) {
+      decrementTicksUntilNextshot();
+    }
+    if (tower.ticksUntilNextShot === 0) {
+      setTicksUntilNextShot(tower.shootsEveryNthTick);
+      enemies.forEach(enemy => {
+        if (areColliding(tower, enemy)) {
+          enemiesInReach.push(enemy);
+        }
+      });
+      enemiesInReach.sort((a, b) => a.route.length - b.route.length);
+      if (enemiesInReach.length) {
+        setIsFiring(true);
+        const { damagePerShot } = tower;
+        const target = enemiesInReach[0];
+        target.isUnderFire = true;
+        target.health -= damagePerShot;
       }
-    });
-    enemiesInReach.sort((a, b) => a.route.length - b.route.length);
-    if (enemiesInReach.length) {
-      tower.isFiring = true;
-      const { damagePerFrame } = tower;
-      const target = enemiesInReach[0];
-      target.isUnderFire = true;
-      target.health -= damagePerFrame;
     }
   });
 };
@@ -79,16 +144,15 @@ export const renderActiveTowerUI = (tower: Tower) => {
 };
 
 export const renderConstructionUI = () => {
-  const { mouse, construction } = store;
+  const { mouse, construction, game } = store;
   const { isVisible, blueprint } = construction;
+  const { level, money } = game;
   if (!blueprint) {
     return;
   }
   const { cost, color, radius } = blueprint;
   const { position } = mouse;
-  const { game } = store;
-  const { money } = game;
-  if (isVisible && position && getValueAtPosition(position, level01.map) === 0 && cost <= money) {
+  if (isVisible && position && getValueAtPosition(position, level.map) === 0 && cost <= money) {
     CTX.fillStyle = "rgba(255,255,255,.1)";
     CTX.beginPath();
     CTX.arc(
@@ -112,5 +176,3 @@ export const renderConstructionUI = () => {
     construction.setIsVisible(false);
   }
 };
-
-export const towers: Tower[] = [];

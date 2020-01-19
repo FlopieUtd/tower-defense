@@ -4,7 +4,7 @@ import { store } from "../../../state/RootStore";
 
 export const TopBar = observer(() => {
   const { engine, game } = store;
-  const { isFastForward, setIsFastForward } = engine;
+  const { isFastForward, setIsFastForward, waveTick } = engine;
   const { money, currentWave } = game;
   const handleFastForwardToggle = () => {
     setIsFastForward(!isFastForward);

@@ -1,4 +1,4 @@
-import { Instance, types } from "mobx-state-tree";
+import { Instance, types } from "mobx-state-tree"; // eslint-disable-line
 
 export const EnemyBlueprint = types.model({
   type: types.string,

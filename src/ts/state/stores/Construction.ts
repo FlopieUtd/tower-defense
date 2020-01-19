@@ -1,5 +1,5 @@
 import { types } from "mobx-state-tree";
-import { Position } from "../models/Position";
+import { Position, PositionType } from "../models/Position"; // eslint-disable-line
 import { Tower } from "../models/Tower";
 import { TowerBlueprint } from "../models/TowerBlueprint";
 
@@ -17,7 +17,7 @@ export const ConstructionStore = types
     setBlueprint(blueprint: TowerBlueprint) {
       self.blueprint = blueprint;
     },
-    setPosition(position: Position | null) {
+    setPosition(position: PositionType | null) {
       self.position = position;
     },
     setActiveTower(tower: Tower) {

@@ -1,5 +1,6 @@
-import { CTX, SPAWN_LOCATION1, SPAWN_LOCATION2, TILE_SIZE } from "../consts";
+import { CTX, TILE_SIZE } from "../consts";
 import { store } from "../state/RootStore";
+import { getUniquePosition } from "../utils";
 
 export interface Position {
   x: number;
@@ -7,41 +8,41 @@ export interface Position {
 }
 export type Map = number[][];
 
-export const level01 = {
-  map: [
-    [0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-    [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-    [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3],
+export interface Wave {
+  amount: number;
+  type: string;
+  spawnLocation: Position;
+}
+
+export const maps = {
+  1: [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 2, 1, 1, 0, 1, 0, 1, 0, 1, 1, 4, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ],
-  waves: [
-    [
-      { amount: 10, type: "normal", spawnLocation: () => SPAWN_LOCATION1 },
-      { amount: 10, type: "normal", spawnLocation: () => SPAWN_LOCATION2 },
-    ],
-    [
-      { amount: 20, type: "normal", spawnLocation: () => SPAWN_LOCATION1 },
-      { amount: 10, type: "normal", spawnLocation: () => SPAWN_LOCATION2 },
-    ],
-    [
-      { amount: 8, type: "heavy", spawnLocation: () => SPAWN_LOCATION1 },
-      { amount: 8, type: "heavy", spawnLocation: () => SPAWN_LOCATION2 },
-    ],
-    [
-      { amount: 10, type: "heavy", spawnLocation: () => SPAWN_LOCATION1 },
-      { amount: 25, type: "normal", spawnLocation: () => SPAWN_LOCATION2 },
-    ],
-    [
-      { amount: 15, type: "heavy", spawnLocation: () => SPAWN_LOCATION1 },
-      { amount: 15, type: "heavy", spawnLocation: () => SPAWN_LOCATION2 },
-    ],
+};
+
+export const waves = {
+  1: [
+    [{ amount: 20, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) }],
+    [{ amount: 20, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) }],
+    [{ amount: 8, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],
+    [{ amount: 10, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],
+    [{ amount: 15, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],
   ],
+};
+
+export const level01 = {
+  map: maps[1],
+  waves: waves[1],
+  startingMoney: 200,
 };
 
 export const renderMap = (map: Map) => {

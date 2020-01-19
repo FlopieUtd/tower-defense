@@ -24,4 +24,8 @@ export const EngineStore = types
     incrementWaveTick() {
       self.waveTick++;
     },
+    resetTicks() {
+      self.tick = 0;
+      self.waveTick = 0;
+    },
   }));
