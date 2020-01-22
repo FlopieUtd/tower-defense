@@ -31,8 +31,8 @@ export const maps = {
 
 export const waves = {
   1: [
-    [{ amount: 20, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) }],
-    [{ amount: 20, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) }],
+    [{ amount: 120, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) }],
+    [{ amount: 120, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) }],
     [{ amount: 8, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],
     [{ amount: 10, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],
     [{ amount: 15, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],

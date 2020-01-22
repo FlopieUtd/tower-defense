@@ -1,8 +1,9 @@
 import { CANVAS, TILE_SIZE } from "../consts";
-import { activeEnemies, renderEnemies, spawnEnemies, updateEnemies } from "../enemies";
+import { renderEnemies, spawnEnemies, updateEnemies } from "../enemies";
 import { level01, renderBuildings, renderMap } from "../levels"; // eslint-disable-line
 import { Level } from "../state/models/Level"; // eslint-disable-line
 import { store } from "../state/RootStore";
+import { enemies } from "../state/v2/Enemies";
 import { renderActiveTowerUI, renderConstructionUI, renderTowers, updateTowers } from "../towers";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
 
@@ -34,8 +35,8 @@ const update = () => {
   const { towers } = game;
   incrementTick();
   spawnEnemies();
-  updateEnemies(activeEnemies);
-  updateTowers(towers, activeEnemies);
+  updateEnemies(enemies);
+  updateTowers(towers, enemies);
 };
 
 const render = () => {
@@ -44,7 +45,7 @@ const render = () => {
   const { towers } = game;
   renderMap(level01.map);
   renderTowers(towers);
-  renderEnemies(activeEnemies);
+  renderEnemies(enemies);
   renderConstructionUI();
   renderActiveTowerUI(activeTower);
   renderBuildings(level01.map);

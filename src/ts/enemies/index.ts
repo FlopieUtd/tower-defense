@@ -1,11 +1,12 @@
 import { CTX, HEADQUARTERS, TILE_SIZE } from "../consts";
-import { Enemy } from "../state/models/Enemy"; // eslint-disable-line
-import { EnemyBlueprint } from "../state/models/EnemyBlueprint"; // eslint-disable-line
 import { PositionType } from "../state/models/Position"; // eslint-disable-line
 import { store } from "../state/RootStore";
 import { arePositionsEqual, breadthFirstSearch, move } from "../utils";
 
 import { uuid } from "uuidv4";
+import { enemies } from "../state/v2/Enemies";
+import { Enemy } from "../state/v2/Enemy"; // eslint-disable-line
+import { EnemyBlueprint } from "../state/v2/EnemyBlueprint"; // eslint-disable-line
 
 export type Route = Position[];
 
@@ -34,7 +35,7 @@ export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: Positi
       start: { x: spawnLocation.x, y: spawnLocation.y },
     }),
   };
-  activeEnemies.push(newEnemy);
+  enemies.push(newEnemy);
 };
 //
 export const spawnEnemies = () => {
@@ -126,7 +127,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     originalHealth: 75,
     reward: 2,
     speed: 2.5,
-    intervalInTicks: 30,
+    intervalInTicks: 5,
   },
   {
     type: "heavy",
@@ -138,4 +139,3 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     intervalInTicks: 25,
   },
 ];
-export const activeEnemies: Enemy[] = [];

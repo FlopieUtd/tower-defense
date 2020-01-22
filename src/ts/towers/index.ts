@@ -1,9 +1,9 @@
 import { uuid } from "uuidv4";
 import { CTX, TILE_SIZE } from "../consts";
-import { Enemy } from "../state/models/Enemy"; // eslint-disable-line
 import { Tower } from "../state/models/Tower"; // eslint-disable-line
 import { TowerBlueprint } from "../state/models/TowerBlueprint"; // eslint-disable-line
 import { store } from "../state/RootStore";
+import { Enemy } from "../state/v2/Enemy"; // eslint-disable-line
 import { areColliding, getValueAtPosition } from "../utils";
 
 export type TowerType = "turret" | "flamethrower";
@@ -19,7 +19,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     color: "blue",
     armorPiercing: false,
     targetsAir: true,
-    targetsGround: true,
+    targetsGround: true, //
   },
   {
     type: "flamethrower",
