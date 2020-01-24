@@ -1,11 +1,13 @@
 import { TILE_SIZE } from "../consts";
-import { TowerBlueprint } from "../state/models/TowerBlueprint"; // eslint-disable-line
-import { store } from "../state/RootStore";
+import { construction } from "../state/v2/Construction";
+import { engine } from "../state/v2/Engine";
+import { game } from "../state/v2/Game";
+import { mouse } from "../state/v2/Mouse";
+import { TowerBlueprint } from "../state/v2/TowerBlueprint"; // eslint-disable-line
 import { constructTower, towerBlueprints } from "../towers";
 import { arePositionsEqual, getValueAtPosition } from "../utils";
 
-const handleConstructionPreview = (blueprint: TowerBlueprint) => {
-  const { game, construction } = store;
+export const handleConstructionPreview = (blueprint: TowerBlueprint) => {
   const { setBlueprint, setIsVisible, setActiveTower } = construction;
   const { money } = game;
   setActiveTower(null);
@@ -16,7 +18,6 @@ const handleConstructionPreview = (blueprint: TowerBlueprint) => {
 };
 
 const handleMouseMove = (event: MouseEvent) => {
-  const { mouse } = store;
   const { offsetX, offsetY } = event;
   const currentTile = {
     x: Math.floor(offsetX / TILE_SIZE),
@@ -26,14 +27,12 @@ const handleMouseMove = (event: MouseEvent) => {
 };
 
 export const handleEscape = () => {
-  const { construction } = store;
   const { setIsVisible, setActiveTower } = construction;
   setIsVisible(false);
   setActiveTower(null);
 };
 
 const handleMouseClick = () => {
-  const { mouse, construction, game } = store;
   const { position } = mouse;
   const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
   const { level, towers, decreaseMoneyBy } = game;
@@ -61,7 +60,6 @@ const handleMouseClick = () => {
 };
 
 const handleKeyDown = (e: KeyboardEvent) => {
-  const { engine } = store;
   const { isFastForward, setIsFastForward, isPaused, setIsPaused } = engine;
   if (e.key === "Escape") {
     handleEscape();

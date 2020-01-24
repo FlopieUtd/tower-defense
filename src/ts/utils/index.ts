@@ -1,8 +1,7 @@
-// eslint-disable-next-line
-import { Map, Position } from "../levels";
+import { Map, PositionType } from "../levels"; // eslint-disable-line
 
 export interface Circle {
-  position: Position;
+  position: PositionType;
   radius: number;
 }
 
@@ -20,24 +19,28 @@ export const getUniquePosition = (map: Map, key: number) => {
 
 export const getValueAtPosition = ({ x, y }, map: Map) => (map[y] ? map[y][x] : null);
 
-export const arePositionsEqual = (a: Position, b: Position) =>
+export const arePositionsEqual = (a: PositionType, b: PositionType) =>
   Object.keys(a).length === Object.keys(b).length && Object.keys(a).every(key => a[key] === b[key]);
 
-export const getAdjacentPositions = (position: Position, map: Map) => {
+export const getAdjacentPositions = (position: PositionType, map: Map) => {
   const left = { x: position.x - 1, y: position.y };
   const right = { x: position.x + 1, y: position.y };
   const up = { x: position.x, y: position.y - 1 };
   const down = { x: position.x, y: position.y + 1 };
   const directions = [left, right, up, down];
   return directions.filter(
-    (position: Position) =>
+    (position: PositionType) =>
       getValueAtPosition(position, map) > 0 && getValueAtPosition(position, map) < 5,
   );
 };
 
-export const positionToId = (position: Position) => position.x + position.y * 1000;
+export const positionToId = (position: PositionType) => position.x + position.y * 1000;
 
-export const breadthFirstSearch = (problem: { map: Map; start: Position; end: Position }) => {
+export const breadthFirstSearch = (problem: {
+  map: Map;
+  start: PositionType;
+  end: PositionType;
+}) => {
   const { map, start, end } = problem;
   const closed = new Set();
   const queue = [];
@@ -66,7 +69,7 @@ export const areColliding = (a: Circle, b: Circle) => {
   return distance < a.radius + b.radius;
 };
 // // //
-export const move = (current: Position, next: Position, speed: number) => {
+export const move = (current: PositionType, next: PositionType, speed: number) => {
   const moveSpeed = speed / 100;
   if (current.x < next.x) {
     return { x: Number((current.x += moveSpeed).toFixed(4)), y: current.y };

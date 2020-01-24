@@ -1,18 +1,27 @@
 import { CTX, TILE_SIZE } from "../consts";
-import { store } from "../state/RootStore";
+import { game } from "../state/v2/Game";
+import { Wave } from "../state/v2/Wave"; // eslint-disable-line
 import { getUniquePosition } from "../utils";
 
-export interface Position {
+export interface PositionType {
   x: number;
   y: number;
 }
 export type Map = number[][];
 
-export interface Wave {
+export interface LevelType {
+  map: Map;
+  waves: WaveGroup[];
+  startingMoney: number;
+}
+
+export interface WaveType {
   amount: number;
   type: string;
-  spawnLocation: Position;
+  spawnLocation: PositionType;
 }
+
+export type WaveGroup = Wave[];
 
 export const maps = {
   1: [
@@ -30,16 +39,10 @@ export const maps = {
 };
 
 export const waves = {
-  1: [
-    [{ amount: 120, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) }],
-    [{ amount: 120, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) }],
-    [{ amount: 8, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],
-    [{ amount: 10, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],
-    [{ amount: 15, type: "heavy", spawnLocation: getUniquePosition(maps[1], 2) }],
-  ],
+  1: [[new Wave({ amount: 20, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) })]],
 };
 
-export const level01 = {
+export const level01: LevelType = {
   map: maps[1],
   waves: waves[1],
   startingMoney: 200,
@@ -59,7 +62,6 @@ export const renderMap = (map: Map) => {
 };
 
 export const renderBuildings = (map: Map) => {
-  const { game } = store;
   const { health } = game;
   map.forEach((row, y) => {
     row.forEach((tile, x) => {

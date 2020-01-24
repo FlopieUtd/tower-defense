@@ -1,9 +1,11 @@
 import React from "react";
-import { TowerBlueprint } from "../../../state/models/TowerBlueprint";
+import { handleConstructionPreview } from "../../../engine/event_handlers";
+import { TowerBlueprint } from "../../../state/v2/TowerBlueprint"; // eslint-disable-line
+import { towerBlueprints } from "../../../towers";
 
-export const TowerSlot = (blueprint: TowerBlueprint) => {
+export const TowerSlot = ({ blueprint, index }: { blueprint: TowerBlueprint; index: number }) => {
   const handleClick = () => {
-    //
+    handleConstructionPreview(towerBlueprints[index]);
   };
 
   return (

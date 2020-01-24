@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import React from "react"; // eslint-disable-line
-import { store } from "../../../state/RootStore";
+import { engine } from "../../../state/v2/Engine";
+import { game } from "../../../state/v2/Game";
 
 export const TopBar = observer(() => {
-  const { engine, game } = store;
-  const { isFastForward, setIsFastForward, waveTick } = engine;
-  const { money, currentWave } = game;
+  const { isFastForward, setIsFastForward } = engine;
+  const { money, currentWaveGroup } = game;
   const handleFastForwardToggle = () => {
     setIsFastForward(!isFastForward);
   };
@@ -13,7 +13,7 @@ export const TopBar = observer(() => {
   return (
     <div className="top-bar">
       <div>
-        <div>Wave: {currentWave + 1}</div>
+        <div>Wave: {currentWaveGroup + 1}</div>
         <div>
           Money: <span className="coin-num">{money}</span>
         </div>

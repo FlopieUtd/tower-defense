@@ -1,11 +1,11 @@
 import React from "react";
 import { restartLevel } from "../../../engine";
 import { level01 } from "../../../levels";
-import { Level } from "../../../state/models/Level";
+import { Level } from "../../../state/v2/Level";
 
 export const LoseScreen = () => {
   const handleTryAgain = () => {
-    restartLevel(Level.create(level01));
+    restartLevel(new Level(level01));
   };
 
   return (

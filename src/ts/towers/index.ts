@@ -1,9 +1,11 @@
 import { uuid } from "uuidv4";
 import { CTX, TILE_SIZE } from "../consts";
-import { Tower } from "../state/models/Tower"; // eslint-disable-line
-import { TowerBlueprint } from "../state/models/TowerBlueprint"; // eslint-disable-line
-import { store } from "../state/RootStore";
+import { construction } from "../state/v2/Construction";
 import { Enemy } from "../state/v2/Enemy"; // eslint-disable-line
+import { game } from "../state/v2/Game";
+import { mouse } from "../state/v2/Mouse";
+import { Tower } from "../state/v2/Tower"; // eslint-disable-line
+import { TowerBlueprint } from "../state/v2/TowerBlueprint"; // eslint-disable-line
 import { areColliding, getValueAtPosition } from "../utils";
 
 export type TowerType = "turret" | "flamethrower";
@@ -68,7 +70,6 @@ export const towerBlueprints: TowerBlueprint[] = [
 ];
 
 export const constructTower = (blueprint: TowerBlueprint) => {
-  const { mouse, game } = store;
   const { position } = mouse;
   const { addTower, level } = game;
   level.setValueOnMap(position, 5);
@@ -81,7 +82,7 @@ export const constructTower = (blueprint: TowerBlueprint) => {
     originalTicksUntilNextShot: ticksUntilNextShot,
     ticksUntilNextShot,
   };
-  addTower(Tower.create(tower));
+  addTower(new Tower(tower));
 };
 
 export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
@@ -144,7 +145,6 @@ export const renderActiveTowerUI = (tower: Tower) => {
 };
 
 export const renderConstructionUI = () => {
-  const { mouse, construction, game } = store;
   const { isVisible, blueprint } = construction;
   const { level, money } = game;
   if (!blueprint) {

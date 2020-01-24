@@ -1,15 +1,16 @@
 import { CANVAS, TILE_SIZE } from "../consts";
 import { renderEnemies, spawnEnemies, updateEnemies } from "../enemies";
 import { level01, renderBuildings, renderMap } from "../levels"; // eslint-disable-line
-import { Level } from "../state/models/Level"; // eslint-disable-line
-import { store } from "../state/RootStore";
-import { enemies } from "../state/v2/Enemies";
+import { construction } from "../state/v2/Construction";
+import { enemies } from "../state/v2/Enemy";
+import { engine } from "../state/v2/Engine";
+import { game } from "../state/v2/Game";
+import { Level } from "../state/v2/Level";
 import { renderActiveTowerUI, renderConstructionUI, renderTowers, updateTowers } from "../towers";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
 
 const checkGameState = (health: number) => {
   if (health <= 0) {
-    const { engine } = store;
     const { setIsGameOver } = engine;
     handleEscape();
     setIsGameOver(true);
@@ -30,7 +31,6 @@ export const getStars = (health: number) => {
 };
 
 const update = () => {
-  const { engine, game } = store;
   const { incrementTick } = engine;
   const { towers } = game;
   incrementTick();
@@ -40,7 +40,6 @@ const update = () => {
 };
 
 const render = () => {
-  const { construction, game } = store;
   const { activeTower } = construction;
   const { towers } = game;
   renderMap(level01.map);
@@ -59,7 +58,6 @@ let last = timestamp();
 let delta = 0;
 
 export const frame = () => {
-  const { engine, game } = store;
   const { isPaused, isFastForward, isGameOver } = engine;
   const { health } = game;
   const now = timestamp();
@@ -88,7 +86,6 @@ const initializeCanvas = canvas => {
 };
 
 export const resetGameState = () => {
-  const { game, engine } = store;
   const { resetHealth, setCurrentWave } = game;
   const { resetTicks, setIsFastForward } = engine;
 
@@ -100,7 +97,6 @@ export const resetGameState = () => {
 
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
-  const { game, engine } = store;
   const { setCurrentWave, setMoney, setLevel } = game;
   const { setIsGameOver } = engine;
 
@@ -120,5 +116,5 @@ export const restartLevel = (level: Level) => {
 export const initializeGame = () => {
   initializeCanvas(CANVAS);
   registerEventHandlers();
-  startLevel(Level.create(level01));
+  startLevel(new Level(level01));
 };

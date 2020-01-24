@@ -1,5 +1,5 @@
 import { uuid } from "uuidv4";
-import { PositionType } from "../models/Position"; // eslint-disable-line
+import { PositionType } from "../../levels"; // eslint-disable-line
 import { EnemyBlueprint } from "./EnemyBlueprint";
 
 export class Enemy extends EnemyBlueprint {
@@ -14,3 +14,5 @@ export class Enemy extends EnemyBlueprint {
     this.id = uuid();
   }
 }
+
+export const enemies: Enemy[] = [];
