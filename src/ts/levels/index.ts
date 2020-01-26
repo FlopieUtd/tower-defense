@@ -1,6 +1,7 @@
 import { CTX, TILE_SIZE } from "../consts";
-import { game } from "../state/v2/Game";
-import { Wave } from "../state/v2/Wave"; // eslint-disable-line
+import { game } from "../state/Game";
+import { Level } from "../state/Level";
+import { Wave } from "../state/Wave"; // eslint-disable-line
 import { getUniquePosition } from "../utils";
 
 export interface PositionType {
@@ -28,11 +29,11 @@ export const maps = {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
-    [0, 2, 1, 1, 0, 1, 0, 1, 0, 1, 1, 4, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ],
@@ -42,10 +43,31 @@ export const waves = {
   1: [[new Wave({ amount: 20, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) })]],
 };
 
+export const levelCreator = () => {
+  return new Level({
+    map: [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ],
+    waves: [
+      [new Wave({ amount: 20, type: "normal", spawnLocation: getUniquePosition(maps[1], 2) })],
+    ],
+    startingMoney: 400,
+  });
+};
+
 export const level01: LevelType = {
   map: maps[1],
   waves: waves[1],
-  startingMoney: 200,
+  startingMoney: 600,
 };
 
 export const renderMap = (map: Map) => {

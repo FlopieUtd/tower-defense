@@ -1,4 +1,4 @@
-import { LevelType, Map, PositionType, WaveGroup } from "../../levels"; // eslint-disable-line
+import { LevelType, Map, PositionType, WaveGroup } from "../levels"; // eslint-disable-line
 
 export class Level {
   public map: Map;
@@ -6,7 +6,7 @@ export class Level {
   public startingMoney: number;
   constructor(level: LevelType) {
     const { map, waves, startingMoney } = level;
-    this.map = map;
+    this.map = [...map];
     this.waves = waves;
     this.startingMoney = startingMoney;
 

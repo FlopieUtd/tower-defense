@@ -3,8 +3,8 @@ import { observable } from "mobx";
 export class Engine {
   public isPaused: boolean = false;
   @observable public isFastForward: boolean = false;
-  public isGameOver: boolean = false;
-  public isGameWon: boolean = false;
+  @observable public isGameOver: boolean = false;
+  @observable public isGameWon: boolean = false;
   public tick: number = 0;
   public waveTick: number = 0;
 

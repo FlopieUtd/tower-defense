@@ -1,11 +1,11 @@
 import { uuid } from "uuidv4";
 import { CTX, TILE_SIZE } from "../consts";
-import { construction } from "../state/v2/Construction";
-import { Enemy } from "../state/v2/Enemy"; // eslint-disable-line
-import { game } from "../state/v2/Game";
-import { mouse } from "../state/v2/Mouse";
-import { Tower } from "../state/v2/Tower"; // eslint-disable-line
-import { TowerBlueprint } from "../state/v2/TowerBlueprint"; // eslint-disable-line
+import { construction } from "../state/Construction";
+import { Enemy } from "../state/Enemy"; // eslint-disable-line
+import { game } from "../state/Game";
+import { mouse } from "../state/Mouse";
+import { Tower } from "../state/Tower"; // eslint-disable-line
+import { TowerBlueprint } from "../state/TowerBlueprint"; // eslint-disable-line
 import { areColliding, getValueAtPosition } from "../utils";
 
 export type TowerType = "turret" | "flamethrower";
@@ -34,39 +34,39 @@ export const towerBlueprints: TowerBlueprint[] = [
     targetsAir: false,
     targetsGround: true,
   },
-  // {
-  //   type: "sniper",
-  //   damagePerShot: 150,
-  //   shootsEveryNthTick: 120,
-  //   radius: 3,
-  //   cost: 150,
-  //   color: "cyan",
-  //   armorPiercing: false,
-  //   targetsAir: false,
-  //   targetsGround: true,
-  // },
-  // {
-  //   type: "canon",
-  //   damagePerShot: 200,
-  //   shootsEveryNthTick: 120,
-  //   radius: 2,
-  //   cost: 150,
-  //   color: "purple",
-  //   armorPiercing: true,
-  //   targetsAir: false,
-  //   targetsGround: true,
-  // },
-  // {
-  //   type: "anti-air",
-  //   damagePerShot: 50,
-  //   shootsEveryNthTick: 20,
-  //   radius: 2,
-  //   cost: 150,
-  //   color: "yellow",
-  //   armorPiercing: false,
-  //   targetsGround: false,
-  //   targetsAir: true,
-  // },
+  {
+    type: "sniper",
+    damagePerShot: 150,
+    shootsEveryNthTick: 120,
+    radius: 3,
+    cost: 150,
+    color: "cyan",
+    armorPiercing: false,
+    targetsAir: false,
+    targetsGround: true,
+  },
+  {
+    type: "canon",
+    damagePerShot: 200,
+    shootsEveryNthTick: 120,
+    radius: 2,
+    cost: 150,
+    color: "purple",
+    armorPiercing: true,
+    targetsAir: false,
+    targetsGround: true,
+  },
+  {
+    type: "anti-air",
+    damagePerShot: 50,
+    shootsEveryNthTick: 20,
+    radius: 2,
+    cost: 150,
+    color: "yellow",
+    armorPiercing: false,
+    targetsGround: false,
+    targetsAir: true,
+  },
 ];
 
 export const constructTower = (blueprint: TowerBlueprint) => {

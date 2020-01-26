@@ -2,11 +2,11 @@ import { CTX, HEADQUARTERS, TILE_SIZE } from "../consts";
 import { arePositionsEqual, breadthFirstSearch, move } from "../utils";
 
 import { uuid } from "uuidv4";
-import { PositionType } from "../levels"; // eslint-disable-line
-import { enemies, Enemy } from "../state/v2/Enemy"; // eslint-disable-line
-import { EnemyBlueprint } from "../state/v2/EnemyBlueprint"; // eslint-disable-line
-import { engine } from "../state/v2/Engine";
-import { game } from "../state/v2/Game";
+import { level01, PositionType } from "../levels"; // eslint-disable-line
+import { enemies, Enemy } from "../state/Enemy"; // eslint-disable-line
+import { EnemyBlueprint } from "../state/EnemyBlueprint"; // eslint-disable-line
+import { engine } from "../state/Engine";
+import { game } from "../state/Game";
 
 export type Route = PositionType[];
 
@@ -71,8 +71,8 @@ export const updateEnemies = (enemies: Enemy[]) => {
     }
     if (arePositionsEqual(position, HEADQUARTERS) || health <= 0) {
       enemies.splice(enemies.indexOf(enemy), 1);
-      if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0) {
-        // console.log("game won!");
+      if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
+        engine.setIsGameWon(true);
       }
       return null;
     }

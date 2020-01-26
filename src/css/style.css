@@ -107,16 +107,6 @@ canvas {
   font-size: 11px;
 }
 
-.result-screen {
-  height: 300px;
-  width: 500px;
-  background: #222;
-  position: absolute;
-  border: 2px solid #333;
-  box-sizing: border-box;
-  display: none;
-}
-
 .lose-screen {
   background: black;
   display: flex;
@@ -129,7 +119,6 @@ canvas {
 }
 
 .lose-screen h1 {
-  color: magenta;
   margin-bottom: 20px;
 }
 
@@ -141,4 +130,8 @@ canvas {
   text-transform: uppercase;
   border: 2px solid #444;
   cursor: pointer;
+}
+
+.stars {
+  font-size: 32px;
 }

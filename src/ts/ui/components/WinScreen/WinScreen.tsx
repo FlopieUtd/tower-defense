@@ -1,15 +1,17 @@
 import React from "react";
-import { restartLevel } from "../../../engine";
+import { getStars, restartLevel } from "../../../engine";
 import { levelCreator } from "../../../levels";
+import { game } from "../../../state/Game";
 
-export const LoseScreen = () => {
+export const WinScreen = () => {
   const handleTryAgain = () => {
     restartLevel(levelCreator());
   };
 
   return (
     <div className="lose-screen">
-      <h1>Game over</h1>
+      <h1>Game won!</h1>
+      <div className="stars">{getStars(game.health).map(star => (star ? "★" : "☆"))}</div>
       <button onClick={handleTryAgain}>Try again</button>
     </div>
   );

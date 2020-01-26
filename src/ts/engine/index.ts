@@ -1,11 +1,11 @@
 import { CANVAS, TILE_SIZE } from "../consts";
 import { renderEnemies, spawnEnemies, updateEnemies } from "../enemies";
-import { level01, renderBuildings, renderMap } from "../levels"; // eslint-disable-line
-import { construction } from "../state/v2/Construction";
-import { enemies } from "../state/v2/Enemy";
-import { engine } from "../state/v2/Engine";
-import { game } from "../state/v2/Game";
-import { Level } from "../state/v2/Level";
+import { level01, levelCreator, renderBuildings, renderMap } from "../levels"; // eslint-disable-line
+import { construction } from "../state/Construction";
+import { enemies } from "../state/Enemy";
+import { engine } from "../state/Engine";
+import { game } from "../state/Game";
+import { Level } from "../state/Level"; // eslint-disable-line
 import { renderActiveTowerUI, renderConstructionUI, renderTowers, updateTowers } from "../towers";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
 
@@ -19,15 +19,15 @@ const checkGameState = (health: number) => {
 
 export const getStars = (health: number) => {
   if (health === 20) {
-    return 3;
+    return [1, 1, 1];
   }
   if (health >= 12) {
-    return 2;
+    return [1, 1, 0];
   }
   if (health >= 6) {
-    return 1;
+    return [1, 0, 0];
   }
-  return 0;
+  return [0, 0, 0];
 };
 
 const update = () => {
@@ -97,13 +97,16 @@ export const resetGameState = () => {
 
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
-  const { setCurrentWave, setMoney, setLevel } = game;
-  const { setIsGameOver } = engine;
+  const { setCurrentWave, setMoney, setLevel, resetTowers } = game;
+  const { setIsGameOver, setIsGameWon } = engine;
 
   setLevel(level);
   setCurrentWave(0);
   setMoney(startingMoney);
+  resetTowers();
+
   setIsGameOver(false);
+  setIsGameWon(false);
 
   requestAnimationFrame(frame);
 };
@@ -116,5 +119,5 @@ export const restartLevel = (level: Level) => {
 export const initializeGame = () => {
   initializeCanvas(CANVAS);
   registerEventHandlers();
-  startLevel(new Level(level01));
+  startLevel(levelCreator());
 };

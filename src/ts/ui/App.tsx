@@ -1,13 +1,14 @@
 import { observer } from "mobx-react";
 import React, { useEffect } from "react"; // eslint-disable-line
 import { initializeGame } from "../engine";
-import { engine } from "../state/v2/Engine";
+import { engine } from "../state/Engine";
 import { BottomBar } from "./components/BottomBar/BottomBar"; // eslint-disable-line
 import { LoseScreen } from "./components/LoseScreen/LoseScreen";
 import { TopBar } from "./components/TopBar/TopBar"; // eslint-disable-line
+import { WinScreen } from "./components/WinScreen/WinScreen";
 
 export const App = observer(() => {
-  const { isGameOver } = engine;
+  const { isGameOver, isGameWon } = engine;
   useEffect(() => {
     initializeGame();
   }, []);
@@ -16,6 +17,7 @@ export const App = observer(() => {
     <>
       <TopBar />
       {isGameOver && <LoseScreen />}
+      {isGameWon && <WinScreen />}
       <BottomBar />
     </>
   );

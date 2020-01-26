@@ -1,5 +1,5 @@
 import { uuid } from "uuidv4";
-import { PositionType } from "../../levels"; // eslint-disable-line
+import { PositionType } from "../levels"; // eslint-disable-line
 import { TowerBlueprint } from "./TowerBlueprint";
 
 export class Tower extends TowerBlueprint {
@@ -33,5 +33,3 @@ export class Tower extends TowerBlueprint {
     this.ticksUntilNextShot--;
   }
 }
-
-export const enemies: Tower[] = [];

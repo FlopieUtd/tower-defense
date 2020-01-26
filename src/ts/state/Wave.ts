@@ -1,4 +1,4 @@
-import { PositionType, WaveType } from "../../levels"; // eslint-disable-line
+import { PositionType, WaveType } from "../levels"; // eslint-disable-line
 
 export class Wave {
   public amount: number;

@@ -1,12 +1,11 @@
 import { observable } from "mobx";
-import { WaveGroup } from "../../levels"; // eslint-disable-line
+import { WaveGroup } from "../levels"; // eslint-disable-line
 import { Level } from "./Level"; // eslint-disable-line
 import { Tower } from "./Tower"; // eslint-disable-line
 
 export class Game {
   @observable public money: number = 0;
-  public health: number = 20;
-  public waves: WaveGroup[] = [];
+  @observable public health: number = 20;
   @observable public currentWaveGroup: number = 0;
   public level: Level;
   public towers: Tower[] = [];
@@ -19,6 +18,7 @@ export class Game {
     this.resetHealth = this.resetHealth.bind(this);
     this.setCurrentWave = this.setCurrentWave.bind(this);
     this.addTower = this.addTower.bind(this);
+    this.resetTowers = this.resetTowers.bind(this);
     this.setLevel = this.setLevel.bind(this);
   }
 
@@ -42,6 +42,9 @@ export class Game {
   }
   public addTower(tower: Tower) {
     this.towers.push(tower);
+  }
+  public resetTowers() {
+    this.towers = [];
   }
   public setLevel(level: Level) {
     this.level = level;

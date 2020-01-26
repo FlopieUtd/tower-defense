@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react"; // eslint-disable-line
-import { engine } from "../../../state/v2/Engine";
-import { game } from "../../../state/v2/Game";
+import { engine } from "../../../state/Engine";
+import { game } from "../../../state/Game";
 
 export const TopBar = observer(() => {
   const { isFastForward, setIsFastForward } = engine;

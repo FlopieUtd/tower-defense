@@ -1,9 +1,9 @@
 import { TILE_SIZE } from "../consts";
-import { construction } from "../state/v2/Construction";
-import { engine } from "../state/v2/Engine";
-import { game } from "../state/v2/Game";
-import { mouse } from "../state/v2/Mouse";
-import { TowerBlueprint } from "../state/v2/TowerBlueprint"; // eslint-disable-line
+import { construction } from "../state/Construction";
+import { engine } from "../state/Engine";
+import { game } from "../state/Game";
+import { mouse } from "../state/Mouse";
+import { TowerBlueprint } from "../state/TowerBlueprint"; // eslint-disable-line
 import { constructTower, towerBlueprints } from "../towers";
 import { arePositionsEqual, getValueAtPosition } from "../utils";
 
