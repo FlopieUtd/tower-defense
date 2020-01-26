@@ -4,7 +4,7 @@ import { levelCreator } from "../../../levels";
 
 export const LoseScreen = () => {
   const handleTryAgain = () => {
-    restartLevel(levelCreator());
+    restartLevel(levelCreator(1));
   };
 
   return (

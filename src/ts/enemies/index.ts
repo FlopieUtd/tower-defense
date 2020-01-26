@@ -1,8 +1,9 @@
 import { CTX, HEADQUARTERS, TILE_SIZE } from "../consts";
-import { arePositionsEqual, breadthFirstSearch, move } from "../utils";
+import { arePositionsEqual, breadthFirstSearch, getUniquePosition, move } from "../utils";
 
 import { uuid } from "uuidv4";
-import { level01, PositionType } from "../levels"; // eslint-disable-line
+import { handleEscape } from "../engine/event_handlers";
+import { PositionType } from "../levels"; // eslint-disable-line
 import { enemies, Enemy } from "../state/Enemy"; // eslint-disable-line
 import { EnemyBlueprint } from "../state/EnemyBlueprint"; // eslint-disable-line
 import { engine } from "../state/Engine";
@@ -19,18 +20,18 @@ const callNextWave = () => {
   }
 };
 
-export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: PositionType) => {
+export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: number) => {
   const { level } = game;
   const newEnemy = {
     ...enemyBlueprint,
     id: uuid(),
     isUnderFire: false,
-    position: { x: spawnLocation.x, y: spawnLocation.y },
+    position: getUniquePosition(level.map, spawnLocation),
     health: enemyBlueprint.originalHealth,
     route: breadthFirstSearch({
       end: HEADQUARTERS,
       map: level.map,
-      start: { x: spawnLocation.x, y: spawnLocation.y },
+      start: getUniquePosition(level.map, spawnLocation),
     }),
   };
   enemies.push(newEnemy);
@@ -72,6 +73,7 @@ export const updateEnemies = (enemies: Enemy[]) => {
     if (arePositionsEqual(position, HEADQUARTERS) || health <= 0) {
       enemies.splice(enemies.indexOf(enemy), 1);
       if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
+        handleEscape();
         engine.setIsGameWon(true);
       }
       return null;

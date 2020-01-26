@@ -1,6 +1,6 @@
 import { CANVAS, TILE_SIZE } from "../consts";
 import { renderEnemies, spawnEnemies, updateEnemies } from "../enemies";
-import { level01, levelCreator, renderBuildings, renderMap } from "../levels"; // eslint-disable-line
+import { levelCreator, levels, renderBuildings, renderMap } from "../levels"; // eslint-disable-line
 import { construction } from "../state/Construction";
 import { enemies } from "../state/Enemy";
 import { engine } from "../state/Engine";
@@ -42,12 +42,13 @@ const update = () => {
 const render = () => {
   const { activeTower } = construction;
   const { towers } = game;
-  renderMap(level01.map);
+  const { activeLevel } = engine;
+  renderMap(levels[activeLevel].map);
   renderTowers(towers);
   renderEnemies(enemies);
   renderConstructionUI();
   renderActiveTowerUI(activeTower);
-  renderBuildings(level01.map);
+  renderBuildings(levels[activeLevel].map);
 };
 
 const timestamp = () =>
@@ -79,10 +80,11 @@ export const frame = () => {
 };
 
 const initializeCanvas = canvas => {
-  canvas.width = level01.map[0].length * TILE_SIZE;
-  canvas.style.width = `${level01.map[0].length * TILE_SIZE}px`;
-  canvas.height = level01.map.length * TILE_SIZE;
-  canvas.style.height = `${level01.map.length * TILE_SIZE}px`;
+  const { activeLevel } = engine;
+  canvas.width = levels[activeLevel].map[0].length * TILE_SIZE;
+  canvas.style.width = `${levels[activeLevel].map[0].length * TILE_SIZE}px`;
+  canvas.height = levels[activeLevel].map.length * TILE_SIZE;
+  canvas.style.height = `${levels[activeLevel].map.length * TILE_SIZE}px`;
 };
 
 export const resetGameState = () => {
@@ -119,5 +121,5 @@ export const restartLevel = (level: Level) => {
 export const initializeGame = () => {
   initializeCanvas(CANVAS);
   registerEventHandlers();
-  startLevel(levelCreator());
+  startLevel(levelCreator(1));
 };
