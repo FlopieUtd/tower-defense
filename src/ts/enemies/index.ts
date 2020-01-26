@@ -1,10 +1,10 @@
-import { CTX, HEADQUARTERS, TILE_SIZE } from "../consts";
+import { CTX, TILE_SIZE } from "../consts";
 import { arePositionsEqual, breadthFirstSearch, getUniquePosition, move } from "../utils";
 
 import { uuid } from "uuidv4";
 import { handleEscape } from "../engine/event_handlers";
 import { PositionType } from "../levels"; // eslint-disable-line
-import { enemies, Enemy } from "../state/Enemy"; // eslint-disable-line
+import { Enemy } from "../state/Enemy"; // eslint-disable-line
 import { EnemyBlueprint } from "../state/EnemyBlueprint"; // eslint-disable-line
 import { engine } from "../state/Engine";
 import { game } from "../state/Game";
@@ -21,7 +21,7 @@ const callNextWave = () => {
 };
 
 export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: number) => {
-  const { level } = game;
+  const { level, addEnemy } = game;
   const newEnemy = {
     ...enemyBlueprint,
     id: uuid(),
@@ -29,18 +29,18 @@ export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: number
     position: getUniquePosition(level.map, spawnLocation),
     health: enemyBlueprint.originalHealth,
     route: breadthFirstSearch({
-      end: HEADQUARTERS,
+      end: getUniquePosition(level.map, 4),
       map: level.map,
       start: getUniquePosition(level.map, spawnLocation),
     }),
   };
-  enemies.push(newEnemy);
+  addEnemy(newEnemy);
 };
 
 export const spawnEnemies = () => {
   const { tick, waveTick, incrementWaveTick } = engine;
   const { currentWaveGroup, level } = game;
-  if (tick % 30 === 0) {
+  if (tick % 10 === 0) {
     if (level.waves[currentWaveGroup]) {
       const waveGroup = level.waves[currentWaveGroup];
       waveGroup.forEach(wave => {
@@ -67,10 +67,10 @@ export const updateEnemies = (enemies: Enemy[]) => {
     if (health <= 0) {
       increaseMoneyBy(reward);
     }
-    if (arePositionsEqual(position, HEADQUARTERS)) {
+    if (arePositionsEqual(position, getUniquePosition(level.map, 4))) {
       decreaseHealth();
     }
-    if (arePositionsEqual(position, HEADQUARTERS) || health <= 0) {
+    if (arePositionsEqual(position, getUniquePosition(level.map, 4)) || health <= 0) {
       enemies.splice(enemies.indexOf(enemy), 1);
       if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
         handleEscape();

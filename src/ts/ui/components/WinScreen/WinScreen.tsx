@@ -6,7 +6,9 @@ import { game } from "../../../state/Game";
 
 export const WinScreen = () => {
   const handleTryAgain = () => {
-    restartLevel(levelCreator(1));
+    const { level } = game;
+    const { levelNumber } = level;
+    restartLevel(levelCreator(levelNumber));
   };
 
   const handleContinue = () => {

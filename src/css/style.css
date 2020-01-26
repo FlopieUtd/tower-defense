@@ -135,3 +135,15 @@ canvas {
 .stars {
   font-size: 32px;
 }
+
+.level-grid {
+  display: flex;
+  flex-direction: row;
+}
+
+.level-button {
+  padding: 12px;
+  background: #333;
+  margin: 4px;
+  cursor: pointer;
+}

@@ -1,5 +1,6 @@
 import { observable } from "mobx";
 import { WaveGroup } from "../levels"; // eslint-disable-line
+import { Enemy } from "./Enemy"; // eslint-disable-line
 import { Level } from "./Level"; // eslint-disable-line
 import { Tower } from "./Tower"; // eslint-disable-line
 
@@ -9,6 +10,7 @@ export class Game {
   @observable public currentWaveGroup: number = 0;
   public level: Level;
   public towers: Tower[] = [];
+  public enemies: Enemy[] = [];
 
   constructor() {
     this.increaseMoneyBy = this.increaseMoneyBy.bind(this);
@@ -19,6 +21,8 @@ export class Game {
     this.setCurrentWave = this.setCurrentWave.bind(this);
     this.addTower = this.addTower.bind(this);
     this.resetTowers = this.resetTowers.bind(this);
+    this.addEnemy = this.addEnemy.bind(this);
+    this.resetEnemies = this.resetEnemies.bind(this);
     this.setLevel = this.setLevel.bind(this);
   }
 
@@ -45,6 +49,12 @@ export class Game {
   }
   public resetTowers() {
     this.towers = [];
+  }
+  public addEnemy(enemy: Enemy) {
+    this.enemies.push(enemy);
+  }
+  public resetEnemies() {
+    this.enemies = [];
   }
   public setLevel(level: Level) {
     this.level = level;

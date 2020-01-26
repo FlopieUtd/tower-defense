@@ -2,7 +2,6 @@ import { CANVAS, TILE_SIZE } from "../consts";
 import { renderEnemies, spawnEnemies, updateEnemies } from "../enemies";
 import { levelCreator, levels, renderBuildings, renderMap } from "../levels"; // eslint-disable-line
 import { construction } from "../state/Construction";
-import { enemies } from "../state/Enemy";
 import { engine } from "../state/Engine";
 import { game } from "../state/Game";
 import { Level } from "../state/Level"; // eslint-disable-line
@@ -32,7 +31,7 @@ export const getStars = (health: number) => {
 
 const update = () => {
   const { incrementTick } = engine;
-  const { towers } = game;
+  const { towers, enemies } = game;
   incrementTick();
   spawnEnemies();
   updateEnemies(enemies);
@@ -41,14 +40,13 @@ const update = () => {
 
 const render = () => {
   const { activeTower } = construction;
-  const { towers } = game;
-  const { activeLevel } = engine;
-  renderMap(levels[activeLevel].map);
+  const { towers, level, enemies } = game;
+  renderMap(level.map);
   renderTowers(towers);
   renderEnemies(enemies);
   renderConstructionUI();
   renderActiveTowerUI(activeTower);
-  renderBuildings(levels[activeLevel].map);
+  renderBuildings(level.map);
 };
 
 const timestamp = () =>
@@ -88,8 +86,11 @@ const initializeCanvas = canvas => {
 };
 
 export const resetGameState = () => {
-  const { resetHealth, setCurrentWave } = game;
+  const { resetHealth, setCurrentWave, resetTowers, resetEnemies } = game;
   const { resetTicks, setIsFastForward } = engine;
+
+  resetTowers();
+  resetEnemies();
 
   setIsFastForward(false);
   setCurrentWave(0);
@@ -99,22 +100,23 @@ export const resetGameState = () => {
 
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
-  const { setCurrentWave, setMoney, setLevel, resetTowers } = game;
-  const { setIsGameOver, setIsGameWon } = engine;
+  const { setCurrentWave, setMoney, setLevel } = game;
+  const { setIsGameOver, setIsGameWon, setIsMenuActive } = engine;
+
+  resetGameState();
 
   setLevel(level);
   setCurrentWave(0);
   setMoney(startingMoney);
-  resetTowers();
 
   setIsGameOver(false);
   setIsGameWon(false);
+  setIsMenuActive(false);
 
   requestAnimationFrame(frame);
 };
 
 export const restartLevel = (level: Level) => {
-  resetGameState();
   startLevel(level);
 };
 

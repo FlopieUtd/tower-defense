@@ -14,5 +14,3 @@ export class Enemy extends EnemyBlueprint {
     this.id = uuid();
   }
 }
-
-export const enemies: Enemy[] = [];
