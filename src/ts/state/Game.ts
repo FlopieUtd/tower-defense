@@ -8,6 +8,7 @@ export class Game {
   @observable public money: number = 0;
   @observable public health: number = 20;
   @observable public currentWaveGroup: number = 0;
+  @observable public starsWon = 0;
   public level: Level;
   public towers: Tower[] = [];
   public enemies: Enemy[] = [];
@@ -24,6 +25,7 @@ export class Game {
     this.addEnemy = this.addEnemy.bind(this);
     this.resetEnemies = this.resetEnemies.bind(this);
     this.setLevel = this.setLevel.bind(this);
+    this.setStarsWon = this.setStarsWon.bind(this);
   }
 
   public increaseMoneyBy(amount: number) {
@@ -58,6 +60,9 @@ export class Game {
   }
   public setLevel(level: Level) {
     this.level = level;
+  }
+  public setStarsWon(starsWon: number) {
+    this.starsWon = starsWon;
   }
 }
 

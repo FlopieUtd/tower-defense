@@ -5,6 +5,7 @@ import { construction } from "../state/Construction";
 import { engine } from "../state/Engine";
 import { game } from "../state/Game";
 import { Level } from "../state/Level"; // eslint-disable-line
+import { user } from "../state/User";
 import { renderActiveTowerUI, renderConstructionUI, renderTowers, updateTowers } from "../towers";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
 
@@ -18,15 +19,15 @@ const checkGameState = (health: number) => {
 
 export const getStars = (health: number) => {
   if (health === 20) {
-    return [1, 1, 1];
+    return 3;
   }
   if (health >= 12) {
-    return [1, 1, 0];
+    return 2;
   }
   if (health >= 6) {
-    return [1, 0, 0];
+    return 1;
   }
-  return [0, 0, 0];
+  return 0;
 };
 
 const update = () => {
@@ -124,4 +125,5 @@ export const initializeGame = () => {
   initializeCanvas(CANVAS);
   registerEventHandlers();
   startLevel(levelCreator(1));
+  console.log(user);
 };

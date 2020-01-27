@@ -1,15 +1,28 @@
+import { observer } from "mobx-react";
 import React from "react";
 import { startLevel } from "../../../engine";
 import { levelCreator } from "../../../levels";
+import { LevelStatus } from "../../../state/User"; // eslint-disable-line
 
-export const LevelButton = ({ levelNumber }: { levelNumber: number }) => {
+export const LevelButton = observer(({ level }: { level: LevelStatus }) => {
+  const { levelNumber, isGameWon } = level;
   const handleClick = () => {
     startLevel(levelCreator(levelNumber));
   };
 
   return (
-    <div className="level-button" onClick={handleClick}>
+    <div
+      className="level-button"
+      onClick={handleClick}
+      style={{ color: isGameWon ? "#fff" : "#999" }}
+    >
       {levelNumber}
+      {isGameWon && (
+        <div>
+          {[...Array(level.stars)].map(() => "★")}
+          {[...Array(3 - level.stars)].map(() => "☆")}
+        </div>
+      )}
     </div>
   );
-};
+});

@@ -10,10 +10,10 @@ export interface PositionType {
 export type Map = number[][];
 
 export interface LevelType {
+  levelNumber: number;
   map: Map;
   waves: WaveGroup[];
   startingMoney: number;
-  levelNumber: number;
 }
 
 export interface WaveType {
@@ -41,8 +41,8 @@ export const levels = {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
-    waves: [[{ amount: 200, type: "normal", spawnLocation: 2 }]],
-    startingMoney: 600,
+    waves: [[{ amount: 20, type: "normal", spawnLocation: 2 }]],
+    startingMoney: 200,
   },
   2: {
     levelNumber: 2,
@@ -58,8 +58,45 @@ export const levels = {
       [0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
-    waves: [[{ amount: 20, type: "normal", spawnLocation: 2 }]],
-    startingMoney: 600,
+    waves: [
+      [{ amount: 20, type: "normal", spawnLocation: 2 }],
+      [{ amount: 10, type: "heavy", spawnLocation: 2 }],
+    ],
+    startingMoney: 200,
+  },
+  3: {
+    levelNumber: 3,
+    map: [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 2, 1, 1, 1, 0, 1, 1, 4, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ],
+    waves: [[{ amount: 20, type: "heavy", spawnLocation: 2 }]],
+    startingMoney: 200,
+  },
+  4: {
+    levelNumber: 4,
+    map: [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 2, 1, 1, 1, 0, 1, 1, 4, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ],
+    waves: [[{ amount: 20, type: "heavy", spawnLocation: 2 }]],
+    startingMoney: 200,
   },
 };
 

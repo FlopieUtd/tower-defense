@@ -1,18 +1,17 @@
+import { observer } from "mobx-react";
 import React from "react";
-import { levels } from "../../../levels";
+import { user } from "../../../state/User";
 import { LevelButton } from "../LevelButton/LevelButton";
 
-export const MenuScreen = () => {
-  const iterableLevels = Object.keys(levels).map(key => levels[key]);
-
+export const MenuScreen = observer(() => {
   return (
     <div className="lose-screen">
-      <h1>Menu</h1>
+      <p>Money: {user.money}</p>
       <div className="level-grid">
-        {iterableLevels.map(level => (
-          <LevelButton levelNumber={level.levelNumber} key={level.levelNumber} />
+        {user.progress.map(level => (
+          <LevelButton level={level} key={level.levelNumber} />
         ))}
       </div>
     </div>
   );
-};
+});

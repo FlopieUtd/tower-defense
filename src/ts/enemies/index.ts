@@ -2,12 +2,14 @@ import { CTX, TILE_SIZE } from "../consts";
 import { arePositionsEqual, breadthFirstSearch, getUniquePosition, move } from "../utils";
 
 import { uuid } from "uuidv4";
+import { getStars } from "../engine";
 import { handleEscape } from "../engine/event_handlers";
-import { PositionType } from "../levels"; // eslint-disable-line
+import { levels, PositionType } from "../levels"; // eslint-disable-line
 import { Enemy } from "../state/Enemy"; // eslint-disable-line
 import { EnemyBlueprint } from "../state/EnemyBlueprint"; // eslint-disable-line
 import { engine } from "../state/Engine";
 import { game } from "../state/Game";
+import { user } from "../state/User";
 
 export type Route = PositionType[];
 
@@ -40,7 +42,7 @@ export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: number
 export const spawnEnemies = () => {
   const { tick, waveTick, incrementWaveTick } = engine;
   const { currentWaveGroup, level } = game;
-  if (tick % 10 === 0) {
+  if (tick % 30 === 0) {
     if (level.waves[currentWaveGroup]) {
       const waveGroup = level.waves[currentWaveGroup];
       waveGroup.forEach(wave => {
@@ -60,6 +62,17 @@ export const spawnEnemies = () => {
   }
 };
 
+export const handleGameWon = () => {
+  handleEscape();
+  engine.setIsGameWon(true);
+  game.setStarsWon(getStars(game.health));
+  user.setLevelStatus({
+    levelNumber: game.level.levelNumber,
+    isGameWon: true,
+    stars: game.starsWon,
+  });
+};
+
 export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
     const { position, route, health, reward, speed } = enemy;
@@ -73,8 +86,7 @@ export const updateEnemies = (enemies: Enemy[]) => {
     if (arePositionsEqual(position, getUniquePosition(level.map, 4)) || health <= 0) {
       enemies.splice(enemies.indexOf(enemy), 1);
       if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
-        handleEscape();
-        engine.setIsGameWon(true);
+        handleGameWon();
       }
       return null;
     }
