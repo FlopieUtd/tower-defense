@@ -5,7 +5,6 @@ import { construction } from "../state/Construction";
 import { engine } from "../state/Engine";
 import { game } from "../state/Game";
 import { Level } from "../state/Level"; // eslint-disable-line
-import { user } from "../state/User";
 import { renderActiveTowerUI, renderConstructionUI, renderTowers, updateTowers } from "../towers";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
 
@@ -125,5 +124,4 @@ export const initializeGame = () => {
   initializeCanvas(CANVAS);
   registerEventHandlers();
   startLevel(levelCreator(1));
-  console.log(user);
 };

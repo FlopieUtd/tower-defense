@@ -150,11 +150,17 @@ canvas {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: #333;
+  background: #222;
+  color: #777;
   margin: 4px;
+}
+
+.level-button-is-unlocked {
+  background: #333;
+  color: white;
   cursor: pointer;
 }
 
-.level-button:hover {
+.level-button-is-unlocked:hover {
   background: #444;
 }

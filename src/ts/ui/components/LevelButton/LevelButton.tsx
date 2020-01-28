@@ -5,15 +5,15 @@ import { levelCreator } from "../../../levels";
 import { LevelStatus } from "../../../state/User"; // eslint-disable-line
 
 export const LevelButton = observer(({ level }: { level: LevelStatus }) => {
-  const { levelNumber, isGameWon } = level;
+  const { levelNumber, isGameWon, isUnlocked } = level;
   const handleClick = () => {
     startLevel(levelCreator(levelNumber));
   };
 
   return (
     <div
-      className="level-button"
-      onClick={handleClick}
+      className={"level-button " + (isUnlocked ? "level-button-is-unlocked" : "")}
+      onClick={isUnlocked ? handleClick : null}
       style={{ color: isGameWon ? "#fff" : "#999" }}
     >
       {levelNumber}

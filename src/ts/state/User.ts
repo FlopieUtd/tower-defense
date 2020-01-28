@@ -1,33 +1,41 @@
+import { observable } from "mobx";
 import { levels } from "../levels";
 
 export interface LevelStatus {
   levelNumber: number;
+  isUnlocked: boolean;
   isGameWon: boolean;
   stars: number;
 }
 
+const LEVEL_WON_AWARD = 100;
+const STAR_AWARD = 50;
+
 export class User {
-  public money: number = 0;
+  @observable public money: number = 0;
   public progress: LevelStatus[] = [];
 
   constructor() {
     this.setMoney = this.setMoney.bind(this);
     this.setLevelStatus = this.setLevelStatus.bind(this);
+    this.awardMoney = this.awardMoney.bind(this);
     this.syncUserWithLocalStorage = this.syncUserWithLocalStorage.bind(this);
 
     const storedUser = localStorage.getItem("tower-defense-user");
 
     if (!storedUser) {
       // New user
-      console.log("New user!");
       this.progress = Object.keys(levels)
         .map(key => levels[key])
-        .map(level => ({ levelNumber: level.levelNumber, isGameWon: false, stars: 0 }));
-      this.syncUserWithLocalStorage();
+        .map(level => ({
+          levelNumber: level.levelNumber,
+          isGameWon: false,
+          isUnlocked: level.levelNumber === 1 ? true : false,
+          stars: 0,
+        }));
     } else {
       // Existing user
       const parsedUser = JSON.parse(storedUser);
-      console.log("Existing user", parsedUser);
       const { money, progress } = parsedUser;
       this.money = money;
       this.progress = progress;
@@ -43,15 +51,28 @@ export class User {
     // Only overwrite stars if the user won more than before
     levelStatus.stars = Math.max(levelStatus.stars, level.stars);
     this.progress.splice(this.progress.indexOf(level), 1, levelStatus);
-    this.syncUserWithLocalStorage();
+    // Unlock the next level
+    if (this.progress[levelStatus.levelNumber]) {
+      this.progress[levelStatus.levelNumber].isUnlocked = true;
+    }
+  }
+  public awardMoney(newLevelStatus: LevelStatus) {
+    const existingLevelStatus = this.progress.find(
+      level => level.levelNumber === newLevelStatus.levelNumber,
+    );
+    if (!existingLevelStatus.isGameWon) {
+      this.setMoney(this.money + LEVEL_WON_AWARD);
+    }
+    const newStarsWon = newLevelStatus.stars - existingLevelStatus.stars;
+    this.setMoney(this.money + newStarsWon * STAR_AWARD);
   }
   public syncUserWithLocalStorage() {
     localStorage.setItem(
       "tower-defense-user",
       JSON.stringify({ money: this.money, progress: this.progress }),
     );
-    console.log("synced with local storage!", this.progress);
   }
 }
 
 export const user = new User();
+user.syncUserWithLocalStorage();

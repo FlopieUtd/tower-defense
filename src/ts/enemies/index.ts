@@ -66,11 +66,15 @@ export const handleGameWon = () => {
   handleEscape();
   engine.setIsGameWon(true);
   game.setStarsWon(getStars(game.health));
-  user.setLevelStatus({
+  const levelStatus = {
     levelNumber: game.level.levelNumber,
+    isUnlocked: true,
     isGameWon: true,
     stars: game.starsWon,
-  });
+  };
+  user.awardMoney(levelStatus);
+  user.setLevelStatus(levelStatus);
+  user.syncUserWithLocalStorage();
 };
 
 export const updateEnemies = (enemies: Enemy[]) => {
