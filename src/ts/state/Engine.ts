@@ -3,9 +3,11 @@ import { observable } from "mobx";
 export class Engine {
   public isPaused: boolean = false;
   @observable public isFastForward: boolean = false;
+  @observable public isGameStarted: boolean = false;
   @observable public isGameOver: boolean = false;
   @observable public isGameWon: boolean = false;
-  @observable public isMenuActive: boolean = false;
+  @observable public isMenuActive: boolean = true;
+  @observable public nextWaveInNSeconds: number = 0;
   public tick: number = 0;
   public waveTick: number = 0;
   public activeLevel: number | null = 1;
@@ -18,8 +20,10 @@ export class Engine {
     this.setIsMenuActive = this.setIsMenuActive.bind(this);
     this.incrementTick = this.incrementTick.bind(this);
     this.incrementWaveTick = this.incrementWaveTick.bind(this);
+    this.callNextWave = this.callNextWave.bind(this);
     this.resetTicks = this.resetTicks.bind(this);
     this.setActiveLevel = this.setActiveLevel.bind(this);
+    this.setIsGameStarted = this.setIsGameStarted.bind(this);
   }
 
   public setIsPaused(isPaused: boolean) {
@@ -35,7 +39,6 @@ export class Engine {
     this.isGameWon = isGameWon;
   }
   public setIsMenuActive(isMenuActive: boolean) {
-    console.log("setting menu active", isMenuActive);
     this.isMenuActive = isMenuActive;
   }
   public incrementTick() {
@@ -43,14 +46,22 @@ export class Engine {
   }
   public incrementWaveTick() {
     this.waveTick++;
+    if (this.waveTick % 60 === 0) {
+      this.nextWaveInNSeconds = (1200 - this.waveTick) / 60;
+    }
+  }
+  public callNextWave() {
+    this.waveTick = 1200 - 1;
   }
   public resetTicks() {
     this.tick = 0;
     this.waveTick = 0;
   }
   public setActiveLevel(activeLevel: number) {
-    console.log("setting menu active", activeLevel);
     this.activeLevel = activeLevel;
+  }
+  public setIsGameStarted(isGameStarted: boolean) {
+    this.isGameStarted = isGameStarted;
   }
 }
 

@@ -123,5 +123,5 @@ export const restartLevel = (level: Level) => {
 export const initializeGame = () => {
   initializeCanvas(CANVAS);
   registerEventHandlers();
-  startLevel(levelCreator(1));
+  // startLevel(levelCreator(1));
 };

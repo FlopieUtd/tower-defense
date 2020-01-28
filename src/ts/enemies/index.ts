@@ -40,9 +40,9 @@ export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: number
 };
 
 export const spawnEnemies = () => {
-  const { tick, waveTick, incrementWaveTick } = engine;
+  const { isGameStarted, tick, waveTick, incrementWaveTick, resetTicks } = engine;
   const { currentWaveGroup, level } = game;
-  if (tick % 30 === 0) {
+  if (isGameStarted && tick % 30 === 0) {
     if (level.waves[currentWaveGroup]) {
       const waveGroup = level.waves[currentWaveGroup];
       waveGroup.forEach(wave => {
@@ -57,6 +57,7 @@ export const spawnEnemies = () => {
   if (level.waves[currentWaveGroup].every(wave => wave.amount < 1)) {
     incrementWaveTick();
     if (waveTick > 1 && waveTick % 1200 === 0) {
+      resetTicks();
       callNextWave();
     }
   }

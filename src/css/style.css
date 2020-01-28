@@ -51,7 +51,18 @@ canvas {
   top: -50px;
 }
 
-.fast-forward {
+.game-status {
+  padding: 0px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.top-bar-left {
+  display: flex;
+}
+
+.topbar-button {
   height: 50px;
   width: 50px;
   display: flex;
@@ -61,7 +72,7 @@ canvas {
   cursor: pointer;
 }
 
-.fast-forward:hover {
+.topbar-button:hover {
   background: #333;
 }
 
