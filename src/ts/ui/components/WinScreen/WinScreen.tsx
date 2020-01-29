@@ -26,8 +26,10 @@ export const WinScreen = observer(() => {
         {[...Array(game.starsWon)].map(() => "★")}
         {[...Array(3 - game.starsWon)].map(() => "☆")}
       </div>
-      <button onClick={handleTryAgain}>Try again</button>
-      <button onClick={handleContinue}>Continue</button>
+      <div className="button-wrapper">
+        <button onClick={handleTryAgain}>Try again</button>
+        <button onClick={handleContinue}>Continue</button>
+      </div>
     </div>
   );
 });

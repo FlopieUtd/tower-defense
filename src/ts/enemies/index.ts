@@ -80,8 +80,10 @@ export const spawnEnemies = () => {
 };
 
 export const handleGameWon = () => {
+  const { setIsGameStarted, setIsGameWon } = engine;
   handleEscape();
-  engine.setIsGameWon(true);
+  setIsGameStarted(false);
+  setIsGameWon(true);
   game.setStarsWon(getStars(game.health));
   const levelStatus = {
     levelNumber: game.level.levelNumber,
@@ -122,13 +124,13 @@ export const updateEnemies = (enemies: Enemy[]) => {
 
 export const renderEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
-    const { position, isUnderFire, health, originalHealth, color } = enemy;
+    const { position, isUnderFire, health, originalHealth, color, radius } = enemy;
     CTX.fillStyle = isUnderFire ? "white" : color;
     CTX.beginPath();
     CTX.arc(
       position.x * TILE_SIZE + 0.5 * TILE_SIZE,
       position.y * TILE_SIZE + 0.5 * TILE_SIZE,
-      5,
+      radius * 100,
       0,
       2 * Math.PI,
     );
@@ -154,7 +156,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
   {
     type: "runner",
     color: "red",
-    radius: 0.05,
+    radius: 0.045,
     originalHealth: 100,
     reward: 2,
     speed: 2.5,
@@ -165,8 +167,8 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     color: "pink",
     radius: 0.05,
     originalHealth: 250,
-    reward: 3,
-    speed: 2,
-    intervalInTicks: 30,
+    reward: 4,
+    speed: 1.25,
+    intervalInTicks: 50,
   },
 ];

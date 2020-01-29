@@ -12,7 +12,7 @@ export const TopBar = observer(() => {
     callNextWave,
     setIsGameStarted,
   } = engine;
-  const { money, currentWaveGroup } = game;
+  const { money, currentWaveGroup, level } = game;
   const handleFastForwardToggle = () => {
     setIsFastForward(!isFastForward);
   };
@@ -42,7 +42,7 @@ export const TopBar = observer(() => {
         )}
 
         <div className="game-status">
-          <div>Wave: {currentWaveGroup + 1}</div>
+          <div>{level && `Wave: ${currentWaveGroup + 1} / ${level.waves.length}`}</div>
           <div>
             Money: <span className="coin-num">{money}</span>
           </div>

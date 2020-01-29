@@ -10,8 +10,9 @@ import { handleEscape, registerEventHandlers } from "./event_handlers";
 
 const checkGameState = (health: number) => {
   if (health <= 0) {
-    const { setIsGameOver } = engine;
+    const { setIsGameOver, setIsGameStarted } = engine;
     handleEscape();
+    setIsGameStarted(false);
     setIsGameOver(true);
   }
 };
