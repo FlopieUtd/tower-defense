@@ -13,7 +13,7 @@ import { user } from "../state/User";
 
 export type Route = PositionType[];
 
-export type EnemyType = "normal" | "heavy";
+export type EnemyType = "runner" | "heavy";
 
 const callNextWave = () => {
   const { currentWaveGroup, setCurrentWave, level } = game;
@@ -40,25 +40,41 @@ export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: number
 };
 
 export const spawnEnemies = () => {
-  const { isGameStarted, tick, waveTick, incrementWaveTick, resetTicks } = engine;
+  const {
+    isGameStarted,
+    tick,
+    waveTick,
+    incrementWaveTick,
+    resetTicks,
+    isGameWon,
+    isGameOver,
+  } = engine;
   const { currentWaveGroup, level } = game;
-  if (isGameStarted && tick % 30 === 0) {
-    if (level.waves[currentWaveGroup]) {
-      const waveGroup = level.waves[currentWaveGroup];
-      waveGroup.forEach(wave => {
+  if (level.waves[currentWaveGroup]) {
+    const waveGroup = level.waves[currentWaveGroup];
+    waveGroup.forEach(wave => {
+      const { intervalInTicks } = wave;
+      if (isGameStarted && tick % intervalInTicks === 0) {
         if (wave.amount) {
           wave.decreaseAmount();
           const blueprint = enemyBlueprints.find(enemy => enemy.type === wave.type);
           spawnEnemy(blueprint, wave.spawnLocation);
         }
-      });
-    }
+      }
+    });
   }
-  if (level.waves[currentWaveGroup].every(wave => wave.amount < 1)) {
+  if (
+    // All enemies in the current wave are spawned
+    level.waves[currentWaveGroup].every(wave => wave.amount < 1) &&
+    // There is a next wave
+    level.waves[currentWaveGroup + 1]
+  ) {
     incrementWaveTick();
     if (waveTick > 1 && waveTick % 1200 === 0) {
       resetTicks();
-      callNextWave();
+      if (!isGameOver && !isGameWon) {
+        callNextWave();
+      }
     }
   }
 };
@@ -136,21 +152,21 @@ export const renderEnemies = (enemies: Enemy[]) => {
 
 export const enemyBlueprints: EnemyBlueprint[] = [
   {
-    type: "normal",
+    type: "runner",
     color: "red",
     radius: 0.05,
-    originalHealth: 75,
+    originalHealth: 100,
     reward: 2,
     speed: 2.5,
-    intervalInTicks: 5,
+    intervalInTicks: 20,
   },
   {
     type: "heavy",
     color: "pink",
     radius: 0.05,
-    originalHealth: 150,
+    originalHealth: 250,
     reward: 3,
     speed: 2,
-    intervalInTicks: 25,
+    intervalInTicks: 30,
   },
 ];

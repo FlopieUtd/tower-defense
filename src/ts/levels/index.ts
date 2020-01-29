@@ -42,9 +42,9 @@ export const levels = {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
     waves: [
-      [{ amount: 20, type: "normal", spawnLocation: 2 }],
-      [{ amount: 20, type: "normal", spawnLocation: 2 }],
-      [{ amount: 20, type: "normal", spawnLocation: 2 }],
+      [{ amount: 20, type: "runner", spawnLocation: 2 }],
+      [{ amount: 20, type: "runner", spawnLocation: 2 }],
+      [{ amount: 20, type: "runner", spawnLocation: 2 }],
     ],
     startingMoney: 200,
   },
@@ -63,7 +63,7 @@ export const levels = {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
     waves: [
-      [{ amount: 20, type: "normal", spawnLocation: 2 }],
+      [{ amount: 20, type: "runner", spawnLocation: 2 }],
       [{ amount: 10, type: "heavy", spawnLocation: 2 }],
     ],
     startingMoney: 200,
@@ -99,7 +99,7 @@ export const levels = {
       [0, 0, 0, 0, 2, 1, 1, 1, 0, 1, 1, 4, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
-    waves: [[{ amount: 500, type: "normal", spawnLocation: 2 }]],
+    waves: [[{ amount: 500, type: "runner", spawnLocation: 2 }]],
     startingMoney: 1200,
   },
 };

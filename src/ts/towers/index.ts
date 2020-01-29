@@ -14,14 +14,14 @@ export type Color = "blue" | "red" | "pink";
 export const towerBlueprints: TowerBlueprint[] = [
   {
     type: "turret",
-    damagePerShot: 8,
+    damagePerShot: 10,
     shootsEveryNthTick: 8,
     radius: 1.5,
     cost: 100,
     color: "blue",
     armorPiercing: false,
     targetsAir: true,
-    targetsGround: true, //
+    targetsGround: true,
   },
   {
     type: "flamethrower",

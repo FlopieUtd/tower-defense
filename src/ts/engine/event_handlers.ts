@@ -69,7 +69,16 @@ const handleMouseClick = () => {
 };
 
 const handleKeyDown = (e: KeyboardEvent) => {
-  const { isFastForward, setIsFastForward, isPaused, setIsPaused } = engine;
+  const {
+    isFastForward,
+    setIsFastForward,
+    isPaused,
+    setIsPaused,
+    setIsGameStarted,
+    callNextWave,
+    isMenuActive,
+    nextWaveInNSeconds,
+  } = engine;
   if (e.key === "Escape") {
     handleEscape();
   }
@@ -83,6 +92,14 @@ const handleKeyDown = (e: KeyboardEvent) => {
     const index = Number(e.key) - 1;
     if (towerBlueprints[index]) {
       handleConstructionPreview(towerBlueprints[index]);
+    }
+  }
+  if (e.code === "Space") {
+    if (!isMenuActive) {
+      setIsGameStarted(true);
+      if (nextWaveInNSeconds !== 0) {
+        callNextWave();
+      }
     }
   }
 };
