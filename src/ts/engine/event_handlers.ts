@@ -18,12 +18,17 @@ export const handleConstructionPreview = (blueprint: TowerBlueprint) => {
 };
 
 const handleMouseMove = (event: MouseEvent) => {
-  const { offsetX, offsetY } = event;
-  const currentTile = {
-    x: Math.floor(offsetX / TILE_SIZE),
-    y: Math.floor(offsetY / TILE_SIZE),
-  };
-  mouse.setPosition(currentTile);
+  const element = event.target as HTMLElement;
+  if (element.className === "root") {
+    const { offsetX, offsetY } = event;
+    const currentTile = {
+      x: Math.floor(offsetX / TILE_SIZE),
+      y: Math.floor(offsetY / TILE_SIZE),
+    };
+    mouse.setPosition(currentTile);
+  } else {
+    mouse.setPosition(null);
+  }
 };
 
 export const handleEscape = () => {
@@ -36,6 +41,10 @@ const handleMouseClick = () => {
   const { position } = mouse;
   const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
   const { level, towers, decreaseMoneyBy } = game;
+
+  if (!position) {
+    return;
+  }
 
   // Set active tower click
   if (getValueAtPosition(position, level.map) === 5) {

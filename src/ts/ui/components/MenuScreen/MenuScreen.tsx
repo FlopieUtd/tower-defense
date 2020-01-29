@@ -7,6 +7,7 @@ export const MenuScreen = observer(() => {
   return (
     <div className="lose-screen">
       <p>Money: {user.money}</p>
+      <br />
       <div className="level-grid">
         {user.progress.map(level => (
           <LevelButton level={level} key={level.levelNumber} />
