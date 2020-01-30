@@ -68,19 +68,3 @@ export const areColliding = (a: Circle, b: Circle) => {
   const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
   return distance < a.radius + b.radius;
 };
-// // //
-export const move = (current: PositionType, next: PositionType, speed: number) => {
-  const moveSpeed = speed / 100;
-  if (current.x < next.x) {
-    return { x: Number((current.x += moveSpeed).toFixed(4)), y: current.y };
-  }
-  if (current.x > next.x) {
-    return { x: Number((current.x -= moveSpeed).toFixed(4)), y: current.y };
-  }
-  if (current.y < next.y) {
-    return { x: current.x, y: Number((current.y += moveSpeed).toFixed(4)) };
-  }
-  if (current.y > next.y) {
-    return { x: current.x, y: Number((current.y -= moveSpeed).toFixed(4)) };
-  }
-};

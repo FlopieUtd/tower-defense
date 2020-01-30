@@ -1,5 +1,5 @@
 import { CTX, TILE_SIZE } from "../consts";
-import { arePositionsEqual, breadthFirstSearch, getUniquePosition, move } from "../utils";
+import { arePositionsEqual, breadthFirstSearch, getUniquePosition } from "../utils";
 
 import { uuid } from "uuidv4";
 import { getStars } from "../engine";
@@ -96,28 +96,77 @@ export const handleGameWon = () => {
   user.syncUserWithLocalStorage();
 };
 
+const move = (current: PositionType, next: PositionType, speed: number) => {
+  const moveSpeed = speed / 100;
+  if (current.x < next.x) {
+    return { x: Number((current.x += moveSpeed).toFixed(4)), y: current.y };
+  }
+  if (current.x > next.x) {
+    return { x: Number((current.x -= moveSpeed).toFixed(4)), y: current.y };
+  }
+  if (current.y < next.y) {
+    return { x: current.x, y: Number((current.y += moveSpeed).toFixed(4)) };
+  }
+  if (current.y > next.y) {
+    return { x: current.x, y: Number((current.y -= moveSpeed).toFixed(4)) };
+  }
+};
+
+const getDistanceBetweenPositions = (positionA: PositionType, positionB: PositionType) =>
+  Math.abs(positionA.x !== positionB.x ? positionB.x - positionA.x : positionB.y - positionA.y);
+
+const checkForGameWin = () => {
+  const { currentWaveGroup, level, enemies } = game;
+  if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
+    handleGameWon();
+  }
+};
+
+const removeEnemy = (enemy: Enemy) => {
+  const { enemies } = game;
+  enemies.splice(enemies.indexOf(enemy), 1);
+};
+
 export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
     const { position, route, health, reward, speed } = enemy;
-    const { increaseMoneyBy, decreaseHealth, currentWaveGroup, level } = game;
+    const { increaseMoneyBy, decreaseHealth, level } = game;
+
     if (health <= 0) {
       increaseMoneyBy(reward);
     }
+
     if (arePositionsEqual(position, getUniquePosition(level.map, 4))) {
       decreaseHealth();
     }
+
     if (arePositionsEqual(position, getUniquePosition(level.map, 4)) || health <= 0) {
-      enemies.splice(enemies.indexOf(enemy), 1);
-      if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
-        handleGameWon();
-      }
+      removeEnemy(enemy);
+      checkForGameWin();
       return null;
     }
-    if (arePositionsEqual(position, route[0])) {
+
+    if (arePositionsEqual(enemy.position, route[0])) {
       route.shift();
     }
 
-    enemy.position = move(position, route[0], speed);
+    const distanceToNextPosition = getDistanceBetweenPositions(position, route[0]);
+
+    if (distanceToNextPosition > speed / 100) {
+      enemy.position = move(position, route[0], speed);
+    } else {
+      if (!route[1]) {
+        decreaseHealth();
+        removeEnemy(enemy);
+        checkForGameWin();
+        return null;
+      }
+
+      const excessMovement = speed - distanceToNextPosition;
+      enemy.position = move(route[0], route[1], excessMovement);
+      route.shift();
+    }
+
     enemy.isUnderFire = false;
   });
 };
@@ -159,7 +208,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     radius: 0.045,
     originalHealth: 100,
     reward: 2,
-    speed: 2.5,
+    speed: 2.51,
     intervalInTicks: 20,
   },
   {
@@ -168,7 +217,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     radius: 0.05,
     originalHealth: 250,
     reward: 4,
-    speed: 1.25,
+    speed: 1.23,
     intervalInTicks: 50,
   },
 ];

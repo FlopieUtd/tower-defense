@@ -14,8 +14,8 @@ export type Color = "blue" | "red" | "pink";
 export const towerBlueprints: TowerBlueprint[] = [
   {
     type: "turret",
-    damagePerShot: 12,
-    shootsEveryNthTick: 8,
+    damagePerShot: 50,
+    shootsEveryNthTick: 50,
     radius: 1.5,
     cost: 100,
     color: "blue",
@@ -25,7 +25,7 @@ export const towerBlueprints: TowerBlueprint[] = [
   },
   {
     type: "flamethrower",
-    damagePerShot: 2,
+    damagePerShot: 1.6,
     shootsEveryNthTick: 1,
     radius: 1.2,
     cost: 150,
