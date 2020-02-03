@@ -147,7 +147,7 @@ export const renderBuildings = (map: Map) => {
     row.forEach((tile, x) => {
       // Spawn Camps
       if (tile === 2 || tile === 3) {
-        CTX.fillStyle = "#1A1A1A";
+        CTX.fillStyle = "#333";
         CTX.fillRect(x * TILE_SIZE + 2, y * TILE_SIZE + 2, TILE_SIZE - 4, TILE_SIZE - 4);
         CTX.font = "20px monospace";
         CTX.fillStyle = "white";
@@ -156,7 +156,7 @@ export const renderBuildings = (map: Map) => {
       }
       // HQ
       if (tile === 4) {
-        CTX.fillStyle = "#1A1A1A";
+        CTX.fillStyle = "#333";
         CTX.fillRect(x * TILE_SIZE + 2, y * TILE_SIZE + 2, TILE_SIZE - 4, TILE_SIZE - 4);
         CTX.font = "20px monospace";
         CTX.fillStyle = "white";

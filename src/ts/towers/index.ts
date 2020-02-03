@@ -83,7 +83,12 @@ export const constructTower = (blueprint: TowerBlueprint) => {
 
 export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
   towers.forEach(tower => {
-    const { setIsFiring, decrementTicksUntilNextshot, setTicksUntilNextShot } = tower;
+    const {
+      setIsFiring,
+      decrementTicksUntilNextshot,
+      setTicksUntilNextShot,
+      setTargetPosition,
+    } = tower;
     setIsFiring(false);
     const enemiesInReach: Enemy[] = [];
     if (tower.ticksUntilNextShot > 0) {
@@ -102,10 +107,14 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
       targetableEnemies.sort((a, b) => a.route.length - b.route.length);
       if (targetableEnemies.length) {
         setIsFiring(true);
+
         const { damagePerShot } = tower;
         const target = targetableEnemies[0];
         target.isUnderFire = true;
         target.health -= damagePerShot;
+        setTargetPosition(target.position);
+      } else {
+        setTargetPosition(null);
       }
     }
   });
@@ -116,19 +125,32 @@ export const renderTowers = (towers: Tower[]) => {
     const { position } = tower;
 
     renderConstructionTile(position);
-    renderTower(tower, position);
+    renderTower(tower);
   });
 };
 
-export const renderTower = (blueprint: TowerBlueprint, position: PositionType) => {
+export const renderTower = (tower: Tower) => {
+  const { position, targetPosition } = tower;
   const { x, y } = position;
 
-  CTX.fillStyle = blueprint.colors[0];
+  CTX.fillStyle = tower.colors[0];
   CTX.fillRect(x * TILE_SIZE + 10, y * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
-  CTX.fillStyle = blueprint.colors[1];
+  CTX.fillStyle = tower.colors[1];
   CTX.beginPath();
   CTX.arc(x * TILE_SIZE + 0.5 * TILE_SIZE, y * TILE_SIZE + 0.5 * TILE_SIZE, 6, 0, 2 * Math.PI);
   CTX.fill();
+
+  if (targetPosition) {
+    CTX.beginPath();
+    CTX.moveTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2);
+    CTX.lineTo(
+      targetPosition.x * TILE_SIZE + TILE_SIZE / 2,
+      targetPosition.y * TILE_SIZE + TILE_SIZE / 2,
+    );
+    CTX.strokeStyle = "white";
+    CTX.lineWidth = 1;
+    CTX.stroke();
+  }
 };
 
 export const renderActiveTowerUI = (tower: Tower) => {
@@ -168,7 +190,7 @@ export const renderConstructionUI = () => {
     );
     CTX.fill();
 
-    renderTower(blueprint, position);
+    renderTower(new Tower({ ...blueprint, position }));
   }
   if (cost > money) {
     construction.setIsVisible(false);

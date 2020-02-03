@@ -43,9 +43,9 @@ const render = () => {
   const { activeTower } = construction;
   const { towers, level, enemies } = game;
   renderMap(level.map);
+  renderBuildings(level.map);
   renderTowers(towers);
   renderEnemies(enemies);
-  renderBuildings(level.map);
   renderConstructionUI();
   renderActiveTowerUI(activeTower);
 };
