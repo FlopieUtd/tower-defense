@@ -39,13 +39,13 @@ export const handleEscape = () => {
 
 const handleMouseClick = () => {
   const { position } = mouse;
+  const { isMenuActive } = engine;
   const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
   const { level, towers, decreaseMoneyBy } = game;
 
-  if (!position) {
+  if (!position || isMenuActive) {
     return;
   }
-
   // Set active tower click
   if (getValueAtPosition(position, level.map) === 5) {
     const tower = towers.find(tower => arePositionsEqual(tower.position, position));
@@ -55,7 +55,7 @@ const handleMouseClick = () => {
   }
 
   // Idle click
-  if (getValueAtPosition(position, level.map) !== 0 || !isVisible || !blueprint) {
+  if (getValueAtPosition(position, level.map) !== 6 || !isVisible || !blueprint) {
     handleEscape();
     return;
   }

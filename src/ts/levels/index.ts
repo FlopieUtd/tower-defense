@@ -34,9 +34,9 @@ export const levels = {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 2, 1, 1, 0, 1, 0, 1, 1, 4, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 6, 1, 1, 1, 6, 6, 6, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 2, 1, 1, 6, 1, 6, 1, 1, 4, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 6, 6, 6, 1, 1, 1, 6, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -44,10 +44,10 @@ export const levels = {
     ],
     waves: [
       [{ amount: 4, type: "runner", spawnLocation: 2 }],
-      [{ amount: 8, type: "runner", spawnLocation: 2 }],
-      [{ amount: 12, type: "runner", spawnLocation: 2 }],
       [{ amount: 4, type: "heavy", spawnLocation: 2 }],
+      [{ amount: 8, type: "runner", spawnLocation: 2 }],
       [{ amount: 8, type: "heavy", spawnLocation: 2 }],
+      [{ amount: 12, type: "runner", spawnLocation: 2 }],
       [{ amount: 12, type: "heavy", spawnLocation: 2 }],
     ],
     startingMoney: 300,
@@ -119,14 +119,23 @@ export const levels = {
   },
 };
 
+export const renderConstructionTile = (position: PositionType) => {
+  const { x, y } = position;
+  CTX.fillStyle = "#1A1A1A";
+  CTX.fillRect(x * TILE_SIZE + 2, y * TILE_SIZE + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+};
+
 export const renderMap = (map: Map) => {
   CTX.fillStyle = "black";
   CTX.fillRect(0, 0, map[0].length * TILE_SIZE, map.length * TILE_SIZE);
   map.forEach((row, y) => {
     row.forEach((tile, x) => {
       if (tile > 0 && tile < 5) {
-        CTX.fillStyle = "#444";
-        CTX.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        CTX.fillStyle = "#333";
+        CTX.fillRect(x * TILE_SIZE + 2, y * TILE_SIZE + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+      }
+      if (tile === 6) {
+        renderConstructionTile({ x, y });
       }
     });
   });
@@ -138,8 +147,8 @@ export const renderBuildings = (map: Map) => {
     row.forEach((tile, x) => {
       // Spawn Camps
       if (tile === 2 || tile === 3) {
-        CTX.fillStyle = "#222";
-        CTX.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        CTX.fillStyle = "#1A1A1A";
+        CTX.fillRect(x * TILE_SIZE + 2, y * TILE_SIZE + 2, TILE_SIZE - 4, TILE_SIZE - 4);
         CTX.font = "20px monospace";
         CTX.fillStyle = "white";
         CTX.textAlign = "center";
@@ -147,8 +156,8 @@ export const renderBuildings = (map: Map) => {
       }
       // HQ
       if (tile === 4) {
-        CTX.fillStyle = "#222";
-        CTX.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        CTX.fillStyle = "#1A1A1A";
+        CTX.fillRect(x * TILE_SIZE + 2, y * TILE_SIZE + 2, TILE_SIZE - 4, TILE_SIZE - 4);
         CTX.font = "20px monospace";
         CTX.fillStyle = "white";
         CTX.textAlign = "center";

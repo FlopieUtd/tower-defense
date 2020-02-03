@@ -10,7 +10,7 @@ export const TowerSlot = ({ blueprint, index }: { blueprint: TowerBlueprint; ind
 
   return (
     <div className="tower-slot" onClick={handleClick}>
-      <div className="preview" style={{ background: blueprint.color }}></div>
+      <div className="preview" style={{ background: blueprint.colors[0] }}></div>
     </div>
   );
 };

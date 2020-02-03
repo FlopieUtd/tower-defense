@@ -1,13 +1,14 @@
+import { Movement } from "./EnemyBlueprint"; // eslint-disable-line
+
 export class TowerBlueprint {
   public radius: number;
   public shootsEveryNthTick: number;
   public damagePerShot: number;
   public type: string;
   public cost: number;
-  public color: string;
+  public colors: string[];
   public armorPiercing: boolean;
-  public targetsGround: boolean;
-  public targetsAir: boolean;
+  public targets: Movement[];
 
   constructor(blueprint: TowerBlueprint) {
     const {
@@ -16,10 +17,9 @@ export class TowerBlueprint {
       damagePerShot,
       type,
       cost,
-      color,
+      colors,
       armorPiercing,
-      targetsGround,
-      targetsAir,
+      targets,
     } = blueprint;
 
     this.radius = radius;
@@ -27,9 +27,8 @@ export class TowerBlueprint {
     this.damagePerShot = damagePerShot;
     this.type = type;
     this.cost = cost;
-    this.color = color;
+    this.colors = colors;
     this.armorPiercing = armorPiercing;
-    this.targetsGround = targetsGround;
-    this.targetsAir = targetsAir;
+    this.targets = targets;
   }
 }

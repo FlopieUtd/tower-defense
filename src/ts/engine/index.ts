@@ -45,9 +45,9 @@ const render = () => {
   renderMap(level.map);
   renderTowers(towers);
   renderEnemies(enemies);
+  renderBuildings(level.map);
   renderConstructionUI();
   renderActiveTowerUI(activeTower);
-  renderBuildings(level.map);
 };
 
 const timestamp = () =>

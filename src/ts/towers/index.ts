@@ -1,5 +1,6 @@
 import { uuid } from "uuidv4";
 import { CTX, TILE_SIZE } from "../consts";
+import { PositionType, renderConstructionTile } from "../levels"; // eslint-disable-line
 import { construction } from "../state/Construction";
 import { Enemy } from "../state/Enemy"; // eslint-disable-line
 import { game } from "../state/Game";
@@ -18,10 +19,9 @@ export const towerBlueprints: TowerBlueprint[] = [
     shootsEveryNthTick: 50,
     radius: 1.5,
     cost: 100,
-    color: "blue",
+    colors: ["#008A7B", "#4DB5AC"],
     armorPiercing: false,
-    targetsAir: true,
-    targetsGround: true,
+    targets: ["air", "ground"],
   },
   {
     type: "flamethrower",
@@ -29,43 +29,39 @@ export const towerBlueprints: TowerBlueprint[] = [
     shootsEveryNthTick: 1,
     radius: 1.2,
     cost: 150,
-    color: "red",
+    colors: ["#E53734", "#E37370"],
     armorPiercing: false,
-    targetsAir: false,
-    targetsGround: true,
+    targets: ["ground"],
   },
   {
     type: "sniper",
-    damagePerShot: 150,
-    shootsEveryNthTick: 120,
+    damagePerShot: 250,
+    shootsEveryNthTick: 150,
     radius: 3,
-    cost: 150,
-    color: "cyan",
+    cost: 200,
+    colors: ["#49A550", "#7DC584"],
     armorPiercing: false,
-    targetsAir: false,
-    targetsGround: true,
+    targets: ["ground"],
   },
   {
     type: "canon",
-    damagePerShot: 200,
-    shootsEveryNthTick: 120,
+    damagePerShot: 400,
+    shootsEveryNthTick: 150,
     radius: 2,
-    cost: 150,
-    color: "purple",
+    cost: 200,
+    colors: ["#2086E4", "#64B5F5"],
     armorPiercing: true,
-    targetsAir: false,
-    targetsGround: true,
+    targets: ["ground"],
   },
   {
     type: "anti-air",
     damagePerShot: 50,
     shootsEveryNthTick: 20,
     radius: 2,
-    cost: 150,
-    color: "yellow",
+    cost: 200,
+    colors: ["#0EBBBF", "#4DD0E1"],
     armorPiercing: false,
-    targetsGround: false,
-    targetsAir: true,
+    targets: ["air"],
   },
 ];
 
@@ -100,11 +96,14 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
           enemiesInReach.push(enemy);
         }
       });
-      enemiesInReach.sort((a, b) => a.route.length - b.route.length);
-      if (enemiesInReach.length) {
+      const targetableEnemies = enemiesInReach.filter(enemy =>
+        tower.targets.includes(enemy.movement),
+      );
+      targetableEnemies.sort((a, b) => a.route.length - b.route.length);
+      if (targetableEnemies.length) {
         setIsFiring(true);
         const { damagePerShot } = tower;
-        const target = enemiesInReach[0];
+        const target = targetableEnemies[0];
         target.isUnderFire = true;
         target.health -= damagePerShot;
       }
@@ -114,17 +113,22 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
 
 export const renderTowers = (towers: Tower[]) => {
   towers.forEach(tower => {
-    const { position, isFiring } = tower;
-    const { x, y } = position;
-    CTX.fillStyle = tower.color;
-    CTX.fillRect(x * TILE_SIZE + 10, y * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
-    if (isFiring) {
-      CTX.fillStyle = "white";
-      CTX.beginPath();
-      CTX.arc(x * TILE_SIZE + 0.5 * TILE_SIZE, y * TILE_SIZE + 0.5 * TILE_SIZE, 5, 0, 2 * Math.PI);
-      CTX.fill();
-    }
+    const { position } = tower;
+
+    renderConstructionTile(position);
+    renderTower(tower, position);
   });
+};
+
+export const renderTower = (blueprint: TowerBlueprint, position: PositionType) => {
+  const { x, y } = position;
+
+  CTX.fillStyle = blueprint.colors[0];
+  CTX.fillRect(x * TILE_SIZE + 10, y * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
+  CTX.fillStyle = blueprint.colors[1];
+  CTX.beginPath();
+  CTX.arc(x * TILE_SIZE + 0.5 * TILE_SIZE, y * TILE_SIZE + 0.5 * TILE_SIZE, 6, 0, 2 * Math.PI);
+  CTX.fill();
 };
 
 export const renderActiveTowerUI = (tower: Tower) => {
@@ -150,9 +154,9 @@ export const renderConstructionUI = () => {
   if (!blueprint) {
     return;
   }
-  const { cost, color, radius } = blueprint;
+  const { cost, radius } = blueprint;
   const { position } = mouse;
-  if (isVisible && position && getValueAtPosition(position, level.map) === 0 && cost <= money) {
+  if (isVisible && position && getValueAtPosition(position, level.map) === 6 && cost <= money) {
     CTX.fillStyle = "rgba(255,255,255,.1)";
     CTX.beginPath();
     CTX.arc(
@@ -164,13 +168,7 @@ export const renderConstructionUI = () => {
     );
     CTX.fill();
 
-    CTX.fillStyle = color;
-    CTX.fillRect(
-      position.x * TILE_SIZE + 10,
-      position.y * TILE_SIZE + 10,
-      TILE_SIZE - 20,
-      TILE_SIZE - 20,
-    );
+    renderTower(blueprint, position);
   }
   if (cost > money) {
     construction.setIsVisible(false);

@@ -4,7 +4,7 @@ import { arePositionsEqual, breadthFirstSearch, getUniquePosition } from "../uti
 import { uuid } from "uuidv4";
 import { getStars } from "../engine";
 import { handleEscape } from "../engine/event_handlers";
-import { levels, PositionType } from "../levels"; // eslint-disable-line
+import { PositionType } from "../levels"; // eslint-disable-line
 import { Enemy } from "../state/Enemy"; // eslint-disable-line
 import { EnemyBlueprint } from "../state/EnemyBlueprint"; // eslint-disable-line
 import { engine } from "../state/Engine";
@@ -208,8 +208,9 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     radius: 0.045,
     originalHealth: 100,
     reward: 2,
-    speed: 2.51,
+    speed: 2.5,
     intervalInTicks: 20,
+    movement: "ground",
   },
   {
     type: "heavy",
@@ -217,7 +218,8 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     radius: 0.05,
     originalHealth: 250,
     reward: 4,
-    speed: 1.23,
+    speed: 1.5,
     intervalInTicks: 50,
+    movement: "ground",
   },
 ];
