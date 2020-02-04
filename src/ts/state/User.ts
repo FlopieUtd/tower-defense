@@ -60,11 +60,12 @@ export class User {
     const existingLevelStatus = this.progress.find(
       level => level.levelNumber === newLevelStatus.levelNumber,
     );
+
     if (!existingLevelStatus.isGameWon) {
       this.setMoney(this.money + LEVEL_WON_AWARD);
     }
     const newStarsWon = newLevelStatus.stars - existingLevelStatus.stars;
-    this.setMoney(this.money + newStarsWon * STAR_AWARD);
+    this.setMoney(this.money + (newStarsWon > 0 ? newStarsWon * STAR_AWARD : 0));
   }
   public syncUserWithLocalStorage() {
     localStorage.setItem(

@@ -18,7 +18,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     damagePerShot: 50,
     shootsEveryNthTick: 50,
     radius: 1.5,
-    cost: 100,
+    cost: 50,
     colors: ["#008A7B", "#4DB5AC"],
     armorPiercing: false,
     targets: ["air", "ground"],
@@ -28,7 +28,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     damagePerShot: 1.6,
     shootsEveryNthTick: 1,
     radius: 1.2,
-    cost: 150,
+    cost: 60,
     colors: ["#E53734", "#E37370"],
     armorPiercing: false,
     targets: ["ground"],
@@ -38,7 +38,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     damagePerShot: 250,
     shootsEveryNthTick: 150,
     radius: 3,
-    cost: 200,
+    cost: 80,
     colors: ["#49A550", "#7DC584"],
     armorPiercing: false,
     targets: ["ground"],
@@ -48,7 +48,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     damagePerShot: 400,
     shootsEveryNthTick: 150,
     radius: 2,
-    cost: 200,
+    cost: 100,
     colors: ["#2086E4", "#64B5F5"],
     armorPiercing: true,
     targets: ["ground"],
@@ -58,7 +58,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     damagePerShot: 50,
     shootsEveryNthTick: 20,
     radius: 2,
-    cost: 200,
+    cost: 60,
     colors: ["#0EBBBF", "#4DD0E1"],
     armorPiercing: false,
     targets: ["air"],
@@ -94,28 +94,27 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
     if (tower.ticksUntilNextShot > 0) {
       decrementTicksUntilNextshot();
     }
-    if (tower.ticksUntilNextShot === 0) {
-      setTicksUntilNextShot(tower.shootsEveryNthTick);
-      enemies.forEach(enemy => {
-        if (areColliding(tower, enemy)) {
-          enemiesInReach.push(enemy);
-        }
-      });
-      const targetableEnemies = enemiesInReach.filter(enemy =>
-        tower.targets.includes(enemy.movement),
-      );
-      targetableEnemies.sort((a, b) => a.route.length - b.route.length);
-      if (targetableEnemies.length) {
+    enemies.forEach(enemy => {
+      if (areColliding(tower, enemy)) {
+        enemiesInReach.push(enemy);
+      }
+    });
+    const targetableEnemies = enemiesInReach.filter(enemy =>
+      tower.targets.includes(enemy.movement),
+    );
+    targetableEnemies.sort((a, b) => a.route.length - b.route.length);
+    if (targetableEnemies.length) {
+      const target = targetableEnemies[0];
+      if (tower.ticksUntilNextShot === 0) {
+        setTicksUntilNextShot(tower.shootsEveryNthTick);
         setIsFiring(true);
-
         const { damagePerShot } = tower;
-        const target = targetableEnemies[0];
         target.isUnderFire = true;
         target.health -= damagePerShot;
-        setTargetPosition(target.position);
-      } else {
-        setTargetPosition(null);
       }
+      setTargetPosition(target.position);
+    } else {
+      setTargetPosition(null);
     }
   });
 };
