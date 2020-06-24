@@ -129,7 +129,7 @@ export const renderTowers = (towers: Tower[]) => {
 };
 
 export const renderTower = (tower: Tower) => {
-  const { position, targetPosition } = tower;
+  const { position, targetPosition, angle, setAngle, isFiring } = tower;
   const { x, y } = position;
 
   CTX.fillStyle = tower.colors[0];
@@ -140,6 +140,11 @@ export const renderTower = (tower: Tower) => {
   CTX.fill();
 
   if (targetPosition) {
+    const newAngle = (Math.atan2(targetPosition.y - y, targetPosition.x - x) * 180) / Math.PI;
+    setAngle(newAngle);
+  }
+
+  if (isFiring) {
     CTX.beginPath();
     CTX.moveTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2);
     CTX.lineTo(
@@ -150,6 +155,19 @@ export const renderTower = (tower: Tower) => {
     CTX.lineWidth = 1;
     CTX.stroke();
   }
+
+  // Barrel
+  const barrelLength = 12;
+  const barrelWidth = 5;
+
+  CTX.moveTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2);
+  CTX.lineTo(
+    x * TILE_SIZE + TILE_SIZE / 2 + barrelLength * Math.cos((Math.PI * angle) / 180),
+    y * TILE_SIZE + TILE_SIZE / 2 + barrelLength * Math.sin((Math.PI * angle) / 180),
+  );
+  CTX.strokeStyle = tower.colors[1];
+  CTX.lineWidth = barrelWidth;
+  CTX.stroke();
 };
 
 export const renderActiveTowerUI = (tower: Tower) => {

@@ -8,6 +8,7 @@ export class Tower extends TowerBlueprint {
   public isFiring: boolean = false;
   public ticksUntilNextShot: number = 0;
   public targetPosition: PositionType | null;
+  public angle: number = 0;
 
   constructor(blueprint: TowerBlueprint & { position: PositionType }) {
     super(blueprint);
@@ -20,6 +21,7 @@ export class Tower extends TowerBlueprint {
     this.setTicksUntilNextShot = this.setTicksUntilNextShot.bind(this);
     this.decrementTicksUntilNextshot = this.decrementTicksUntilNextshot.bind(this);
     this.setTargetPosition = this.setTargetPosition.bind(this);
+    this.setAngle = this.setAngle.bind(this);
   }
 
   public setPosition(position: PositionType) {
@@ -36,5 +38,8 @@ export class Tower extends TowerBlueprint {
   }
   public setTargetPosition(position: PositionType | null) {
     this.targetPosition = position;
+  }
+  public setAngle(angle: number) {
+    this.angle = angle;
   }
 }
