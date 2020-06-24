@@ -68,3 +68,5 @@ export const areColliding = (a: Circle, b: Circle) => {
   const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
   return distance < a.radius + b.radius;
 };
+
+export const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);

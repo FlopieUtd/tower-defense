@@ -7,7 +7,7 @@ import { game } from "../state/Game";
 import { mouse } from "../state/Mouse";
 import { Tower } from "../state/Tower"; // eslint-disable-line
 import { TowerBlueprint } from "../state/TowerBlueprint"; // eslint-disable-line
-import { areColliding, getValueAtPosition } from "../utils";
+import { areColliding, clamp, getValueAtPosition } from "../utils";
 
 export type TowerType = "turret" | "flamethrower";
 export type Color = "blue" | "red" | "pink";
@@ -88,7 +88,17 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
       decrementTicksUntilNextshot,
       setTicksUntilNextShot,
       setTargetPosition,
+      targetPosition,
+      barrelAngle,
+      setBarrelAngle,
+      position,
+      rotationSpeed,
+      setTargetAngle,
+      targetAngle,
     } = tower;
+
+    const { x, y } = position;
+
     setIsFiring(false);
     const enemiesInReach: Enemy[] = [];
     if (tower.ticksUntilNextShot > 0) {
@@ -103,9 +113,31 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
       tower.targets.includes(enemy.movement),
     );
     targetableEnemies.sort((a, b) => a.route.length - b.route.length);
+
+    // Turn barrel
+    if (targetPosition) {
+      let targetAngle = (Math.atan2(targetPosition.y - y, targetPosition.x - x) * 180) / Math.PI;
+      if (targetAngle < 0) {
+        targetAngle = 360 - Math.abs(targetAngle);
+      }
+      setTargetAngle(targetAngle);
+      const difference = targetAngle - barrelAngle;
+
+      const clampedDifference = clamp(difference, -rotationSpeed, rotationSpeed);
+      setBarrelAngle(barrelAngle + clampedDifference);
+      if (difference < -180) {
+        setBarrelAngle(barrelAngle - 360);
+      }
+      if (difference > 180) {
+        setBarrelAngle(barrelAngle + 360);
+      }
+    }
+
+    const targetBarrelDifference = Math.abs(targetAngle - barrelAngle);
+
     if (targetableEnemies.length) {
       const target = targetableEnemies[0];
-      if (tower.ticksUntilNextShot === 0) {
+      if (tower.ticksUntilNextShot === 0 && targetBarrelDifference < 1) {
         setTicksUntilNextShot(tower.shootsEveryNthTick);
         setIsFiring(true);
         const { damagePerShot } = tower;
@@ -129,41 +161,38 @@ export const renderTowers = (towers: Tower[]) => {
 };
 
 export const renderTower = (tower: Tower) => {
-  const { position, targetPosition, angle, setAngle, isFiring } = tower;
+  const { position, targetPosition, isFiring, barrelAngle } = tower;
   const { x, y } = position;
 
   CTX.fillStyle = tower.colors[0];
   CTX.fillRect(x * TILE_SIZE + 10, y * TILE_SIZE + 10, TILE_SIZE - 20, TILE_SIZE - 20);
+
   CTX.fillStyle = tower.colors[1];
   CTX.beginPath();
-  CTX.arc(x * TILE_SIZE + 0.5 * TILE_SIZE, y * TILE_SIZE + 0.5 * TILE_SIZE, 6, 0, 2 * Math.PI);
+  CTX.arc(x * TILE_SIZE + 0.5 * TILE_SIZE, y * TILE_SIZE + 0.5 * TILE_SIZE, 5, 0, 2 * Math.PI);
   CTX.fill();
-
-  if (targetPosition) {
-    const newAngle = (Math.atan2(targetPosition.y - y, targetPosition.x - x) * 180) / Math.PI;
-    setAngle(newAngle);
-  }
 
   if (isFiring) {
     CTX.beginPath();
+    CTX.strokeStyle = "white";
+    CTX.lineWidth = 1;
     CTX.moveTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2);
     CTX.lineTo(
       targetPosition.x * TILE_SIZE + TILE_SIZE / 2,
       targetPosition.y * TILE_SIZE + TILE_SIZE / 2,
     );
-    CTX.strokeStyle = "white";
-    CTX.lineWidth = 1;
     CTX.stroke();
   }
 
   // Barrel
-  const barrelLength = 12;
-  const barrelWidth = 5;
+  const barrelLength = 10;
+  const barrelWidth = 4;
 
+  CTX.beginPath();
   CTX.moveTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2);
   CTX.lineTo(
-    x * TILE_SIZE + TILE_SIZE / 2 + barrelLength * Math.cos((Math.PI * angle) / 180),
-    y * TILE_SIZE + TILE_SIZE / 2 + barrelLength * Math.sin((Math.PI * angle) / 180),
+    x * TILE_SIZE + TILE_SIZE / 2 + barrelLength * Math.cos((Math.PI * barrelAngle) / 180),
+    y * TILE_SIZE + TILE_SIZE / 2 + barrelLength * Math.sin((Math.PI * barrelAngle) / 180),
   );
   CTX.strokeStyle = tower.colors[1];
   CTX.lineWidth = barrelWidth;
