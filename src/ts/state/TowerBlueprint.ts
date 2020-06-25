@@ -9,6 +9,9 @@ export class TowerBlueprint {
   public colors: string[];
   public armorPiercing: boolean;
   public targets: Movement[];
+  public rotationSpeed: number;
+  public barrelWidth: number;
+  public barrelLength: number;
 
   constructor(blueprint: TowerBlueprint) {
     const {

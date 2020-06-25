@@ -9,14 +9,18 @@ export class Tower extends TowerBlueprint {
   public ticksUntilNextShot: number = 0;
   public targetPosition: PositionType | null;
   public barrelAngle: number = 0;
-  public targetAngle: number = 180;
-  public rotationSpeed = 4;
+  public targetAngle: number | null = null;
+  public barrelWidth: number;
+  public barrelLength: number;
 
   constructor(blueprint: TowerBlueprint & { position: PositionType }) {
     super(blueprint);
-    const { position } = blueprint;
+    const { position, rotationSpeed, barrelWidth, barrelLength } = blueprint;
     this.id = uuid();
     this.position = position;
+    this.rotationSpeed = rotationSpeed;
+    this.barrelWidth = barrelWidth;
+    this.barrelLength = barrelLength;
 
     this.setPosition = this.setPosition.bind(this);
     this.setIsFiring = this.setIsFiring.bind(this);

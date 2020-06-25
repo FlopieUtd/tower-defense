@@ -8,6 +8,10 @@ export class Enemy extends EnemyBlueprint {
   public route: PositionType[];
   public isUnderFire: boolean;
   public health: number;
+  public deviation: {
+    x: number;
+    y: number;
+  };
 
   constructor(blueprint: EnemyBlueprint) {
     super(blueprint);

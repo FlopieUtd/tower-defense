@@ -10,7 +10,6 @@ import { TowerBlueprint } from "../state/TowerBlueprint"; // eslint-disable-line
 import { areColliding, clamp, getValueAtPosition } from "../utils";
 
 export type TowerType = "turret" | "flamethrower";
-export type Color = "blue" | "red" | "pink";
 
 export const towerBlueprints: TowerBlueprint[] = [
   {
@@ -22,6 +21,9 @@ export const towerBlueprints: TowerBlueprint[] = [
     colors: ["#008A7B", "#4DB5AC"],
     armorPiercing: false,
     targets: ["air", "ground"],
+    rotationSpeed: 4,
+    barrelWidth: 4,
+    barrelLength: 10,
   },
   {
     type: "flamethrower",
@@ -32,6 +34,9 @@ export const towerBlueprints: TowerBlueprint[] = [
     colors: ["#E53734", "#E37370"],
     armorPiercing: false,
     targets: ["ground"],
+    rotationSpeed: 4,
+    barrelWidth: 4,
+    barrelLength: 8,
   },
   {
     type: "sniper",
@@ -42,6 +47,9 @@ export const towerBlueprints: TowerBlueprint[] = [
     colors: ["#49A550", "#7DC584"],
     armorPiercing: false,
     targets: ["ground"],
+    rotationSpeed: 8,
+    barrelWidth: 3,
+    barrelLength: 12,
   },
   {
     type: "canon",
@@ -52,6 +60,9 @@ export const towerBlueprints: TowerBlueprint[] = [
     colors: ["#2086E4", "#64B5F5"],
     armorPiercing: true,
     targets: ["ground"],
+    rotationSpeed: 3,
+    barrelWidth: 5,
+    barrelLength: 12,
   },
   {
     type: "anti-air",
@@ -62,6 +73,9 @@ export const towerBlueprints: TowerBlueprint[] = [
     colors: ["#0EBBBF", "#4DD0E1"],
     armorPiercing: false,
     targets: ["air"],
+    rotationSpeed: 4,
+    barrelWidth: 6,
+    barrelLength: 6,
   },
 ];
 
@@ -131,13 +145,20 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
       if (difference > 180) {
         setBarrelAngle(barrelAngle + 360);
       }
+    } else {
+      setTargetAngle(null);
     }
 
-    const targetBarrelDifference = Math.abs(targetAngle - barrelAngle);
+    const targetBarrelDifference = targetAngle ? Math.abs(targetAngle - barrelAngle) : null;
 
     if (targetableEnemies.length) {
       const target = targetableEnemies[0];
-      if (tower.ticksUntilNextShot === 0 && targetBarrelDifference < 1) {
+      if (
+        tower.ticksUntilNextShot === 0 &&
+        typeof targetBarrelDifference === "number" &&
+        targetBarrelDifference < 1 &&
+        targetPosition
+      ) {
         setTicksUntilNextShot(tower.shootsEveryNthTick);
         setIsFiring(true);
         const { damagePerShot } = tower;
@@ -161,7 +182,7 @@ export const renderTowers = (towers: Tower[]) => {
 };
 
 export const renderTower = (tower: Tower) => {
-  const { position, targetPosition, isFiring, barrelAngle } = tower;
+  const { position, targetPosition, isFiring, barrelAngle, barrelWidth, barrelLength } = tower;
   const { x, y } = position;
 
   CTX.fillStyle = tower.colors[0];
@@ -185,9 +206,6 @@ export const renderTower = (tower: Tower) => {
   }
 
   // Barrel
-  const barrelLength = 10;
-  const barrelWidth = 4;
-
   CTX.beginPath();
   CTX.moveTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2);
   CTX.lineTo(
