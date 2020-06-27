@@ -1,7 +1,7 @@
 import React from "react";
 import { handleConstructionPreview } from "../../../engine/event_handlers";
 import { TowerBlueprint } from "../../../state/TowerBlueprint"; // eslint-disable-line
-import { towerBlueprints } from "../../../towers";
+import { towerBlueprints } from "../../../towers/blueprints";
 
 export const TowerSlot = ({ blueprint, index }: { blueprint: TowerBlueprint; index: number }) => {
   const handleClick = () => {

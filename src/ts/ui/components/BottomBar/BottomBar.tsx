@@ -1,5 +1,5 @@
 import React from "react";
-import { towerBlueprints } from "../../../towers";
+import { towerBlueprints } from "../../../towers/blueprints";
 import { TowerSlot } from "../TowerSlot/TowerSlot";
 
 export const BottomBar = () => {

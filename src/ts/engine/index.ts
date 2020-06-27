@@ -1,11 +1,15 @@
 import { CANVAS, TILE_SIZE } from "../consts";
-import { renderEnemies, spawnEnemies, updateEnemies } from "../enemies";
-import { levelCreator, levels, renderBuildings, renderMap } from "../levels"; // eslint-disable-line
+import { renderEnemies } from "../enemies/render";
+import { spawnEnemies, updateEnemies } from "../enemies/update";
+import { levelCreator, levels, PositionType } from "../levels"; // eslint-disable-line
+import { renderBuildings, renderMap } from "../levels/render";
 import { construction } from "../state/Construction";
 import { engine } from "../state/Engine";
 import { game } from "../state/Game";
 import { Level } from "../state/Level"; // eslint-disable-line
-import { renderActiveTowerUI, renderConstructionUI, renderTowers, updateTowers } from "../towers";
+import { user } from "../state/User";
+import { renderActiveTowerUI, renderConstructionUI, renderTowers } from "../towers/render";
+import { updateTowers } from "../towers/update";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
 
 const checkGameState = (health: number) => {
@@ -125,4 +129,38 @@ export const initializeGame = () => {
   initializeCanvas(CANVAS);
   registerEventHandlers();
   // startLevel(levelCreator(1));
+};
+
+export const callNextWave = () => {
+  const { currentWaveGroup, setCurrentWave, level } = game;
+  if (currentWaveGroup < level.waves.length - 1) {
+    setCurrentWave(currentWaveGroup + 1);
+  }
+};
+
+export const handleGameWon = () => {
+  const { setIsGameStarted, setIsGameWon } = engine;
+  handleEscape();
+  setIsGameStarted(false);
+  setIsGameWon(true);
+  game.setStarsWon(getStars(game.health));
+  const levelStatus = {
+    levelNumber: game.level.levelNumber,
+    isUnlocked: true,
+    isGameWon: true,
+    stars: game.starsWon,
+  };
+  user.awardMoney(levelStatus);
+  user.setLevelStatus(levelStatus);
+  user.syncUserWithLocalStorage();
+};
+
+export const getDistanceBetweenPositions = (positionA: PositionType, positionB: PositionType) =>
+  Math.abs(positionA.x !== positionB.x ? positionB.x - positionA.x : positionB.y - positionA.y);
+
+export const checkForGameWin = () => {
+  const { currentWaveGroup, level, enemies } = game;
+  if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
+    handleGameWon();
+  }
 };

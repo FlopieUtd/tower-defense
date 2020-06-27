@@ -4,7 +4,8 @@ import { engine } from "../state/Engine";
 import { game } from "../state/Game";
 import { mouse } from "../state/Mouse";
 import { TowerBlueprint } from "../state/TowerBlueprint"; // eslint-disable-line
-import { constructTower, towerBlueprints } from "../towers";
+import { towerBlueprints } from "../towers/blueprints";
+import { constructTower } from "../towers/update";
 import { arePositionsEqual, getValueAtPosition } from "../utils";
 
 export const handleConstructionPreview = (blueprint: TowerBlueprint) => {
