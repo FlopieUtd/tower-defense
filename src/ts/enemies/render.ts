@@ -1,5 +1,6 @@
 import { CTX, TILE_SIZE } from "../consts";
 import { Enemy } from "../state/Enemy";
+import { clamp } from "../utils";
 
 export const renderEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
@@ -23,13 +24,12 @@ export const renderEnemies = (enemies: Enemy[]) => {
         15,
         2,
       );
-
       // Health bar foreground
       CTX.fillStyle = "lime";
       CTX.fillRect(
         position.x * TILE_SIZE + deviation.x + 17.5,
         position.y * TILE_SIZE + deviation.y + 35,
-        15 * (health / originalHealth),
+        15 * clamp(health / originalHealth, 0, 999999),
         2,
       );
     }

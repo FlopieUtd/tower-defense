@@ -59,8 +59,8 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
     } else {
       setTargetAngle(null);
     }
-
-    const targetBarrelDifference = targetAngle ? Math.abs(targetAngle - barrelAngle) : null;
+    const targetBarrelDifference =
+      typeof targetAngle === "number" ? Math.abs(targetAngle - barrelAngle) : null;
 
     if (targetableEnemies.length) {
       const target = targetableEnemies[0];

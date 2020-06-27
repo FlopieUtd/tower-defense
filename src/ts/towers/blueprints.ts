@@ -3,14 +3,14 @@ import { TowerBlueprint } from "../state/TowerBlueprint";
 export const towerBlueprints: TowerBlueprint[] = [
   {
     type: "turret",
-    damagePerShot: 50,
-    shootsEveryNthTick: 50,
-    radius: 1.5,
+    damagePerShot: 25,
+    shootsEveryNthTick: 25,
+    radius: 3,
     cost: 50,
     colors: ["#008A7B", "#4DB5AC"],
     armorPiercing: false,
     targets: ["air", "ground"],
-    rotationSpeed: 4,
+    rotationSpeed: 14,
     barrelWidth: 4,
     barrelLength: 10,
   },
