@@ -10,6 +10,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     speed: 2.4,
     intervalInTicks: 20,
     movement: "ground",
+    drops: [],
   },
   {
     type: "heavy",
@@ -20,6 +21,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     speed: 1.8,
     intervalInTicks: 50,
     movement: "ground",
+    drops: [],
   },
   {
     type: "spawner",
@@ -30,5 +32,6 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     speed: 1.8,
     intervalInTicks: 50,
     movement: "ground",
+    drops: ["runner", "runner", "runner"],
   },
 ];

@@ -15,7 +15,7 @@ export const renderEnemies = (enemies: Enemy[]) => {
       2 * Math.PI,
     );
     CTX.fill();
-    if (health / originalHealth < 1) {
+    if (health / originalHealth < 1 && health > 0) {
       // Health bar background
       CTX.fillStyle = "black";
       CTX.fillRect(

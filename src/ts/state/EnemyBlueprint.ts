@@ -1,3 +1,5 @@
+import { EnemyType } from "../enemies";
+
 export type Movement = "air" | "ground";
 
 export class EnemyBlueprint {
@@ -9,9 +11,19 @@ export class EnemyBlueprint {
   public speed: number;
   public intervalInTicks: number;
   public movement: Movement;
+  public drops: EnemyType[];
 
   constructor(blueprint: EnemyBlueprint) {
-    const { type, color, originalHealth, radius, reward, speed, intervalInTicks } = blueprint;
+    const {
+      type,
+      color,
+      originalHealth,
+      radius,
+      reward,
+      speed,
+      intervalInTicks,
+      drops,
+    } = blueprint;
 
     this.radius = radius;
     this.color = color;
@@ -21,5 +33,6 @@ export class EnemyBlueprint {
     this.color = color;
     this.speed = speed;
     this.intervalInTicks = intervalInTicks;
+    this.drops = drops;
   }
 }

@@ -18,5 +18,7 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["@typescript-eslint"],
-  rules: {},
+  rules: {
+    "fp/no-mutating-methods": "error",
+  },
 };

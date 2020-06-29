@@ -47,13 +47,13 @@ export class Game {
     this.currentWaveGroup = wave;
   }
   public addTower(tower: Tower) {
-    this.towers.push(tower);
+    this.towers = [...this.towers, tower];
   }
   public resetTowers() {
     this.towers = [];
   }
   public addEnemy(enemy: Enemy) {
-    this.enemies.push(enemy);
+    this.enemies = [...this.enemies, enemy];
   }
   public resetEnemies() {
     this.enemies = [];

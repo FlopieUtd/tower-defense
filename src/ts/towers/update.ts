@@ -25,13 +25,13 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
     const { x, y } = position;
 
     setIsFiring(false);
-    const enemiesInReach: Enemy[] = [];
+    let enemiesInReach: Enemy[] = [];
     if (tower.ticksUntilNextShot > 0) {
       decrementTicksUntilNextshot();
     }
     enemies.forEach(enemy => {
       if (areColliding(tower, enemy)) {
-        enemiesInReach.push(enemy);
+        enemiesInReach = [...enemiesInReach, enemy];
       }
     });
     const targetableEnemies = enemiesInReach.filter(enemy =>

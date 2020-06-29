@@ -19,18 +19,24 @@ export const enemyReachedHq = (enemyPosition: PositionType, level: Level) =>
 
 export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
-    const { position, route, health, reward, speed } = enemy;
+    const { position, route, health, reward, speed, type, drops } = enemy;
     const { increaseMoneyBy, decreaseHealth, level } = game;
-
     if (health <= 0) {
       increaseMoneyBy(reward);
     }
 
     if (enemyReachedHq(position, level)) {
       decreaseHealth();
+      removeEnemy(enemy);
+      checkForGameWin();
+      return null;
     }
 
-    if (enemyReachedHq(position, level) || health <= 0) {
+    if (health <= 0) {
+      drops.forEach(drop => {
+        const blueprint = enemyBlueprints.find(enemy => enemy.type === drop);
+        spawnEnemy(blueprint, [...route], position);
+      });
       removeEnemy(enemy);
       checkForGameWin();
       return null;
@@ -96,7 +102,14 @@ export const spawnEnemies = () => {
         if (wave.amount) {
           wave.decreaseAmount();
           const blueprint = enemyBlueprints.find(enemy => enemy.type === wave.type);
-          spawnEnemy(blueprint, wave.spawnLocation);
+
+          const route = breadthFirstSearch({
+            end: getUniquePosition(level.map, 4),
+            map: level.map,
+            start: getUniquePosition(level.map, wave.spawnLocation),
+          });
+
+          spawnEnemy(blueprint, route, getUniquePosition(level.map, wave.spawnLocation));
         }
       }
     });
@@ -117,22 +130,22 @@ export const spawnEnemies = () => {
   }
 };
 
-export const spawnEnemy = (enemyBlueprint: EnemyBlueprint, spawnLocation: number) => {
+export const spawnEnemy = (
+  enemyBlueprint: EnemyBlueprint,
+  route: PositionType[],
+  position: PositionType,
+) => {
   const { level, addEnemy } = game;
   const newEnemy = {
     ...enemyBlueprint,
     id: uuid(),
     isUnderFire: false,
-    position: getUniquePosition(level.map, spawnLocation),
+    position,
     health: enemyBlueprint.originalHealth,
-    route: breadthFirstSearch({
-      end: getUniquePosition(level.map, 4),
-      map: level.map,
-      start: getUniquePosition(level.map, spawnLocation),
-    }),
+    route,
     deviation: {
-      x: Math.floor(Math.random() * 10 - 5),
-      y: Math.floor(Math.random() * 10 - 5),
+      x: Math.floor(Math.random() * 20 - 10),
+      y: Math.floor(Math.random() * 20 - 10),
     },
   };
   addEnemy(newEnemy);
