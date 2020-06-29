@@ -1,6 +1,6 @@
 import { TILE_SIZE } from "../consts";
 import { construction } from "../state/Construction";
-import { engine } from "../state/Engine";
+import { engine, Screen } from "../state/Engine";
 import { game } from "../state/Game";
 import { mouse } from "../state/Mouse";
 import { TowerBlueprint } from "../state/TowerBlueprint"; // eslint-disable-line
@@ -40,11 +40,11 @@ export const handleEscape = () => {
 
 const handleMouseClick = () => {
   const { position } = mouse;
-  const { isMenuActive } = engine;
+  const { activeScreen } = engine;
   const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
   const { level, towers, decreaseMoneyBy } = game;
 
-  if (!position || isMenuActive) {
+  if (!position || activeScreen === Screen.Menu) {
     return;
   }
   // Set active tower click
@@ -77,7 +77,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     setIsPaused,
     setIsGameStarted,
     callNextWave,
-    isMenuActive,
+    activeScreen,
     nextWaveInNSeconds,
   } = engine;
   if (e.key === "Escape") {
@@ -96,7 +96,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     }
   }
   if (e.code === "Space") {
-    if (!isMenuActive) {
+    if (activeScreen === Screen.Game) {
       setIsGameStarted(true);
       if (nextWaveInNSeconds !== 0) {
         callNextWave();

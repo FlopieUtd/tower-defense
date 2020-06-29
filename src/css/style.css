@@ -119,7 +119,9 @@ canvas {
 }
 
 .lose-screen,
-.win-screen {
+.win-screen,
+.menu-screen,
+.research-screen {
   background: black;
   display: flex;
   align-items: center;
@@ -183,4 +185,47 @@ canvas {
 
 .level-button-is-unlocked:hover {
   background: #444;
+}
+
+.research-button {
+  background: #333;
+  width: 108px;
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.research-button:hover {
+  background: #444;
+}
+
+.research-tabs {
+  display: flex;
+  justify-content: stretch;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.research-tab {
+  width: 100px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  cursor: pointer;
+}
+
+.research-tab.active {
+  background: #333;
+}
+
+.research-tab:hover {
+  background: #333;
+}
+
+.research-container {
+  margin-bottom: 16px;
+  width: 100%;
 }

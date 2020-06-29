@@ -1,12 +1,18 @@
 import { observable } from "mobx";
 
+export const enum Screen {
+  Lose,
+  Win,
+  Menu,
+  Research,
+  Game,
+}
+
 export class Engine {
   public isPaused: boolean = false;
+  @observable public activeScreen: Screen = Screen.Menu;
   @observable public isFastForward: boolean = false;
   @observable public isGameStarted: boolean = false;
-  @observable public isGameOver: boolean = false;
-  @observable public isGameWon: boolean = false;
-  @observable public isMenuActive: boolean = true;
   @observable public nextWaveInNSeconds: number = 0;
   public tick: number = 0;
   public waveTick: number = 0;
@@ -14,10 +20,8 @@ export class Engine {
 
   constructor() {
     this.setIsPaused = this.setIsPaused.bind(this);
+    this.setActiveScreen = this.setActiveScreen.bind(this);
     this.setIsFastForward = this.setIsFastForward.bind(this);
-    this.setIsGameOver = this.setIsGameOver.bind(this);
-    this.setIsGameWon = this.setIsGameWon.bind(this);
-    this.setIsMenuActive = this.setIsMenuActive.bind(this);
     this.incrementTick = this.incrementTick.bind(this);
     this.incrementWaveTick = this.incrementWaveTick.bind(this);
     this.callNextWave = this.callNextWave.bind(this);
@@ -32,14 +36,8 @@ export class Engine {
   public setIsFastForward(isFastForward: boolean) {
     this.isFastForward = isFastForward;
   }
-  public setIsGameOver(isGameOver: boolean) {
-    this.isGameOver = isGameOver;
-  }
-  public setIsGameWon(isGameWon: boolean) {
-    this.isGameWon = isGameWon;
-  }
-  public setIsMenuActive(isMenuActive: boolean) {
-    this.isMenuActive = isMenuActive;
+  public setActiveScreen(screen: Screen) {
+    this.activeScreen = screen;
   }
   public incrementTick() {
     this.tick++;

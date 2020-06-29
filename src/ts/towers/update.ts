@@ -1,4 +1,5 @@
 import { uuid } from "uuidv4";
+import { TILE_SIZE } from "../consts";
 import { Enemy } from "../state/Enemy";
 import { game } from "../state/Game";
 import { mouse } from "../state/Mouse";
@@ -76,7 +77,13 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
         target.isUnderFire = true;
         target.health -= damagePerShot;
       }
-      setTargetPosition(target.position);
+
+      const targetPositionWithDeviation = {
+        x: target.position.x + target.deviation.x / TILE_SIZE,
+        y: target.position.y + target.deviation.y / TILE_SIZE,
+      };
+
+      setTargetPosition(targetPositionWithDeviation);
     } else {
       setTargetPosition(null);
     }

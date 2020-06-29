@@ -4,7 +4,7 @@ import { spawnEnemies, updateEnemies } from "../enemies/update";
 import { levelCreator, levels, PositionType } from "../levels"; // eslint-disable-line
 import { renderBuildings, renderMap } from "../levels/render";
 import { construction } from "../state/Construction";
-import { engine } from "../state/Engine";
+import { engine, Screen } from "../state/Engine";
 import { game } from "../state/Game";
 import { Level } from "../state/Level"; // eslint-disable-line
 import { user } from "../state/User";
@@ -14,10 +14,9 @@ import { handleEscape, registerEventHandlers } from "./event_handlers";
 
 const checkGameState = (health: number) => {
   if (health <= 0) {
-    const { setIsGameOver, setIsGameStarted } = engine;
+    const { setActiveScreen } = engine;
     handleEscape();
-    setIsGameStarted(false);
-    setIsGameOver(true);
+    setActiveScreen(Screen.Lose);
   }
 };
 
@@ -62,14 +61,14 @@ let last = timestamp();
 let delta = 0;
 
 export const frame = () => {
-  const { isPaused, isFastForward, isGameOver } = engine;
+  const { isPaused, isFastForward, activeScreen } = engine;
   const { health } = game;
   const now = timestamp();
   const step = isFastForward ? 1 / 240 : 1 / 60;
   delta = delta + Math.min(1, (now - last) / 1000);
   while (delta > step) {
     delta = delta - step;
-    if (!isPaused && !isGameOver) {
+    if (!isPaused && activeScreen === Screen.Game) {
       update();
     }
   }
@@ -77,7 +76,7 @@ export const frame = () => {
 
   render();
   checkGameState(health);
-  if (!isGameOver) {
+  if (activeScreen === Screen.Game) {
     requestAnimationFrame(frame);
   }
 };
@@ -106,7 +105,7 @@ export const resetGameState = () => {
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
   const { setCurrentWave, setMoney, setLevel } = game;
-  const { setIsGameOver, setIsGameWon, setIsMenuActive } = engine;
+  const { setActiveScreen } = engine;
 
   resetGameState();
 
@@ -114,9 +113,7 @@ export const startLevel = (level: Level) => {
   setCurrentWave(0);
   setMoney(startingMoney);
 
-  setIsGameOver(false);
-  setIsGameWon(false);
-  setIsMenuActive(false);
+  setActiveScreen(Screen.Game);
 
   requestAnimationFrame(frame);
 };
@@ -139,10 +136,9 @@ export const callNextWave = () => {
 };
 
 export const handleGameWon = () => {
-  const { setIsGameStarted, setIsGameWon } = engine;
+  const { setActiveScreen } = engine;
   handleEscape();
-  setIsGameStarted(false);
-  setIsGameWon(true);
+  setActiveScreen(Screen.Win);
   game.setStarsWon(getStars(game.health));
   const levelStatus = {
     levelNumber: game.level.levelNumber,

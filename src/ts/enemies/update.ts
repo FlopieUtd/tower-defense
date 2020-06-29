@@ -1,9 +1,10 @@
 import { uuid } from "uuidv4";
+import { TILE_SIZE } from "../consts";
 import { callNextWave, checkForGameWin, getDistanceBetweenPositions } from "../engine";
 import { PositionType } from "../levels";
 import { Enemy } from "../state/Enemy";
 import { EnemyBlueprint } from "../state/EnemyBlueprint";
-import { engine } from "../state/Engine";
+import { engine, Screen } from "../state/Engine";
 import { game } from "../state/Game";
 import { Level } from "../state/Level";
 import { arePositionsEqual, breadthFirstSearch, getUniquePosition } from "../utils";
@@ -84,15 +85,7 @@ export const move = (current: PositionType, next: PositionType, speed: number) =
 };
 
 export const spawnEnemies = () => {
-  const {
-    isGameStarted,
-    tick,
-    waveTick,
-    incrementWaveTick,
-    resetTicks,
-    isGameWon,
-    isGameOver,
-  } = engine;
+  const { isGameStarted, tick, waveTick, incrementWaveTick, resetTicks, activeScreen } = engine;
   const { currentWaveGroup, level } = game;
   if (level.waves[currentWaveGroup]) {
     const waveGroup = level.waves[currentWaveGroup];
@@ -123,7 +116,7 @@ export const spawnEnemies = () => {
     incrementWaveTick();
     if (waveTick > 1 && waveTick % 1200 === 0) {
       resetTicks();
-      if (!isGameOver && !isGameWon) {
+      if (activeScreen === Screen.Game) {
         callNextWave();
       }
     }
@@ -144,8 +137,8 @@ export const spawnEnemy = (
     health: enemyBlueprint.originalHealth,
     route,
     deviation: {
-      x: Math.floor(Math.random() * 20 - 10),
-      y: Math.floor(Math.random() * 20 - 10),
+      x: Math.floor(Math.random() * (TILE_SIZE / 2) - TILE_SIZE / 4),
+      y: Math.floor(Math.random() * (TILE_SIZE / 2) - TILE_SIZE / 4),
     },
   };
   addEnemy(newEnemy);
