@@ -1,12 +1,12 @@
 import { CANVAS, TILE_SIZE } from "../consts";
 import { renderEnemies } from "../enemies/render";
 import { spawnEnemies, updateEnemies } from "../enemies/update";
-import { levelCreator, levels, PositionType } from "../levels"; // eslint-disable-line
+import { levels, PositionType } from "../levels";
 import { renderBuildings, renderMap } from "../levels/render";
 import { construction } from "../state/Construction";
 import { engine, Screen } from "../state/Engine";
 import { game } from "../state/Game";
-import { Level } from "../state/Level"; // eslint-disable-line
+import { Level } from "../state/Level";
 import { user } from "../state/User";
 import { renderActiveTowerUI, renderConstructionUI, renderTowers } from "../towers/render";
 import { updateTowers } from "../towers/update";

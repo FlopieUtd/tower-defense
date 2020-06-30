@@ -1,8 +1,8 @@
-import { LevelType, Map, PositionType, WaveGroup } from "../levels"; // eslint-disable-line
+import { LevelType, Map, PositionType, WaveGroup } from "../levels";
 import { Wave } from "./Wave";
 
 export class Level {
-  public levelNumber: number = 1;
+  public levelNumber = 1;
   public map: Map;
   public waves: WaveGroup[];
   public startingMoney: number;

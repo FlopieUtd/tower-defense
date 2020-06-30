@@ -1,14 +1,14 @@
 import { uuid } from "uuidv4";
-import { PositionType } from "../levels"; // eslint-disable-line
+import { PositionType } from "../levels";
 import { TowerBlueprint } from "./TowerBlueprint";
 
 export class Tower extends TowerBlueprint {
   public id: string = uuid();
   public position: PositionType | null;
-  public isFiring: boolean = false;
-  public ticksUntilNextShot: number = 0;
+  public isFiring = false;
+  public ticksUntilNextShot = 0;
   public targetPosition: PositionType | null;
-  public barrelAngle: number = 0;
+  public barrelAngle = 0;
   public targetAngle: number | null = null;
   public barrelWidth: number;
   public barrelLength: number;

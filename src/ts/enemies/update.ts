@@ -20,7 +20,7 @@ export const enemyReachedHq = (enemyPosition: PositionType, level: Level) =>
 
 export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
-    const { position, route, health, reward, speed, type, drops } = enemy;
+    const { position, route, health, reward, speed,  drops } = enemy;
     const { increaseMoneyBy, decreaseHealth, level } = game;
     if (health <= 0) {
       increaseMoneyBy(reward);
@@ -128,7 +128,7 @@ export const spawnEnemy = (
   route: PositionType[],
   position: PositionType,
 ) => {
-  const { level, addEnemy } = game;
+  const { addEnemy } = game;
   const newEnemy = {
     ...enemyBlueprint,
     id: uuid(),

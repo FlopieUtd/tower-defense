@@ -1,5 +1,5 @@
 import { uuid } from "uuidv4";
-import { PositionType } from "../levels"; // eslint-disable-line
+import { PositionType } from "../levels";
 import { EnemyBlueprint } from "./EnemyBlueprint";
 
 export class Enemy extends EnemyBlueprint {

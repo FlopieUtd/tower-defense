@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { startLevel } from "../../../engine";
 import { levelCreator } from "../../../levels";
-import { LevelStatus } from "../../../state/User"; // eslint-disable-line
+import { LevelStatus } from "../../../state/User";
 
 export const LevelButton = observer(({ level }: { level: LevelStatus }) => {
   const { levelNumber, isGameWon, isUnlocked } = level;

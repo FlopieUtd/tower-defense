@@ -1,7 +1,5 @@
-import { CTX, TILE_SIZE } from "../consts";
-import { game } from "../state/Game";
 import { Level } from "../state/Level";
-import { Wave } from "../state/Wave"; // eslint-disable-line
+import { Wave } from "../state/Wave";
 
 export interface PositionType {
   x: number;

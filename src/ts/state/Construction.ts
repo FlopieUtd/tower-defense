@@ -1,6 +1,6 @@
-import { PositionType } from "../levels"; // eslint-disable-line
-import { Tower } from "./Tower"; // eslint-disable-line
-import { TowerBlueprint } from "./TowerBlueprint"; // eslint-disable-line
+import { PositionType } from "../levels";
+import { Tower } from "./Tower";
+import { TowerBlueprint } from "./TowerBlueprint";
 
 export class Construction {
   public isVisible: boolean;

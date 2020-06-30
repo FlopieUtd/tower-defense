@@ -1,4 +1,4 @@
-import { Map, PositionType } from "../levels"; // eslint-disable-line
+import { Map, PositionType } from "../levels";
 
 export interface Circle {
   position: PositionType;
@@ -36,6 +36,11 @@ export const getAdjacentPositions = (position: PositionType, map: Map) => {
 
 export const positionToId = (position: PositionType) => position.x + position.y * 1000;
 
+export interface BFSNode {
+  position: PositionType;
+  path: PositionType[];
+}
+
 export const breadthFirstSearch = (problem: {
   map: Map;
   start: PositionType;
@@ -43,10 +48,11 @@ export const breadthFirstSearch = (problem: {
 }) => {
   const { map, start, end } = problem;
   const closed = new Set();
-  const queue = [];
-  queue.push({ position: start, path: [] });
+  let queue: BFSNode[] = [];
+  queue = [...queue, { position: start, path: [] }];
   while (queue.length) {
-    const node = queue.shift();
+    const node = queue[0];
+    queue = queue.slice(1);
     const { position, path } = node;
     if (arePositionsEqual(position, end)) {
       return path;
@@ -54,7 +60,7 @@ export const breadthFirstSearch = (problem: {
     if (!closed.has(positionToId(position))) {
       closed.add(positionToId(position));
       getAdjacentPositions(position, map).forEach(neighbour => {
-        queue.push({ position: neighbour, path: path.concat([neighbour]) });
+        queue = [...queue, { position: neighbour, path: path.concat([neighbour]) }];
       });
     }
   }

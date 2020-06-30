@@ -1,5 +1,5 @@
 import { enemyBlueprints } from "../enemies/blueprints";
-import { PositionType, WaveType } from "../levels"; // eslint-disable-line
+import {WaveType } from "../levels";
 
 export class Wave {
   public amount: number;

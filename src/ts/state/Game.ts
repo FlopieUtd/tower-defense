@@ -1,13 +1,12 @@
 import { observable } from "mobx";
-import { WaveGroup } from "../levels"; // eslint-disable-line
-import { Enemy } from "./Enemy"; // eslint-disable-line
-import { Level } from "./Level"; // eslint-disable-line
-import { Tower } from "./Tower"; // eslint-disable-line
+import { Enemy } from "./Enemy";
+import { Level } from "./Level";
+import { Tower } from "./Tower";
 
 export class Game {
-  @observable public money: number = 0;
-  @observable public health: number = 20;
-  @observable public currentWaveGroup: number = 0;
+  @observable public money = 0;
+  @observable public health = 20;
+  @observable public currentWaveGroup = 0;
   @observable public starsWon = 0;
   public level: Level;
   public towers: Tower[] = [];

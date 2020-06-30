@@ -1,4 +1,4 @@
-import { Movement } from "./EnemyBlueprint"; // eslint-disable-line
+import { Movement } from "./EnemyBlueprint";
 
 export class TowerBlueprint {
   public radius: number;

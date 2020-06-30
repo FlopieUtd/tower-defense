@@ -1,4 +1,4 @@
-import { PositionType } from "../levels"; // eslint-disable-line
+import { PositionType } from "../levels";
 
 export class Mouse {
   public position: PositionType | null;

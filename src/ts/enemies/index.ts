@@ -1,4 +1,4 @@
-import { PositionType } from "../levels"; // eslint-disable-line
+import { PositionType } from "../levels";
 
 export type Route = PositionType[];
 

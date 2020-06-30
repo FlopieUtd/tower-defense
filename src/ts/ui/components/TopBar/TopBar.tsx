@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import React from "react"; // eslint-disable-line
+import React from "react";
 import { engine } from "../../../state/Engine";
 import { game } from "../../../state/Game";
 
