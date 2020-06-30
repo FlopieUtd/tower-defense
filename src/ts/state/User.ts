@@ -12,7 +12,7 @@ const LEVEL_WON_AWARD = 100;
 const STAR_AWARD = 50;
 
 export class User {
-  @observable public money: number = 0;
+  @observable public money = 0;
   public progress: LevelStatus[] = [];
 
   constructor() {

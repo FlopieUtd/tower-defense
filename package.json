@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "tslint": "tslint 'src/**/*.{ts,tsx}'",
+    "tslint": "tslint 'src/**/*.{ts,tsx}' --fix",
+    "eslint": "eslint './src/**' --fix",
     "dev": "webpack --config ./webpack.config.js --watch"
   },
   "devDependencies": {

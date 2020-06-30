@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { engine, Screen } from "../../../state/Engine";
 import { towerBlueprints } from "../../../towers/blueprints";
 
@@ -20,6 +20,7 @@ export const ResearchScreen = () => {
             onClick={() => {
               setActiveTab(tower.type);
             }}
+            key={tower.type}
           >
             {tower.type}
           </div>

@@ -9,13 +9,13 @@ export const enum Screen {
 }
 
 export class Engine {
-  public isPaused: boolean = false;
+  public isPaused = false;
   @observable public activeScreen: Screen = Screen.Menu;
-  @observable public isFastForward: boolean = false;
-  @observable public isGameStarted: boolean = false;
-  @observable public nextWaveInNSeconds: number = 0;
-  public tick: number = 0;
-  public waveTick: number = 0;
+  @observable public isFastForward = false;
+  @observable public isGameStarted = false;
+  @observable public nextWaveInNSeconds = 0;
+  public tick = 0;
+  public waveTick = 0;
   public activeLevel: number | null = 1;
 
   constructor() {
