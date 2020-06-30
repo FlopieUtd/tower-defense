@@ -1,5 +1,5 @@
 import { uuid } from "uuidv4";
-import { PositionType } from "../levels";
+import { PositionType } from "../levels/types";
 import { TowerBlueprint } from "./TowerBlueprint";
 
 export class Tower extends TowerBlueprint {

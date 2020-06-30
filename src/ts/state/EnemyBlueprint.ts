@@ -1,4 +1,4 @@
-import { EnemyType } from "../enemies";
+import { EnemyType } from "../enemies/types";
 
 export type Movement = "air" | "ground";
 

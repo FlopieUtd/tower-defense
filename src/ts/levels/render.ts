@@ -1,7 +1,6 @@
-import { PositionType } from ".";
 import { CTX, TILE_SIZE } from "../consts";
 import { game } from "../state/Game";
-import { Map } from "./index";
+import { Map, PositionType } from "./types";
 
 export const renderConstructionTile = (position: PositionType) => {
   const { x, y } = position;

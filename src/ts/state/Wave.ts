@@ -1,5 +1,5 @@
 import { enemyBlueprints } from "../enemies/blueprints";
-import {WaveType } from "../levels";
+import { WaveType } from "../levels/types";
 
 export class Wave {
   public amount: number;

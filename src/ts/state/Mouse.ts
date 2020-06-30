@@ -1,4 +1,4 @@
-import { PositionType } from "../levels";
+import { PositionType } from "../levels/types";
 
 export class Mouse {
   public position: PositionType | null;

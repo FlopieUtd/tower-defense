@@ -1,6 +1,7 @@
-import { PositionType } from "../levels";
 import { Tower } from "./Tower";
 import { TowerBlueprint } from "./TowerBlueprint";
+
+import { PositionType } from "../levels/types";
 
 export class Construction {
   public isVisible: boolean;

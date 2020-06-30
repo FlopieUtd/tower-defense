@@ -1,7 +1,7 @@
 import { CANVAS, TILE_SIZE } from "../consts";
 import { renderEnemies } from "../enemies/render";
 import { spawnEnemies, updateEnemies } from "../enemies/update";
-import { levels, PositionType } from "../levels";
+import { levels } from "../levels";
 import { renderBuildings, renderMap } from "../levels/render";
 import { construction } from "../state/Construction";
 import { engine, Screen } from "../state/Engine";
@@ -11,6 +11,8 @@ import { user } from "../state/User";
 import { renderActiveTowerUI, renderConstructionUI, renderTowers } from "../towers/render";
 import { updateTowers } from "../towers/update";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
+
+import { PositionType } from "../levels/types";
 
 const checkGameState = (health: number) => {
   if (health <= 0) {

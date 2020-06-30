@@ -1,4 +1,4 @@
-import { LevelType, Map, PositionType, WaveGroup } from "../levels";
+import { LevelType, Map, PositionType, WaveGroup } from "../levels/types";
 import { Wave } from "./Wave";
 
 export class Level {

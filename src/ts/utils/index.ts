@@ -1,9 +1,5 @@
-import { Map, PositionType } from "../levels";
-
-export interface Circle {
-  position: PositionType;
-  radius: number;
-}
+import { Map, PositionType } from "../levels/types";
+import { Circle } from "./types";
 
 export const getUniquePosition = (map: Map, key: number) => {
   let x: number;

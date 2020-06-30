@@ -1,6 +1,7 @@
 import { uuid } from "uuidv4";
-import { PositionType } from "../levels";
 import { EnemyBlueprint } from "./EnemyBlueprint";
+
+import { PositionType } from "../levels/types";
 
 export class Enemy extends EnemyBlueprint {
   public id: string;

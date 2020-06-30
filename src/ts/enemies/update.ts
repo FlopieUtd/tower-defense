@@ -1,7 +1,6 @@
 import { uuid } from "uuidv4";
 import { TILE_SIZE } from "../consts";
 import { callNextWave, checkForGameWin, getDistanceBetweenPositions } from "../engine";
-import { PositionType } from "../levels";
 import { Enemy } from "../state/Enemy";
 import { EnemyBlueprint } from "../state/EnemyBlueprint";
 import { engine, Screen } from "../state/Engine";
@@ -9,6 +8,8 @@ import { game } from "../state/Game";
 import { Level } from "../state/Level";
 import { arePositionsEqual, breadthFirstSearch, getUniquePosition } from "../utils";
 import { enemyBlueprints } from "./blueprints";
+
+import { PositionType } from "../levels/types";
 
 const removeEnemy = (enemy: Enemy) => {
   const { enemies } = game;
@@ -20,7 +21,7 @@ export const enemyReachedHq = (enemyPosition: PositionType, level: Level) =>
 
 export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
-    const { position, route, health, reward, speed,  drops } = enemy;
+    const { position, route, health, reward, speed, drops } = enemy;
     const { increaseMoneyBy, decreaseHealth, level } = game;
     if (health <= 0) {
       increaseMoneyBy(reward);
