@@ -14,7 +14,7 @@ export const WinScreen = observer(() => {
 
   const handleContinue = () => {
     const { setActiveScreen } = engine;
-    setActiveScreen(Screen.Win);
+    setActiveScreen(Screen.Menu);
   };
 
   return (

@@ -13,6 +13,10 @@ import { updateTowers } from "../towers/update";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
 
 import { PositionType } from "../levels/types";
+import { research } from "../state/Research";
+import { towerBlueprints } from "../towers/blueprints";
+
+import { researchTypes } from "../research";
 
 const checkGameState = (health: number) => {
   if (health <= 0) {
@@ -93,21 +97,34 @@ const initializeCanvas = canvas => {
 
 export const resetGameState = () => {
   const { resetHealth, setCurrentWave, resetTowers, resetEnemies } = game;
-  const { resetTicks, setIsFastForward } = engine;
+  const { resetTicks, setIsFastForward, setIsGameStarted } = engine;
 
   resetTowers();
   resetEnemies();
 
+  setIsGameStarted(false);
   setIsFastForward(false);
   setCurrentWave(0);
   resetHealth();
   resetTicks();
 };
 
+export const instantiateResearch = () => {
+  const researchObject = researchTypes.reduce((a, b) => ((a[b] = 0), a), {});
+  const rootResearchObject = towerBlueprints.reduce(
+    (a, b) => ((a[b.type] = researchObject), a),
+    {},
+  );
+  research.setResearch(rootResearchObject);
+  console.log("research instantiated!", rootResearchObject);
+};
+
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
   const { setCurrentWave, setMoney, setLevel } = game;
   const { setActiveScreen } = engine;
+
+  instantiateResearch();
 
   resetGameState();
 
