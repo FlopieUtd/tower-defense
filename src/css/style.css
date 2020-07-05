@@ -208,7 +208,7 @@ canvas {
 }
 
 .research-tab {
-  width: 100px;
+  width: 120px;
   height: 40px;
   display: flex;
   justify-content: center;
@@ -228,4 +228,31 @@ canvas {
 .research-container {
   margin-bottom: 16px;
   width: 100%;
+}
+
+.research-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.research-label {
+  width: 180px;
+}
+
+.research-items-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.research-item {
+  width: 32px;
+  height: 32px;
+  background: #111;
+}
+
+.research-item:not(:last-of-type) {
+  margin-right: 8px;
 }

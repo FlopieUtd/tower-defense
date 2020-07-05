@@ -110,7 +110,7 @@ export const resetGameState = () => {
 };
 
 export const instantiateResearch = () => {
-  const researchObject = researchTypes.reduce((a, b) => ((a[b] = 0), a), {});
+  const researchObject = researchTypes.reduce((a, b) => ((a[b.name] = 0), a), {});
   const rootResearchObject = towerBlueprints.reduce(
     (a, b) => ((a[b.type] = researchObject), a),
     {},

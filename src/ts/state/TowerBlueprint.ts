@@ -5,6 +5,7 @@ export class TowerBlueprint {
   public shootsEveryNthTick: number;
   public damagePerShot: number;
   public type: string;
+  public label: string;
   public cost: number;
   public colors: string[];
   public armorPiercing: boolean;

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { researchTypes } from "../../../research";
 import { engine, Screen } from "../../../state/Engine";
 import { towerBlueprints } from "../../../towers/blueprints";
+import { ResearchLine } from "./ResearchLine";
 
 export const ResearchScreen = () => {
   const handleMenu = () => {
@@ -21,22 +23,16 @@ export const ResearchScreen = () => {
               setActiveTab(tower.type);
             }}
             key={tower.type}
+            style={{ background: tower.type === activeTab && tower.colors[0] }}
           >
-            {tower.type}
+            {tower.label}
           </div>
         ))}
       </div>
       <div className="research-container">
-        fire rate
-        <br />
-        range
-        <br />
-        damage
-        <br />
-        rotation speed
-        <br />
-        price
-        <br />
+        {researchTypes.map(type => (
+          <ResearchLine type={type} key={type.label} />
+        ))}
       </div>
       <div className="research-button" onClick={handleMenu}>
         Menu
