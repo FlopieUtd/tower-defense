@@ -5,7 +5,9 @@ import { levelCreator } from "../../../levels";
 import { engine, Screen } from "../../../state/Engine";
 import { game } from "../../../state/Game";
 
-export const WinScreen = observer(() => {
+export const GameOverScreen = observer(() => {
+  const { currentWaveGroup } = game;
+
   const handleTryAgain = () => {
     const { level } = game;
     const { levelNumber } = level;
@@ -19,8 +21,8 @@ export const WinScreen = observer(() => {
 
   return (
     <div className="win-screen">
-      <h1>Game won!</h1>
-      <div className="credits">?/40</div>
+      <h1>Game over!</h1>
+      <div className="waves-won">{currentWaveGroup}/40</div>
       <div className="button-wrapper">
         <button onClick={handleTryAgain}>Try again</button>
         <button onClick={handleContinue}>Continue</button>

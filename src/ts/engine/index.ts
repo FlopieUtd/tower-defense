@@ -19,10 +19,12 @@ import { towerBlueprints } from "../towers/blueprints";
 import { researchTypes } from "../research";
 
 const checkGameState = (health: number) => {
-  if (health <= 0) {
+  const { activeScreen } = engine;
+  if (health <= 0 && activeScreen !== Screen.GameOver) {
     const { setActiveScreen } = engine;
+    setActiveScreen(Screen.GameOver);
     handleEscape();
-    setActiveScreen(Screen.Lose);
+    handleGameOver();
   }
 };
 
@@ -103,7 +105,6 @@ export const instantiateResearch = () => {
     {},
   );
   research.setResearch(rootResearchObject);
-  console.log("research instantiated!", rootResearchObject);
 };
 
 export const startLevel = (level: Level) => {
@@ -141,15 +142,12 @@ export const callNextWave = () => {
   }
 };
 
-export const handleGameWon = () => {
-  const { setActiveScreen } = engine;
+export const handleGameOver = () => {
   handleEscape();
-  setActiveScreen(Screen.Win);
   const levelStatus = {
     levelNumber: game.level.levelNumber,
     isUnlocked: true,
-    isGameWon: true,
-    wavesWon: game.level.levelNumber,
+    wavesWon: game.currentWaveGroup,
   };
   user.awardCredits(levelStatus);
   user.setLevelStatus(levelStatus);
@@ -162,6 +160,6 @@ export const getDistanceBetweenPositions = (positionA: PositionType, positionB: 
 export const checkForGameWin = () => {
   const { currentWaveGroup, level, enemies } = game;
   if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
-    handleGameWon();
+    handleGameOver();
   }
 };

@@ -1,8 +1,7 @@
 import { observable } from "mobx";
 
 export const enum Screen {
-  Lose,
-  Win,
+  GameOver,
   Menu,
   Research,
   Game,

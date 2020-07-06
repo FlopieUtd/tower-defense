@@ -4,7 +4,6 @@ import { levels } from "../levels";
 export interface LevelStatus {
   levelNumber: number;
   isUnlocked: boolean;
-  isGameWon: boolean;
   wavesWon: number;
 }
 
@@ -46,26 +45,25 @@ export class User {
     this.credits = credits;
     this.syncUserWithLocalStorage();
   }
-  public setLevelStatus(levelStatus: LevelStatus) {
-    const level = this.progress.find(level => level.levelNumber === levelStatus.levelNumber);
+  public setLevelStatus(newLevelStatus: LevelStatus) {
+    const existingLevelStatus = this.progress.find(
+      level => level.levelNumber === newLevelStatus.levelNumber,
+    );
     // Only overwrite wavesWon if the user won more than before
-    levelStatus.wavesWon = Math.max(levelStatus.wavesWon, level.wavesWon);
-    this.progress.splice(this.progress.indexOf(level), 1, levelStatus);
+    newLevelStatus.wavesWon = Math.max(newLevelStatus.wavesWon, existingLevelStatus.wavesWon);
+    this.progress.splice(this.progress.indexOf(existingLevelStatus), 1, newLevelStatus);
     // Unlock the next level
-    if (this.progress[levelStatus.levelNumber]) {
-      this.progress[levelStatus.levelNumber].isUnlocked = true;
+    if (this.progress[newLevelStatus.levelNumber]) {
+      this.progress[newLevelStatus.levelNumber].isUnlocked = true;
     }
   }
   public awardCredits(newLevelStatus: LevelStatus) {
     const existingLevelStatus = this.progress.find(
       level => level.levelNumber === newLevelStatus.levelNumber,
     );
-
-    if (!existingLevelStatus.isGameWon) {
-      this.setCredits(this.credits + LEVEL_WON_AWARD);
-    }
-    const newWavesWon = newLevelStatus.wavesWon - existingLevelStatus.wavesWon;
-    this.setCredits(this.credits + (newWavesWon > 0 ? newWavesWon * STAR_AWARD : 0));
+    newLevelStatus.wavesWon = Math.max(newLevelStatus.wavesWon, existingLevelStatus.wavesWon);
+    const newCreditsWon = newLevelStatus.wavesWon - existingLevelStatus.wavesWon;
+    this.setCredits(this.credits + (newCreditsWon > 0 ? newCreditsWon : 0));
   }
   public syncUserWithLocalStorage() {
     localStorage.setItem(
