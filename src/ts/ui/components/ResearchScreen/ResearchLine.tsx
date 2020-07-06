@@ -11,7 +11,7 @@ export const ResearchLine = ({ type }: Props) => {
       <div className="research-label"> {type.label}</div>
       <div className="research-items-container">
         {Array.from(Array(10).keys()).map(item => (
-          <div className="research-item"></div>
+          <div className="research-item" key={item}></div>
         ))}
       </div>
     </div>

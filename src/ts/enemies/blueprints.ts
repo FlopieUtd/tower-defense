@@ -3,7 +3,7 @@ import { EnemyBlueprint } from "../state/EnemyBlueprint";
 export const enemyBlueprints: EnemyBlueprint[] = [
   {
     type: "runner",
-    color: "red",
+    color: "#00d89a",
     radius: 0.045,
     originalHealth: 100,
     reward: 2,
@@ -14,7 +14,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
   },
   {
     type: "heavy",
-    color: "pink",
+    color: "#ff446a",
     radius: 0.05,
     originalHealth: 250,
     reward: 3,
@@ -25,7 +25,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
   },
   {
     type: "spawner",
-    color: "blue",
+    color: "#13cbff",
     radius: 0.06,
     originalHealth: 500,
     reward: 5,

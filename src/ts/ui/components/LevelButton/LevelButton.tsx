@@ -5,7 +5,7 @@ import { levelCreator } from "../../../levels";
 import { LevelStatus } from "../../../state/User";
 
 export const LevelButton = observer(({ level }: { level: LevelStatus }) => {
-  const { levelNumber, isGameWon, isUnlocked } = level;
+  const { levelNumber, isGameWon, isUnlocked, wavesWon } = level;
   const handleClick = () => {
     startLevel(levelCreator(levelNumber));
   };
@@ -17,12 +17,7 @@ export const LevelButton = observer(({ level }: { level: LevelStatus }) => {
       style={{ color: isGameWon ? "#fff" : "#999" }}
     >
       {levelNumber}
-      {isGameWon && (
-        <div>
-          {[...Array(level.stars)].map(() => "★")}
-          {[...Array(3 - level.stars)].map(() => "☆")}
-        </div>
-      )}
+      <div>{wavesWon ?? 0}/40</div>
     </div>
   );
 });

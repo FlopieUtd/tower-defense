@@ -26,19 +26,6 @@ const checkGameState = (health: number) => {
   }
 };
 
-export const getStars = (health: number) => {
-  if (health === 20) {
-    return 3;
-  }
-  if (health >= 12) {
-    return 2;
-  }
-  if (health >= 6) {
-    return 1;
-  }
-  return 0;
-};
-
 const update = () => {
   const { incrementTick } = engine;
   const { towers, enemies } = game;
@@ -121,7 +108,7 @@ export const instantiateResearch = () => {
 
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
-  const { setCurrentWave, setMoney, setLevel } = game;
+  const { setCurrentWave, setCredits, setLevel } = game;
   const { setActiveScreen } = engine;
 
   instantiateResearch();
@@ -130,7 +117,7 @@ export const startLevel = (level: Level) => {
 
   setLevel(level);
   setCurrentWave(0);
-  setMoney(startingMoney);
+  setCredits(startingMoney);
 
   setActiveScreen(Screen.Game);
 
@@ -158,14 +145,13 @@ export const handleGameWon = () => {
   const { setActiveScreen } = engine;
   handleEscape();
   setActiveScreen(Screen.Win);
-  game.setStarsWon(getStars(game.health));
   const levelStatus = {
     levelNumber: game.level.levelNumber,
     isUnlocked: true,
     isGameWon: true,
-    stars: game.starsWon,
+    wavesWon: game.level.levelNumber,
   };
-  user.awardMoney(levelStatus);
+  user.awardCredits(levelStatus);
   user.setLevelStatus(levelStatus);
   user.syncUserWithLocalStorage();
 };

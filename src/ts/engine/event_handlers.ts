@@ -42,7 +42,7 @@ const handleMouseClick = () => {
   const { position } = mouse;
   const { activeScreen } = engine;
   const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
-  const { level, towers, decreaseMoneyBy } = game;
+  const { level, towers, decreaseCreditsBy } = game;
 
   if (!position || activeScreen === Screen.Menu) {
     return;
@@ -63,7 +63,7 @@ const handleMouseClick = () => {
 
   // Construction click
   const { cost } = blueprint;
-  decreaseMoneyBy(cost);
+  decreaseCreditsBy(cost);
   constructTower(blueprint);
 
   construction.setPosition(null);
