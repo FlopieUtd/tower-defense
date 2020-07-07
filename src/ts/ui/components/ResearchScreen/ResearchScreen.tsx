@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { researchTypes } from "../../../research";
 import { engine, Screen } from "../../../state/Engine";
@@ -5,7 +6,7 @@ import { user } from "../../../state/User";
 import { towerBlueprints } from "../../../towers/blueprints";
 import { ResearchLine } from "./ResearchLine";
 
-export const ResearchScreen = () => {
+export const ResearchScreen = observer(() => {
   const { credits } = user;
 
   const handleMenu = () => {
@@ -35,7 +36,7 @@ export const ResearchScreen = () => {
       </div>
       <div className="research-container">
         {researchTypes.map(type => (
-          <ResearchLine type={type} key={type.label} />
+          <ResearchLine towerType={activeTab} researchType={type} key={type.label} />
         ))}
       </div>
       <div className="research-button" onClick={handleMenu}>
@@ -43,4 +44,4 @@ export const ResearchScreen = () => {
       </div>
     </div>
   );
-};
+});

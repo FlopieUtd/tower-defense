@@ -13,7 +13,6 @@ import { updateTowers } from "../towers/update";
 import { handleEscape, registerEventHandlers } from "./event_handlers";
 
 import { PositionType } from "../levels/types";
-import { research } from "../state/Research";
 import { towerBlueprints } from "../towers/blueprints";
 
 import { researchTypes } from "../research";
@@ -99,20 +98,19 @@ export const resetGameState = () => {
 };
 
 export const instantiateResearch = () => {
+  const { setResearch } = user;
   const researchObject = researchTypes.reduce((a, b) => ((a[b.name] = 0), a), {});
   const rootResearchObject = towerBlueprints.reduce(
     (a, b) => ((a[b.type] = researchObject), a),
     {},
   );
-  research.setResearch(rootResearchObject);
+  setResearch(rootResearchObject);
 };
 
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
   const { setCurrentWave, setCredits, setLevel } = game;
   const { setActiveScreen } = engine;
-
-  instantiateResearch();
 
   resetGameState();
 
@@ -132,7 +130,9 @@ export const restartLevel = (level: Level) => {
 export const initializeGame = () => {
   initializeCanvas(CANVAS);
   registerEventHandlers();
-  // startLevel(levelCreator(1));
+  if (!user.research) {
+    instantiateResearch();
+  }
 };
 
 export const callNextWave = () => {

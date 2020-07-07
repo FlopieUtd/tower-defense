@@ -239,7 +239,7 @@ canvas {
 }
 
 .research-label {
-  width: 180px;
+  width: 200px;
 }
 
 .research-items-container {
@@ -249,17 +249,35 @@ canvas {
 }
 
 .research-item {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.credits {
+  position: absolute;
+  right: 24px;
+  top: 36px;
 }
 
 .research-item:not(:last-of-type) {
   margin-right: 8px;
 }
 
-.credits {
-  position: absolute;
-  right: 24px;
-  top: 40px;
+.researched {
+  background: #444;
+}
+
+.is-available:not(.researched) {
+  cursor: pointer;
+  background: #222;
+}
+
+.is-available:not(.researched):hover {
+  cursor: pointer;
+  background: #444;
 }

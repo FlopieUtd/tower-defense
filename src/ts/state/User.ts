@@ -7,18 +7,24 @@ export interface LevelStatus {
   wavesWon: number;
 }
 
-const LEVEL_WON_AWARD = 100;
-const STAR_AWARD = 50;
+interface RootResearchObject {
+  [key: string]: ResearchObject;
+}
+interface ResearchObject {
+  [key: string]: number;
+}
 
 export class User {
   @observable public credits = 0;
   public progress: LevelStatus[] = [];
+  @observable public research: RootResearchObject;
 
   constructor() {
     this.setCredits = this.setCredits.bind(this);
     this.setLevelStatus = this.setLevelStatus.bind(this);
     this.awardCredits = this.awardCredits.bind(this);
     this.syncUserWithLocalStorage = this.syncUserWithLocalStorage.bind(this);
+    this.setResearch = this.setResearch.bind(this);
 
     const storedUser = localStorage.getItem("tower-defense-user");
 
@@ -35,9 +41,10 @@ export class User {
     } else {
       // Existing user
       const parsedUser = JSON.parse(storedUser);
-      const { credits, progress } = parsedUser;
+      const { credits, progress, research } = parsedUser;
       this.credits = credits;
       this.progress = progress;
+      this.research = research;
     }
   }
 
@@ -68,8 +75,11 @@ export class User {
   public syncUserWithLocalStorage() {
     localStorage.setItem(
       "tower-defense-user",
-      JSON.stringify({ credits: this.credits, progress: this.progress }),
+      JSON.stringify({ credits: this.credits, progress: this.progress, research: this.research }),
     );
+  }
+  public setResearch(research: RootResearchObject) {
+    this.research = research;
   }
 }
 

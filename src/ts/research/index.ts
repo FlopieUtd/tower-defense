@@ -10,3 +10,5 @@ export const researchTypes = [
   { name: "rotation-speed", label: "Rotation speed" },
   { name: "price", label: "Price" },
 ];
+
+export const researchCosts = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
