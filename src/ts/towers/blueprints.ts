@@ -12,7 +12,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     armorPiercing: false,
     targets: ["air", "ground"],
     rotationSpeed: 3,
-    barrelWidth: 4,
+    barrelWidth: 3,
     barrelLength: 10,
   },
   {
@@ -27,7 +27,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     targets: ["ground"],
     rotationSpeed: 4,
     barrelWidth: 4,
-    barrelLength: 8,
+    barrelLength: 9,
   },
   {
     type: "sniper",
@@ -36,7 +36,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     shootsEveryNthTick: 150,
     radius: 3,
     cost: 80,
-    colors: ["#13cbff", "#56daff"],
+    colors: ["#13cbff", "#66ddfe"],
     armorPiercing: false,
     targets: ["ground"],
     rotationSpeed: 8,
@@ -54,8 +54,8 @@ export const towerBlueprints: TowerBlueprint[] = [
     armorPiercing: true,
     targets: ["ground"],
     rotationSpeed: 3,
-    barrelWidth: 5,
-    barrelLength: 12,
+    barrelWidth: 4,
+    barrelLength: 11,
   },
   {
     type: "anti-air",
@@ -68,7 +68,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     armorPiercing: false,
     targets: ["air"],
     rotationSpeed: 4,
-    barrelWidth: 6,
-    barrelLength: 6,
+    barrelWidth: 5,
+    barrelLength: 7,
   },
 ];

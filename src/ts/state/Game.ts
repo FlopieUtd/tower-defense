@@ -5,7 +5,7 @@ import { Tower } from "./Tower";
 
 export class Game {
   @observable public money = 0;
-  @observable public health = 3;
+  @observable public health = 20;
   @observable public currentWaveGroup = 0;
   public level: Level;
   public towers: Tower[] = [];
@@ -38,7 +38,7 @@ export class Game {
     this.health -= 1;
   }
   public resetHealth() {
-    this.health = 3;
+    this.health = 20;
   }
   public setCurrentWave(wave: number) {
     this.currentWaveGroup = wave;
