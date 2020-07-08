@@ -13,8 +13,8 @@ export class Game {
 
   constructor() {
     this.increaseMoneyBy = this.increaseMoneyBy.bind(this);
-    this.decreaseCreditsBy = this.decreaseCreditsBy.bind(this);
-    this.setCredits = this.setCredits.bind(this);
+    this.decreaseMoneyBy = this.decreaseMoneyBy.bind(this);
+    this.setMoney = this.setMoney.bind(this);
     this.decreaseHealth = this.decreaseHealth.bind(this);
     this.resetHealth = this.resetHealth.bind(this);
     this.setCurrentWave = this.setCurrentWave.bind(this);
@@ -28,10 +28,10 @@ export class Game {
   public increaseMoneyBy(amount: number) {
     this.money += amount;
   }
-  public decreaseCreditsBy(amount: number) {
+  public decreaseMoneyBy(amount: number) {
     this.money -= amount;
   }
-  public setCredits(amount: number) {
+  public setMoney(amount: number) {
     this.money = amount;
   }
   public decreaseHealth() {

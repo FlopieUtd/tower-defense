@@ -1,3 +1,4 @@
+import { callNextWaveForRewardInSeconds } from ".";
 import { TILE_SIZE } from "../consts";
 import { construction } from "../state/Construction";
 import { engine, Screen } from "../state/Engine";
@@ -33,16 +34,21 @@ const handleMouseMove = (event: MouseEvent) => {
 };
 
 export const handleEscape = () => {
-  const { setIsVisible, setActiveTower } = construction;
-  setIsVisible(false);
-  setActiveTower(null);
+  const { isPaused, setIsPaused } = engine;
+  const { setIsVisible, setActiveTower, isVisible, activeTower } = construction;
+  if (!isVisible && !activeTower) {
+    setIsPaused(!isPaused);
+  } else {
+    setIsVisible(false);
+    setActiveTower(null);
+  }
 };
 
 const handleMouseClick = () => {
   const { position } = mouse;
   const { activeScreen } = engine;
   const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
-  const { level, towers, decreaseCreditsBy } = game;
+  const { level, towers, decreaseMoneyBy } = game;
 
   if (!position || activeScreen === Screen.Menu) {
     return;
@@ -63,7 +69,7 @@ const handleMouseClick = () => {
 
   // Construction click
   const { cost } = blueprint;
-  decreaseCreditsBy(cost);
+  decreaseMoneyBy(cost);
   constructTower(blueprint);
 
   construction.setPosition(null);
@@ -76,7 +82,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
     isPaused,
     setIsPaused,
     setIsGameStarted,
-    callNextWave,
     activeScreen,
     nextWaveInNSeconds,
   } = engine;
@@ -99,7 +104,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     if (activeScreen === Screen.Game) {
       setIsGameStarted(true);
       if (nextWaveInNSeconds !== 0) {
-        callNextWave();
+        callNextWaveForRewardInSeconds();
       }
     }
   }

@@ -1,6 +1,6 @@
 import { uuid } from "uuidv4";
 import { TILE_SIZE } from "../consts";
-import { callNextWave, checkForGameWin, getDistanceBetweenPositions } from "../engine";
+import { checkForGameWin, getDistanceBetweenPositions, startNextWave } from "../engine";
 import { Enemy } from "../state/Enemy";
 import { EnemyBlueprint } from "../state/EnemyBlueprint";
 import { engine, Screen } from "../state/Engine";
@@ -118,7 +118,7 @@ export const spawnEnemies = () => {
     if (waveTick > 1 && waveTick % 1200 === 0) {
       resetTicks();
       if (activeScreen === Screen.Game) {
-        callNextWave();
+        startNextWave();
       }
     }
   }

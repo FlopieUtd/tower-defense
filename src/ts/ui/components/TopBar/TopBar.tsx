@@ -9,7 +9,7 @@ export const TopBar = observer(() => {
     setIsFastForward,
     isGameStarted,
     nextWaveInNSeconds,
-    callNextWave,
+    startNextWave,
     setIsGameStarted,
   } = engine;
   const { money, currentWaveGroup, level } = game;
@@ -21,17 +21,36 @@ export const TopBar = observer(() => {
     setIsGameStarted(true);
   };
 
-  const handleCallNextWave = () => {
-    callNextWave();
+  const handleEscape = () => {
+    const { setIsPaused } = engine;
+    setIsPaused(true);
+  };
+
+  const handleStartNextWave = () => {
+    startNextWave();
   };
 
   return (
     <div className="top-bar">
       <div className="top-bar-left">
+        <div className="topbar-button" onClick={handleEscape}>
+          esc
+        </div>
+        <div className="game-status">
+          <div>{level && `Wave: ${currentWaveGroup + 1} / ${level.waves.length}`}</div>
+          <div>
+            Money: <span className="coin-num">{money}</span>
+          </div>
+        </div>
+      </div>
+      <div className="top-bar-right">
+        <div className="topbar-button" onClick={handleFastForwardToggle}>
+          {isFastForward ? ">" : ">>"}
+        </div>
         {isGameStarted ? (
           <div
             className="topbar-button"
-            onClick={nextWaveInNSeconds === 0 ? null : handleCallNextWave}
+            onClick={nextWaveInNSeconds === 0 ? null : handleStartNextWave}
           >
             {nextWaveInNSeconds === 0 ? "..." : nextWaveInNSeconds}
           </div>
@@ -40,16 +59,6 @@ export const TopBar = observer(() => {
             go
           </div>
         )}
-
-        <div className="game-status">
-          <div>{level && `Wave: ${currentWaveGroup + 1} / ${level.waves.length}`}</div>
-          <div>
-            Money: <span className="coin-num">{money}</span>
-          </div>
-        </div>
-      </div>
-      <div className="topbar-button" onClick={handleFastForwardToggle}>
-        {isFastForward ? ">" : ">>"}
       </div>
     </div>
   );

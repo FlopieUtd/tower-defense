@@ -109,14 +109,14 @@ export const instantiateResearch = () => {
 
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
-  const { setCurrentWave, setCredits, setLevel } = game;
+  const { setCurrentWave, setMoney, setLevel } = game;
   const { setActiveScreen } = engine;
 
   resetGameState();
 
   setLevel(level);
   setCurrentWave(0);
-  setCredits(startingMoney);
+  setMoney(startingMoney);
 
   setActiveScreen(Screen.Game);
 
@@ -135,7 +135,7 @@ export const initializeGame = () => {
   }
 };
 
-export const callNextWave = () => {
+export const startNextWave = () => {
   const { currentWaveGroup, setCurrentWave, level } = game;
   if (currentWaveGroup < level.waves.length - 1) {
     setCurrentWave(currentWaveGroup + 1);
@@ -162,4 +162,11 @@ export const checkForGameWin = () => {
   if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
     handleGameOver();
   }
+};
+
+export const callNextWaveForRewardInSeconds = () => {
+  const { startNextWave, nextWaveInNSeconds } = engine;
+  const { increaseMoneyBy } = game;
+  increaseMoneyBy(nextWaveInNSeconds);
+  startNextWave();
 };

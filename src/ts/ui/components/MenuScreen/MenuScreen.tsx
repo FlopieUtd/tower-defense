@@ -13,7 +13,7 @@ export const MenuScreen = observer(() => {
   return (
     <div className="menu-screen">
       <div>
-        <div className="research-button" onClick={handleResearch}>
+        <div className="button" onClick={handleResearch}>
           Research
         </div>
       </div>

@@ -8,7 +8,7 @@ export const enum Screen {
 }
 
 export class Engine {
-  public isPaused = false;
+  @observable public isPaused = false;
   @observable public activeScreen: Screen = Screen.Menu;
   @observable public isFastForward = false;
   @observable public isGameStarted = false;
@@ -23,7 +23,7 @@ export class Engine {
     this.setIsFastForward = this.setIsFastForward.bind(this);
     this.incrementTick = this.incrementTick.bind(this);
     this.incrementWaveTick = this.incrementWaveTick.bind(this);
-    this.callNextWave = this.callNextWave.bind(this);
+    this.startNextWave = this.startNextWave.bind(this);
     this.resetTicks = this.resetTicks.bind(this);
     this.setActiveLevel = this.setActiveLevel.bind(this);
     this.setIsGameStarted = this.setIsGameStarted.bind(this);
@@ -47,7 +47,7 @@ export class Engine {
       this.nextWaveInNSeconds = (1200 - this.waveTick) / 60;
     }
   }
-  public callNextWave() {
+  public startNextWave() {
     this.waveTick = 1200 - 1;
   }
   public resetTicks() {

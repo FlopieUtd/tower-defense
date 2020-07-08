@@ -39,7 +39,7 @@ export const ResearchScreen = observer(() => {
           <ResearchLine towerType={activeTab} researchType={type} key={type.label} />
         ))}
       </div>
-      <div className="research-button" onClick={handleMenu}>
+      <div className="button" onClick={handleMenu}>
         Menu
       </div>
     </div>
