@@ -25,7 +25,7 @@ export const GameOverScreen = observer(() => {
       <div className="waves-won">{currentWaveGroup}/40</div>
       <div className="button-wrapper">
         <button onClick={handleTryAgain}>Try again</button>
-        <button onClick={handleContinue}>Continue</button>
+        <button onClick={handleContinue}>Menu</button>
       </div>
     </div>
   );

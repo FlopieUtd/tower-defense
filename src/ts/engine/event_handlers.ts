@@ -33,14 +33,21 @@ const handleMouseMove = (event: MouseEvent) => {
   }
 };
 
+export const handleLoseFocus = () => {
+  const { setIsVisible, setActiveTower } = construction;
+  setIsVisible(false);
+  setActiveTower(null);
+};
+
 export const handleEscape = () => {
-  const { isPaused, setIsPaused } = engine;
-  const { setIsVisible, setActiveTower, isVisible, activeTower } = construction;
-  if (!isVisible && !activeTower) {
-    setIsPaused(!isPaused);
-  } else {
-    setIsVisible(false);
-    setActiveTower(null);
+  const { isPaused, setIsPaused, activeScreen } = engine;
+  if (activeScreen === Screen.Game) {
+    const { isVisible, activeTower } = construction;
+    if (!isVisible && !activeTower) {
+      setIsPaused(!isPaused);
+    } else {
+      handleLoseFocus();
+    }
   }
 };
 
@@ -63,7 +70,7 @@ const handleMouseClick = () => {
 
   // Idle click
   if (getValueAtPosition(position, level.map) !== 6 || !isVisible || !blueprint) {
-    handleEscape();
+    handleLoseFocus();
     return;
   }
 

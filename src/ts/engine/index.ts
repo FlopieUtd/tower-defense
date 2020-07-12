@@ -143,6 +143,7 @@ export const startNextWave = () => {
 };
 
 export const handleGameOver = () => {
+  console.log("handleGameOver");
   handleEscape();
   const levelStatus = {
     levelNumber: game.level.levelNumber,
