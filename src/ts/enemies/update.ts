@@ -47,12 +47,13 @@ export const updateEnemies = (enemies: Enemy[]) => {
     if (arePositionsEqual(enemy.position, route[0])) {
       route.shift();
     }
-
     const distanceToNextPosition = getDistanceBetweenPositions(position, route[0]);
+    const moveDistance = speed / 100;
 
-    if (distanceToNextPosition > speed / 100) {
-      enemy.position = move(position, route[0], speed);
+    if (distanceToNextPosition > moveDistance) {
+      enemy.position = move(position, route[0], moveDistance);
     } else {
+      // Enemy reaches HQ
       if (!route[1]) {
         decreaseHealth();
         removeEnemy(enemy);
@@ -60,8 +61,9 @@ export const updateEnemies = (enemies: Enemy[]) => {
         return null;
       }
 
-      const excessMovement = speed - distanceToNextPosition;
+      const excessMovement = Number((moveDistance - distanceToNextPosition).toFixed(3));
       enemy.position = move(route[0], route[1], excessMovement);
+
       route.shift();
     }
 
@@ -69,19 +71,18 @@ export const updateEnemies = (enemies: Enemy[]) => {
   });
 };
 
-export const move = (current: PositionType, next: PositionType, speed: number) => {
-  const moveSpeed = speed / 100;
+export const move = (current: PositionType, next: PositionType, moveDistance: number) => {
   if (current.x < next.x) {
-    return { x: Number((current.x += moveSpeed).toFixed(4)), y: current.y };
+    return { x: Number((current.x + moveDistance).toFixed(3)), y: current.y };
   }
   if (current.x > next.x) {
-    return { x: Number((current.x -= moveSpeed).toFixed(4)), y: current.y };
+    return { x: Number((current.x - moveDistance).toFixed(3)), y: current.y };
   }
   if (current.y < next.y) {
-    return { x: current.x, y: Number((current.y += moveSpeed).toFixed(4)) };
+    return { x: current.x, y: Number((current.y + moveDistance).toFixed(3)) };
   }
   if (current.y > next.y) {
-    return { x: current.x, y: Number((current.y -= moveSpeed).toFixed(4)) };
+    return { x: current.x, y: Number((current.y - moveDistance).toFixed(3)) };
   }
 };
 

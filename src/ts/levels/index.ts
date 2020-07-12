@@ -19,8 +19,10 @@ export const levels = {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ],
     waves: [
-      [{ amount: 1, type: "spawner", spawnLocation: 2 }],
-      [{ amount: 8, type: "runner", spawnLocation: 2 }],
+      [{ amount: 12, type: "runner", spawnLocation: 2 }],
+      [{ amount: 12, type: "runner", spawnLocation: 2 }],
+      [{ amount: 12, type: "runner", spawnLocation: 2 }],
+      [{ amount: 12, type: "runner", spawnLocation: 2 }],
       [{ amount: 8, type: "heavy", spawnLocation: 2 }],
       [{ amount: 16, type: "runner", spawnLocation: 2 }],
       [{ amount: 16, type: "heavy", spawnLocation: 2 }],
