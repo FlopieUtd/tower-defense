@@ -1,16 +1,25 @@
 import React, { useState } from "react";
-import { ResearchType } from "../../../research";
+import { ResearchType, researchTypes } from "../../../research";
+import { user } from "../../../state/User";
 import { ResearchItem } from "../ResearchItem/ResearchItem";
 
 interface Props {
-  researchType: ResearchType;
+  researchTypeName: string;
   towerType: string;
 }
 
-export const ResearchLine = ({ researchType, towerType }: Props) => {
+export const ResearchLine = ({ researchTypeName, towerType }: Props) => {
+  const { research } = user;
+  const researchLevel = research[towerType][researchTypeName];
+  const researchType = researchTypes.find(type => type.name === researchTypeName);
+  const effect = researchType.effects[researchLevel];
+
   return (
     <div className="research-line">
-      <div className="research-label"> {researchType.label}</div>
+      <div className="research-label">
+        {researchType.label} ({researchType.type === "increase" ? "+" : "-"}
+        {effect}%)
+      </div>
       <div className="research-items-container">
         {Array.from(Array(10).keys()).map(level => (
           <ResearchItem

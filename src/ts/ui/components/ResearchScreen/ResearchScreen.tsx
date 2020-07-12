@@ -36,7 +36,7 @@ export const ResearchScreen = observer(() => {
       </div>
       <div className="research-container">
         {researchTypes.map(type => (
-          <ResearchLine towerType={activeTab} researchType={type} key={type.label} />
+          <ResearchLine towerType={activeTab} researchTypeName={type.name} key={type.label} />
         ))}
       </div>
       <div className="button" onClick={handleMenu}>
