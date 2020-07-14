@@ -140,10 +140,17 @@ export const startNextWave = () => {
   if (currentWaveGroup < level.waves.length - 1) {
     setCurrentWave(currentWaveGroup + 1);
   }
+  const levelStatus = {
+    levelNumber: game.level.levelNumber,
+    isUnlocked: true,
+    wavesWon: game.currentWaveGroup,
+  };
+  user.awardCredits(levelStatus);
+  user.setLevelStatus(levelStatus);
+  user.syncUserWithLocalStorage();
 };
 
 export const handleGameOver = () => {
-  console.log("handleGameOver");
   handleEscape();
   const levelStatus = {
     levelNumber: game.level.levelNumber,

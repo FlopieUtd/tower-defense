@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ResearchType, researchTypes } from "../../../research";
+import React from "react";
+import { researchTypes } from "../../../research";
 import { user } from "../../../state/User";
 import { ResearchItem } from "../ResearchItem/ResearchItem";
 
