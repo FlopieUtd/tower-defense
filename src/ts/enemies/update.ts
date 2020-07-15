@@ -11,6 +11,8 @@ import { enemyBlueprints } from "./blueprints";
 
 import { PositionType } from "../levels/types";
 
+const ADDITIONAL_HEALTH_PER_WAVE_IN_PERCENTS = 2;
+
 const removeEnemy = (enemy: Enemy) => {
   const { enemies, setEnemies } = game;
   setEnemies(enemies.filter(e => e !== enemy));
@@ -130,13 +132,16 @@ export const spawnEnemy = (
   route: PositionType[],
   position: PositionType,
 ) => {
-  const { addEnemy } = game;
+  const { addEnemy, currentWaveGroup } = game;
+  const additionalHealth =
+    (currentWaveGroup * ADDITIONAL_HEALTH_PER_WAVE_IN_PERCENTS * enemyBlueprint.originalHealth) /
+    100;
   const newEnemy = {
     ...enemyBlueprint,
     id: uuid(),
     isUnderFire: false,
     position,
-    health: enemyBlueprint.originalHealth,
+    health: enemyBlueprint.originalHealth + additionalHealth,
     route,
     deviation: {
       x: Math.floor(Math.random() * (TILE_SIZE / 2) - TILE_SIZE / 4),
