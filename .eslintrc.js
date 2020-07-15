@@ -7,7 +7,7 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
   ],
   globals: {
     Atomics: "readonly",
@@ -18,9 +18,14 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint", 'fp'],
+  plugins: ["@typescript-eslint", "fp"],
   rules: {
     "fp/no-mutating-methods": 2,
-    '@typescript-eslint/explicit-module-boundary-types': 0
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+  },
+  settings: {
+    react: {
+      version: "detect",
+    },
   },
 };
