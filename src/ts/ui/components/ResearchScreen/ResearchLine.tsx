@@ -10,9 +10,9 @@ interface Props {
 
 export const ResearchLine = ({ researchTypeName, towerType }: Props) => {
   const { research } = user;
-  const researchLevel = research[towerType][researchTypeName];
+  const currentResearch = research[towerType][researchTypeName];
   const researchType = researchTypes.find(type => type.name === researchTypeName);
-  const effect = researchType.effects[researchLevel];
+  const effect = researchType.effects[currentResearch.level];
 
   return (
     <div className="research-line">

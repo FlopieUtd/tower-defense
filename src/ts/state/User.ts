@@ -11,7 +11,7 @@ interface RootResearchObject {
   [key: string]: ResearchObject;
 }
 interface ResearchObject {
-  [key: string]: number;
+  [key: string]: { level: number; effect: number };
 }
 
 export class User {
