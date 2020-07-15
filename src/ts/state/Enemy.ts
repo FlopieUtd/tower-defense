@@ -14,8 +14,21 @@ export class Enemy extends EnemyBlueprint {
     y: number;
   };
 
-  constructor(blueprint: EnemyBlueprint) {
+  constructor(blueprint: Omit<Enemy, "setRoute">) {
     super(blueprint);
+    const { position, route, isUnderFire, health, deviation } = blueprint;
+
     this.id = uuid();
+    this.position = position;
+    this.route = route;
+    this.isUnderFire = isUnderFire;
+    this.health = health;
+    this.deviation = deviation;
+
+    this.setRoute = this.setRoute.bind(this);
+  }
+
+  public setRoute(route: PositionType[]) {
+    this.route = route;
   }
 }

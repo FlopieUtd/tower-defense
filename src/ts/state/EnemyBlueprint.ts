@@ -22,6 +22,7 @@ export class EnemyBlueprint {
       reward,
       speed,
       intervalInTicks,
+      movement,
       drops,
     } = blueprint;
 
@@ -33,6 +34,7 @@ export class EnemyBlueprint {
     this.color = color;
     this.speed = speed;
     this.intervalInTicks = intervalInTicks;
+    this.movement = movement;
     this.drops = drops;
   }
 }

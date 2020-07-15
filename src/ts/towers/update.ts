@@ -35,10 +35,16 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
         enemiesInReach = [...enemiesInReach, enemy];
       }
     });
+
     const targetableEnemies = enemiesInReach.filter(enemy =>
       tower.targets.includes(enemy.movement),
     );
-    targetableEnemies.sort((a, b) => a.route.length - b.route.length);
+
+    // The array is copied before sorting
+    // eslint-disable-next-line fp/no-mutating-methods
+    const sortedTargetableEnemies = [...targetableEnemies].sort(
+      (a, b) => a.route.length - b.route.length,
+    );
 
     // Turn barrel
     if (targetPosition) {
@@ -63,8 +69,8 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
     const targetBarrelDifference =
       typeof targetAngle === "number" ? Math.abs(targetAngle - barrelAngle) : null;
 
-    if (targetableEnemies.length) {
-      const target = targetableEnemies[0];
+    if (sortedTargetableEnemies.length) {
+      const target = sortedTargetableEnemies[0];
       if (
         tower.ticksUntilNextShot === 0 &&
         typeof targetBarrelDifference === "number" &&

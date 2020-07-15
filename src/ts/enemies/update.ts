@@ -12,8 +12,8 @@ import { enemyBlueprints } from "./blueprints";
 import { PositionType } from "../levels/types";
 
 const removeEnemy = (enemy: Enemy) => {
-  const { enemies } = game;
-  enemies.splice(enemies.indexOf(enemy), 1);
+  const { enemies, setEnemies } = game;
+  setEnemies(enemies.filter(e => e !== enemy));
 };
 
 export const enemyReachedHq = (enemyPosition: PositionType, level: Level) =>
@@ -21,7 +21,7 @@ export const enemyReachedHq = (enemyPosition: PositionType, level: Level) =>
 
 export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
-    const { position, route, health, reward, speed, drops } = enemy;
+    const { position, route, setRoute, health, reward, speed, drops } = enemy;
     const { increaseMoneyBy, decreaseHealth, level } = game;
     if (health <= 0) {
       increaseMoneyBy(reward);
@@ -45,7 +45,7 @@ export const updateEnemies = (enemies: Enemy[]) => {
     }
 
     if (arePositionsEqual(enemy.position, route[0])) {
-      route.shift();
+      setRoute(route.slice(1, route.length));
     }
     const distanceToNextPosition = getDistanceBetweenPositions(position, route[0]);
     const moveDistance = speed / 100;
@@ -64,7 +64,7 @@ export const updateEnemies = (enemies: Enemy[]) => {
       const excessMovement = Number((moveDistance - distanceToNextPosition).toFixed(3));
       enemy.position = move(route[0], route[1], excessMovement);
 
-      route.shift();
+      setRoute(route.slice(1, route.length));
     }
 
     enemy.isUnderFire = false;
@@ -143,5 +143,5 @@ export const spawnEnemy = (
       y: Math.floor(Math.random() * (TILE_SIZE / 2) - TILE_SIZE / 4),
     },
   };
-  addEnemy(newEnemy);
+  addEnemy(new Enemy(newEnemy));
 };

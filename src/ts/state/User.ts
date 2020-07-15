@@ -58,7 +58,9 @@ export class User {
     );
     // Only overwrite wavesWon if the user won more than before
     newLevelStatus.wavesWon = Math.max(newLevelStatus.wavesWon, existingLevelStatus.wavesWon);
-    this.progress.splice(this.progress.indexOf(existingLevelStatus), 1, newLevelStatus);
+    this.progress = this.progress.map(levelStatus =>
+      levelStatus === existingLevelStatus ? newLevelStatus : levelStatus,
+    );
     // Unlock the next level
     if (this.progress[newLevelStatus.levelNumber]) {
       this.progress[newLevelStatus.levelNumber].isUnlocked = true;

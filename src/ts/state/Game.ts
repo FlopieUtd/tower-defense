@@ -22,6 +22,7 @@ export class Game {
     this.resetTowers = this.resetTowers.bind(this);
     this.addEnemy = this.addEnemy.bind(this);
     this.resetEnemies = this.resetEnemies.bind(this);
+    this.setEnemies = this.setEnemies.bind(this);
     this.setLevel = this.setLevel.bind(this);
   }
 
@@ -54,6 +55,9 @@ export class Game {
   }
   public resetEnemies() {
     this.enemies = [];
+  }
+  public setEnemies(enemies: Enemy[]) {
+    this.enemies = enemies;
   }
   public setLevel(level: Level) {
     this.level = level;
