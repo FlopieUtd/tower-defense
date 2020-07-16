@@ -1,3 +1,6 @@
+import { Tower } from "../state/Tower";
+import { user } from "../state/User";
+
 export interface ResearchType {
   name: string;
   label: string;
@@ -37,3 +40,25 @@ export const researchTypes = [
 ];
 
 export const researchCosts = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
+
+export const getDamagePerShot = (tower: Tower) => {
+  const { research } = user;
+  const { damagePerShot } = tower;
+  const { effect } = research[tower.type].damage;
+  const additionalDamage = (damagePerShot * effect) / 100;
+  return damagePerShot + additionalDamage;
+};
+
+export const getReloadSpeed = (tower: Tower) => {
+  const { research } = user;
+  const { effect } = research[tower.type]["fire-rate"];
+  return 1 - effect / 100;
+};
+
+export const getRange = (tower: Tower) => {
+  const { research } = user;
+  const { radius } = tower;
+  const { effect } = research[tower.type].range;
+  console.log(radius, effect);
+  return radius;
+};
