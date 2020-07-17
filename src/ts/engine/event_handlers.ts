@@ -13,7 +13,7 @@ export const handleConstructionPreview = (blueprint: TowerBlueprint) => {
   const { setBlueprint, setIsVisible, setActiveTower } = construction;
   const { money } = game;
   setActiveTower(null);
-  if (blueprint.cost <= money) {
+  if (blueprint.price <= money) {
     setBlueprint(blueprint);
     setIsVisible(true);
   }
@@ -75,8 +75,8 @@ const handleMouseClick = () => {
   }
 
   // Construction click
-  const { cost } = blueprint;
-  decreaseMoneyBy(cost);
+  const { price } = blueprint;
+  decreaseMoneyBy(price);
   constructTower(blueprint);
 
   construction.setPosition(null);

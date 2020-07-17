@@ -6,7 +6,7 @@ export class TowerBlueprint {
   public damagePerShot: number;
   public type: string;
   public label: string;
-  public cost: number;
+  public price: number;
   public colors: string[];
   public armorPiercing: boolean;
   public targets: Movement[];
@@ -20,7 +20,7 @@ export class TowerBlueprint {
       shootsEveryNthTick,
       damagePerShot,
       type,
-      cost,
+      price,
       colors,
       armorPiercing,
       targets,
@@ -30,7 +30,7 @@ export class TowerBlueprint {
     this.shootsEveryNthTick = shootsEveryNthTick;
     this.damagePerShot = damagePerShot;
     this.type = type;
-    this.cost = cost;
+    this.price = price;
     this.colors = colors;
     this.armorPiercing = armorPiercing;
     this.targets = targets;

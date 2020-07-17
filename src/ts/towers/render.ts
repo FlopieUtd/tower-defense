@@ -6,6 +6,8 @@ import { mouse } from "../state/Mouse";
 import { Tower } from "../state/Tower";
 import { getValueAtPosition } from "../utils";
 
+import { getPrice } from "../research";
+
 export const renderTowers = (towers: Tower[]) => {
   towers.forEach(tower => {
     const { position } = tower;
@@ -74,9 +76,15 @@ export const renderConstructionUI = () => {
   if (!blueprint) {
     return;
   }
-  const { cost, radius } = blueprint;
+  const { radius } = blueprint;
+  const reducedPrice = getPrice(blueprint);
   const { position } = mouse;
-  if (isVisible && position && getValueAtPosition(position, level.map) === 6 && cost <= money) {
+  if (
+    isVisible &&
+    position &&
+    getValueAtPosition(position, level.map) === 6 &&
+    reducedPrice <= money
+  ) {
     CTX.fillStyle = "rgba(255,255,255,.1)";
     CTX.beginPath();
     CTX.arc(
@@ -90,7 +98,7 @@ export const renderConstructionUI = () => {
 
     renderTower(new Tower({ ...blueprint, position }));
   }
-  if (cost > money) {
+  if (reducedPrice > money) {
     construction.setIsVisible(false);
   }
 };

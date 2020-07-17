@@ -7,6 +7,8 @@ import { Tower } from "../state/Tower";
 import { TowerBlueprint } from "../state/TowerBlueprint";
 import { areColliding, clamp } from "../utils";
 
+import { addResearchEffects } from "../research";
+
 export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
   towers.forEach(tower => {
     const {
@@ -109,5 +111,7 @@ export const constructTower = (blueprint: TowerBlueprint) => {
     originalTicksUntilNextShot: ticksUntilNextShot,
     ticksUntilNextShot,
   };
-  addTower(new Tower(tower));
+  const newTower = new Tower(tower);
+  const newTowerWithResearchEffects = addResearchEffects(newTower);
+  addTower(new Tower(newTowerWithResearchEffects));
 };
