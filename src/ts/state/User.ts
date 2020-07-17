@@ -15,7 +15,7 @@ interface ResearchObject {
 }
 
 export class User {
-  @observable public credits = 200;
+  @observable public credits = 0;
   public progress: LevelStatus[] = [];
   @observable public research: RootResearchObject;
 
@@ -62,7 +62,7 @@ export class User {
       levelStatus === existingLevelStatus ? newLevelStatus : levelStatus,
     );
     // Unlock the next level
-    if (this.progress[newLevelStatus.levelNumber]) {
+    if (this.progress[newLevelStatus.levelNumber] && newLevelStatus.wavesWon === 20) {
       this.progress[newLevelStatus.levelNumber].isUnlocked = true;
     }
   }
