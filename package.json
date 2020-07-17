@@ -6,7 +6,8 @@
   "scripts": {
     "tslint": "tslint 'src/**/*.{ts,tsx}' --fix",
     "eslint": "eslint './src/**/*.{ts,tsx}' --fix",
-    "dev": "webpack --config ./webpack.config.js --watch"
+    "dev": "webpack --config ./webpack.config.js --watch",
+    "tsc": "tsc --noEmit"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.4.0",
