@@ -13,8 +13,8 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
   towers.forEach(tower => {
     const {
       setIsFiring,
-      decrementTicksUntilNextshot,
-      setTicksUntilNextShot,
+      firePowerRequiredForNextShot,
+      setFirePowerRequiredForNextShot,
       setTargetPosition,
       targetPosition,
       barrelAngle,
@@ -23,14 +23,15 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
       rotationSpeed,
       setTargetAngle,
       targetAngle,
+      fireRate,
     } = tower;
 
     const { x, y } = position;
 
     setIsFiring(false);
     let enemiesInReach: Enemy[] = [];
-    if (tower.ticksUntilNextShot > 0) {
-      decrementTicksUntilNextshot();
+    if (tower.firePowerRequiredForNextShot > 0) {
+      setFirePowerRequiredForNextShot(firePowerRequiredForNextShot - fireRate);
     }
     enemies.forEach(enemy => {
       if (areColliding(tower, enemy)) {
@@ -74,12 +75,12 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
     if (sortedTargetableEnemies.length) {
       const target = sortedTargetableEnemies[0];
       if (
-        tower.ticksUntilNextShot === 0 &&
+        tower.firePowerRequiredForNextShot <= 0 &&
         typeof targetBarrelDifference === "number" &&
         targetBarrelDifference < 1 &&
         targetPosition
       ) {
-        setTicksUntilNextShot(tower.shootsEveryNthTick);
+        setFirePowerRequiredForNextShot(100);
         setIsFiring(true);
         const { damagePerShot } = tower;
         target.isUnderFire = true;
@@ -102,14 +103,11 @@ export const constructTower = (blueprint: TowerBlueprint) => {
   const { position } = mouse;
   const { addTower, level } = game;
   level.setValueOnMap(position, 5);
-  const ticksUntilNextShot = blueprint.shootsEveryNthTick;
   const tower = {
     ...blueprint,
     id: uuid(),
     position: { x: position.x, y: position.y },
     isFiring: false,
-    originalTicksUntilNextShot: ticksUntilNextShot,
-    ticksUntilNextShot,
   };
   const newTower = new Tower(tower);
   const newTowerWithResearchEffects = addResearchEffects(newTower);

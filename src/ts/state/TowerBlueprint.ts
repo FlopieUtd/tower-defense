@@ -2,7 +2,7 @@ import { Movement } from "./EnemyBlueprint";
 
 export class TowerBlueprint {
   public radius: number;
-  public shootsEveryNthTick: number;
+  public fireRate: number;
   public damagePerShot: number;
   public type: string;
   public label: string;
@@ -17,7 +17,7 @@ export class TowerBlueprint {
   constructor(blueprint: TowerBlueprint) {
     const {
       radius,
-      shootsEveryNthTick,
+      fireRate,
       damagePerShot,
       type,
       price,
@@ -27,7 +27,7 @@ export class TowerBlueprint {
     } = blueprint;
 
     this.radius = radius;
-    this.shootsEveryNthTick = shootsEveryNthTick;
+    this.fireRate = fireRate;
     this.damagePerShot = damagePerShot;
     this.type = type;
     this.price = price;

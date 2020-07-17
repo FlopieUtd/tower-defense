@@ -15,7 +15,7 @@ interface ResearchObject {
 }
 
 export class User {
-  @observable public credits = 200;
+  @observable public credits = 0;
   public progress: LevelStatus[] = [];
   @observable public research: RootResearchObject;
 

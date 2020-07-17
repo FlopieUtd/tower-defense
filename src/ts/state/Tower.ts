@@ -6,7 +6,7 @@ export class Tower extends TowerBlueprint {
   public id: string = uuid();
   public position: PositionType | null;
   public isFiring = false;
-  public ticksUntilNextShot = 0;
+  public firePowerRequiredForNextShot = 0;
   public targetPosition: PositionType | null;
   public barrelAngle = 0;
   public targetAngle: number | null = null;
@@ -21,11 +21,9 @@ export class Tower extends TowerBlueprint {
     this.rotationSpeed = rotationSpeed;
     this.barrelWidth = barrelWidth;
     this.barrelLength = barrelLength;
-
     this.setPosition = this.setPosition.bind(this);
     this.setIsFiring = this.setIsFiring.bind(this);
-    this.setTicksUntilNextShot = this.setTicksUntilNextShot.bind(this);
-    this.decrementTicksUntilNextshot = this.decrementTicksUntilNextshot.bind(this);
+    this.setFirePowerRequiredForNextShot = this.setFirePowerRequiredForNextShot.bind(this);
     this.setTargetPosition = this.setTargetPosition.bind(this);
     this.setBarrelAngle = this.setBarrelAngle.bind(this);
     this.setTargetAngle = this.setTargetAngle.bind(this);
@@ -37,11 +35,8 @@ export class Tower extends TowerBlueprint {
   public setIsFiring(value: boolean) {
     this.isFiring = value;
   }
-  public setTicksUntilNextShot(value: number) {
-    this.ticksUntilNextShot = value;
-  }
-  public decrementTicksUntilNextshot() {
-    this.ticksUntilNextShot--;
+  public setFirePowerRequiredForNextShot(value: number) {
+    this.firePowerRequiredForNextShot = value;
   }
   public setTargetPosition(position: PositionType | null) {
     this.targetPosition = position;
