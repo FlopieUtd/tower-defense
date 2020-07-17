@@ -110,6 +110,6 @@ export const constructTower = (blueprint: TowerBlueprint) => {
     isFiring: false,
   };
   const newTower = new Tower(tower);
-  const newTowerWithResearchEffects = addResearchEffects(newTower);
-  addTower(new Tower(newTowerWithResearchEffects));
+  addResearchEffects(newTower);
+  addTower(newTower);
 };

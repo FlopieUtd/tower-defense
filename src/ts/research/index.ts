@@ -2,6 +2,7 @@ import { Tower } from "../state/Tower";
 import { user } from "../state/User";
 
 import { TowerBlueprint } from "../state/TowerBlueprint";
+import { getDamagePerShot, getFireRate, getRange } from "./effects";
 
 export interface ResearchType {
   name: string;
@@ -44,42 +45,7 @@ export const researchTypes = [
 export const researchCosts = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
 
 export const addResearchEffects = (tower: Tower) => {
-  const getDamagePerShot = (tower: Tower) => {
-    const { research } = user;
-    const { damagePerShot } = tower;
-    const { effect } = research[tower.type].damage;
-    const additionalDamage = (damagePerShot * effect) / 100;
-    return damagePerShot + additionalDamage;
-  };
-
-  const getFireRate = (tower: Tower) => {
-    const { research } = user;
-    const { fireRate } = tower;
-    const { effect } = research[tower.type]["fire-rate"];
-    const additionalFireRate = (fireRate * effect) / 100;
-    return fireRate + additionalFireRate;
-  };
-
-  const getRange = (tower: Tower) => {
-    const { research } = user;
-    const { radius } = tower;
-    const { effect } = research[tower.type].range;
-    const additionalRange = (radius * effect) / 100;
-    return radius + additionalRange;
-  };
-
-  return {
-    ...tower,
-    damagePerShot: getDamagePerShot(tower),
-    fireRate: getFireRate(tower),
-    radius: getRange(tower),
-  };
-};
-
-export const getPrice = (tower: TowerBlueprint) => {
-  const { research } = user;
-  const { price } = tower;
-  const { effect } = research[tower.type].price;
-  const priceReduction = price * (effect / 100);
-  return price - priceReduction;
+  tower.damagePerShot = getDamagePerShot(tower);
+  tower.fireRate = getFireRate(tower);
+  tower.radius = getRange(tower);
 };

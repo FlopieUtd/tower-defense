@@ -1,12 +1,11 @@
 import { CTX, TILE_SIZE } from "../consts";
 import { renderConstructionTile } from "../levels/render";
+import { getPrice, getRange } from "../research/effects";
 import { construction } from "../state/Construction";
 import { game } from "../state/Game";
 import { mouse } from "../state/Mouse";
 import { Tower } from "../state/Tower";
 import { getValueAtPosition } from "../utils";
-
-import { getPrice } from "../research";
 
 export const renderTowers = (towers: Tower[]) => {
   towers.forEach(tower => {
@@ -77,6 +76,7 @@ export const renderConstructionUI = () => {
     return;
   }
   const { radius } = blueprint;
+  const radiusWithResearchEffect = getRange(blueprint);
   const reducedPrice = getPrice(blueprint);
   const { position } = mouse;
   if (
@@ -90,7 +90,7 @@ export const renderConstructionUI = () => {
     CTX.arc(
       position.x * TILE_SIZE + 0.5 * TILE_SIZE,
       position.y * TILE_SIZE + 0.5 * TILE_SIZE,
-      radius * TILE_SIZE,
+      radiusWithResearchEffect * TILE_SIZE,
       0,
       2 * Math.PI,
     );
