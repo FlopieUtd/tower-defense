@@ -116,8 +116,10 @@ export const constructTower = (blueprint: TowerBlueprint) => {
 };
 
 export const sellTower = (tower: Tower) => {
-  const { removeTower, level } = game;
+  const { removeTower, level, setMoney, money } = game;
+  const { price } = tower;
   removeTower(tower);
   level.setValueOnMap(tower.position, 6);
+  setMoney(money + price / 2);
   handleEscape();
 };
