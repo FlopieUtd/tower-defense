@@ -7,6 +7,7 @@ import { Tower } from "../state/Tower";
 import { TowerBlueprint } from "../state/TowerBlueprint";
 import { areColliding, clamp } from "../utils";
 
+import { handleEscape } from "../engine/event_handlers";
 import { addResearchEffects } from "../research";
 
 export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
@@ -112,4 +113,11 @@ export const constructTower = (blueprint: TowerBlueprint) => {
   const newTower = new Tower(tower);
   addResearchEffects(newTower);
   addTower(newTower);
+};
+
+export const sellTower = (tower: Tower) => {
+  const { removeTower, level } = game;
+  removeTower(tower);
+  level.setValueOnMap(tower.position, 6);
+  handleEscape();
 };

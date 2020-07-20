@@ -1,13 +1,14 @@
 import { Tower } from "./Tower";
 import { TowerBlueprint } from "./TowerBlueprint";
 
+import { observable } from "mobx";
 import { PositionType } from "../levels/types";
 
 export class Construction {
   public isVisible: boolean;
   public blueprint: TowerBlueprint;
   public position: PositionType | null;
-  public activeTower: Tower | null;
+  @observable public activeTower: Tower | null;
 
   constructor() {
     this.setIsVisible = this.setIsVisible.bind(this);

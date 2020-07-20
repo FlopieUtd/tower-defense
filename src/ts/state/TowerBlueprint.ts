@@ -20,6 +20,7 @@ export class TowerBlueprint {
       fireRate,
       damagePerShot,
       type,
+      label,
       price,
       colors,
       armorPiercing,
@@ -30,6 +31,7 @@ export class TowerBlueprint {
     this.fireRate = fireRate;
     this.damagePerShot = damagePerShot;
     this.type = type;
+    this.label = label;
     this.price = price;
     this.colors = colors;
     this.armorPiercing = armorPiercing;

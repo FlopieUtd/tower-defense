@@ -294,3 +294,22 @@ canvas {
   cursor: pointer;
   background: #444;
 }
+
+.active-tower-dialog {
+  background: #111;
+  position: absolute;
+  width: 100px;
+}
+
+.active-tower-title {
+  padding: 2px 8px;
+}
+
+.active-tower-button {
+  padding: 2px 8px;
+}
+
+.active-tower-button:hover {
+  cursor: pointer;
+  background: #222;
+}

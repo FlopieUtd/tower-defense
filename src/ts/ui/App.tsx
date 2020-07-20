@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { initializeGame } from "../engine";
 import { engine, Screen } from "../state/Engine";
+import { ActiveTowerDialog } from "./components/ActiveTowerDialog/ActiveTowerDialog";
 import { BottomBar } from "./components/BottomBar/BottomBar";
 import { GameOverScreen } from "./components/GameOverScreen/GameOverScreen";
 import { MenuScreen } from "./components/MenuScreen/MenuScreen";
@@ -23,6 +24,7 @@ export const App = observer(() => {
       {activeScreen === Screen.Menu && <MenuScreen />}
       {activeScreen === Screen.Research && <ResearchScreen />}
       {isPaused && <PauseDialog />}
+      <ActiveTowerDialog />
     </>
   );
 });

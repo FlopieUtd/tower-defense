@@ -19,6 +19,7 @@ export class Game {
     this.resetHealth = this.resetHealth.bind(this);
     this.setCurrentWave = this.setCurrentWave.bind(this);
     this.addTower = this.addTower.bind(this);
+    this.removeTower = this.removeTower.bind(this);
     this.resetTowers = this.resetTowers.bind(this);
     this.addEnemy = this.addEnemy.bind(this);
     this.resetEnemies = this.resetEnemies.bind(this);
@@ -46,6 +47,9 @@ export class Game {
   }
   public addTower(tower: Tower) {
     this.towers = [...this.towers, tower];
+  }
+  public removeTower(tower: Tower) {
+    this.towers = this.towers.filter(t => t !== tower);
   }
   public resetTowers() {
     this.towers = [];
