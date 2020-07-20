@@ -89,6 +89,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
     isPaused,
     setIsPaused,
     setIsGameStarted,
+    isGameStarted,
     activeScreen,
     nextWaveInNSeconds,
   } = engine;
@@ -110,8 +111,11 @@ const handleKeyDown = (e: KeyboardEvent) => {
   if (e.code === "Space") {
     if (activeScreen === Screen.Game) {
       setIsGameStarted(true);
-      if (nextWaveInNSeconds !== 0) {
+      if (nextWaveInNSeconds !== 0 && isGameStarted) {
         callNextWaveForRewardInSeconds();
+      }
+      if (!isGameStarted) {
+        setIsGameStarted(true);
       }
     }
   }

@@ -11,7 +11,7 @@ import { enemyBlueprints } from "./blueprints";
 
 import { PositionType } from "../levels/types";
 
-const ADDITIONAL_HEALTH_PER_WAVE_IN_PERCENTS = 2.5;
+const ADDITIONAL_HEALTH_PER_WAVE_IN_PERCENTS = 5;
 
 const removeEnemy = (enemy: Enemy) => {
   const { enemies, setEnemies } = game;

@@ -154,6 +154,8 @@ export const startNextWave = () => {
 };
 
 export const handleGameOver = () => {
+  const { setIsGameStarted } = engine;
+  setIsGameStarted(false);
   handleEscape();
   const levelStatus = {
     levelNumber: game.level.levelNumber,

@@ -27,7 +27,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     type: "spawner",
     color: "#13cbff",
     radius: 0.06,
-    originalHealth: 500,
+    originalHealth: 300,
     reward: 5,
     speed: 1.8,
     intervalInTicks: 50,
