@@ -322,19 +322,32 @@ canvas {
 
 .wave-preview-dropdown {
   display: none;
-  max-height: 200px;
+  max-height: 160px;
   overflow: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.wave-preview-dropdown::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.wave-preview-dropdown {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .wave-preview {
   border-bottom: 1px solid #333;
+  padding: 4px 0;
 }
 
 .wave-line {
-  padding: 2px 8px;
-  width: 100px;
+  padding: 0px 8px;
+  width: 120px;
 }
 
-.wave-preview:hover .wave-preview-dropdown {
+.wave-preview:hover + .wave-preview-dropdown,
+.wave-preview-dropdown:hover {
   display: block;
 }
