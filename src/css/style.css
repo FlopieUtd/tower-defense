@@ -313,3 +313,28 @@ canvas {
   cursor: pointer;
   background: #222;
 }
+
+.wave-preview-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.wave-preview-dropdown {
+  display: none;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.wave-preview {
+  border-bottom: 1px solid #333;
+}
+
+.wave-line {
+  padding: 2px 8px;
+  width: 100px;
+}
+
+.wave-preview:hover .wave-preview-dropdown {
+  display: block;
+}
