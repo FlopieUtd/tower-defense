@@ -11,7 +11,7 @@ export const PauseDialog = () => {
   const handleMenu = () => {
     handleGameOver();
     const { setActiveScreen } = engine;
-    setActiveScreen(Screen.GameOver);
+    setActiveScreen(Screen.Menu);
   };
 
   return (

@@ -1,6 +1,6 @@
 import { uuid } from "uuidv4";
 import { TILE_SIZE } from "../consts";
-import { checkForGameWin, getDistanceBetweenPositions, startNextWave } from "../engine";
+import { checkGameState, getDistanceBetweenPositions, startNextWave } from "../engine";
 import { Enemy } from "../state/Enemy";
 import { EnemyBlueprint } from "../state/EnemyBlueprint";
 import { engine, Screen } from "../state/Engine";
@@ -23,16 +23,16 @@ export const enemyReachedHq = (enemyPosition: PositionType, level: Level) =>
 
 export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
-    const { position, route, setRoute, health, reward, speed, drops } = enemy;
-    const { increaseMoneyBy, decreaseHealth, level } = game;
+    const { position, route, setRoute, health, reward, speed, drops, damage } = enemy;
+    const { setMoney, money, setHealth, health: hqHealth, level } = game;
     if (health <= 0) {
-      increaseMoneyBy(reward);
+      setMoney(money + reward);
     }
 
     if (enemyReachedHq(position, level)) {
-      decreaseHealth();
+      setHealth(hqHealth - damage);
       removeEnemy(enemy);
-      checkForGameWin();
+      checkGameState();
       return null;
     }
 
@@ -42,7 +42,7 @@ export const updateEnemies = (enemies: Enemy[]) => {
         spawnEnemy(blueprint, [...route], position);
       });
       removeEnemy(enemy);
-      checkForGameWin();
+      checkGameState();
       return null;
     }
 
@@ -57,9 +57,9 @@ export const updateEnemies = (enemies: Enemy[]) => {
     } else {
       // Enemy reaches HQ
       if (!route[1]) {
-        decreaseHealth();
+        setHealth(hqHealth - damage);
         removeEnemy(enemy);
-        checkForGameWin();
+        checkGameState();
         return null;
       }
 
@@ -132,7 +132,7 @@ export const spawnEnemy = (
   route: PositionType[],
   position: PositionType,
 ) => {
-  const { addEnemy, currentWaveGroup } = game;
+  const { setEnemies, enemies, currentWaveGroup } = game;
   const additionalHealth =
     (currentWaveGroup * ADDITIONAL_HEALTH_PER_WAVE_IN_PERCENTS * enemyBlueprint.originalHealth) /
     100;
@@ -148,5 +148,5 @@ export const spawnEnemy = (
       y: Math.floor(Math.random() * (TILE_SIZE / 2) - TILE_SIZE / 4),
     },
   };
-  addEnemy(new Enemy(newEnemy));
+  setEnemies([...enemies, new Enemy(newEnemy)]);
 };

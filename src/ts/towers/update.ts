@@ -102,7 +102,7 @@ export const updateTowers = (towers: Tower[], enemies: Enemy[]) => {
 
 export const constructTower = (blueprint: TowerBlueprint) => {
   const { position } = mouse;
-  const { addTower, level } = game;
+  const { setTowers, towers, level } = game;
   level.setValueOnMap(position, 5);
   const tower = {
     ...blueprint,
@@ -112,13 +112,13 @@ export const constructTower = (blueprint: TowerBlueprint) => {
   };
   const newTower = new Tower(tower);
   addResearchEffects(newTower);
-  addTower(newTower);
+  setTowers([...towers, newTower]);
 };
 
 export const sellTower = (tower: Tower) => {
-  const { removeTower, level, setMoney, money } = game;
+  const { setTowers, towers, level, setMoney, money } = game;
   const { price } = tower;
-  removeTower(tower);
+  setTowers(towers.filter(t => t !== tower));
   level.setValueOnMap(tower.position, 6);
   setMoney(money + price / 2);
   handleEscape();

@@ -11,6 +11,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     intervalInTicks: 20,
     movement: "ground",
     drops: [],
+    damage: 1,
   },
   {
     type: "heavy",
@@ -22,6 +23,7 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     intervalInTicks: 50,
     movement: "ground",
     drops: [],
+    damage: 1,
   },
   {
     type: "spawner",
@@ -33,5 +35,18 @@ export const enemyBlueprints: EnemyBlueprint[] = [
     intervalInTicks: 50,
     movement: "ground",
     drops: ["runner", "runner", "runner"],
+    damage: 3,
+  },
+  {
+    type: "flyer",
+    color: "#ff41ff",
+    radius: 0.045,
+    originalHealth: 150,
+    reward: 2,
+    speed: 2.4,
+    intervalInTicks: 20,
+    movement: "air",
+    drops: [],
+    damage: 1,
   },
 ];

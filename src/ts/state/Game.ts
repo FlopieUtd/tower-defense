@@ -12,53 +12,25 @@ export class Game {
   public enemies: Enemy[] = [];
 
   constructor() {
-    this.increaseMoneyBy = this.increaseMoneyBy.bind(this);
-    this.decreaseMoneyBy = this.decreaseMoneyBy.bind(this);
     this.setMoney = this.setMoney.bind(this);
-    this.decreaseHealth = this.decreaseHealth.bind(this);
-    this.resetHealth = this.resetHealth.bind(this);
+    this.setHealth = this.setHealth.bind(this);
     this.setCurrentWave = this.setCurrentWave.bind(this);
-    this.addTower = this.addTower.bind(this);
-    this.removeTower = this.removeTower.bind(this);
-    this.resetTowers = this.resetTowers.bind(this);
-    this.addEnemy = this.addEnemy.bind(this);
-    this.resetEnemies = this.resetEnemies.bind(this);
+    this.setTowers = this.setTowers.bind(this);
     this.setEnemies = this.setEnemies.bind(this);
     this.setLevel = this.setLevel.bind(this);
   }
 
-  public increaseMoneyBy(amount: number) {
-    this.money += amount;
-  }
-  public decreaseMoneyBy(amount: number) {
-    this.money -= amount;
-  }
   public setMoney(amount: number) {
     this.money = amount;
   }
-  public decreaseHealth() {
-    this.health -= 1;
-  }
-  public resetHealth() {
-    this.health = 20;
+  public setHealth(health: number) {
+    this.health = health;
   }
   public setCurrentWave(wave: number) {
     this.currentWaveGroup = wave;
   }
-  public addTower(tower: Tower) {
-    this.towers = [...this.towers, tower];
-  }
-  public removeTower(tower: Tower) {
-    this.towers = this.towers.filter(t => t !== tower);
-  }
-  public resetTowers() {
-    this.towers = [];
-  }
-  public addEnemy(enemy: Enemy) {
-    this.enemies = [...this.enemies, enemy];
-  }
-  public resetEnemies() {
-    this.enemies = [];
+  public setTowers(towers: Tower[]) {
+    this.towers = towers;
   }
   public setEnemies(enemies: Enemy[]) {
     this.enemies = enemies;

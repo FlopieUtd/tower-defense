@@ -20,7 +20,7 @@ export const GameOverScreen = observer(() => {
   };
 
   return (
-    <div className="win-screen">
+    <div className="lose-screen">
       <h1>Game over!</h1>
       <div className="waves-won">{currentWaveGroup}/40</div>
       <div className="button-wrapper">

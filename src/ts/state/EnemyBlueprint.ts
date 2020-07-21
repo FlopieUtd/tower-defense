@@ -12,6 +12,7 @@ export class EnemyBlueprint {
   public intervalInTicks: number;
   public movement: Movement;
   public drops: EnemyType[];
+  public damage: number;
 
   constructor(blueprint: EnemyBlueprint) {
     const {
@@ -24,6 +25,7 @@ export class EnemyBlueprint {
       intervalInTicks,
       movement,
       drops,
+      damage,
     } = blueprint;
 
     this.radius = radius;
@@ -36,5 +38,6 @@ export class EnemyBlueprint {
     this.intervalInTicks = intervalInTicks;
     this.movement = movement;
     this.drops = drops;
+    this.damage = damage;
   }
 }

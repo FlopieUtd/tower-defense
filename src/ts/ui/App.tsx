@@ -10,6 +10,8 @@ import { PauseDialog } from "./components/PauseDialog/PauseDialog";
 import { ResearchScreen } from "./components/ResearchScreen/ResearchScreen";
 import { TopBar } from "./components/TopBar/TopBar";
 
+import { GameWonScreen } from "./components/GameWonScreen/GameWonScreen";
+
 export const App = observer(() => {
   const { activeScreen, isPaused } = engine;
   useEffect(() => {
@@ -21,6 +23,7 @@ export const App = observer(() => {
       {activeScreen === Screen.Game && <TopBar />}
       {activeScreen === Screen.Game && <BottomBar />}
       {activeScreen === Screen.GameOver && <GameOverScreen />}
+      {activeScreen === Screen.GameWon && <GameWonScreen />}
       {activeScreen === Screen.Menu && <MenuScreen />}
       {activeScreen === Screen.Research && <ResearchScreen />}
       {isPaused && <PauseDialog />}

@@ -17,16 +17,6 @@ import { towerBlueprints } from "../towers/blueprints";
 
 import { researchTypes } from "../research";
 
-const checkGameState = (health: number) => {
-  const { activeScreen } = engine;
-  if (health <= 0 && activeScreen !== Screen.GameOver) {
-    const { setActiveScreen } = engine;
-    setActiveScreen(Screen.GameOver);
-    handleEscape();
-    handleGameOver();
-  }
-};
-
 const update = () => {
   const { incrementTick } = engine;
   const { towers, enemies } = game;
@@ -56,7 +46,6 @@ let delta = 0;
 
 export const frame = () => {
   const { isPaused, isFastForward, activeScreen } = engine;
-  const { health } = game;
   const now = timestamp();
   const step = isFastForward ? 1 / 240 : 1 / 60;
   delta = delta + Math.min(1, (now - last) / 1000);
@@ -69,7 +58,6 @@ export const frame = () => {
   last = now;
 
   render();
-  checkGameState(health);
   if (activeScreen === Screen.Game) {
     requestAnimationFrame(frame);
   }
@@ -84,16 +72,16 @@ const initializeCanvas = canvas => {
 };
 
 export const resetGameState = () => {
-  const { resetHealth, setCurrentWave, resetTowers, resetEnemies } = game;
+  const { setHealth, setCurrentWave, setTowers, setEnemies } = game;
   const { resetTicks, setIsFastForward, setIsGameStarted } = engine;
 
-  resetTowers();
-  resetEnemies();
+  setTowers([]);
+  setEnemies([]);
 
   setIsGameStarted(false);
   setIsFastForward(false);
   setCurrentWave(0);
-  resetHealth();
+  setHealth(20);
   resetTicks();
 };
 
@@ -154,7 +142,7 @@ export const startNextWave = () => {
 };
 
 export const handleGameOver = () => {
-  const { setIsGameStarted } = engine;
+  const { setIsGameStarted, setActiveScreen } = engine;
   setIsGameStarted(false);
   handleEscape();
   const levelStatus = {
@@ -165,21 +153,53 @@ export const handleGameOver = () => {
   user.awardCredits(levelStatus);
   user.setLevelStatus(levelStatus);
   user.syncUserWithLocalStorage();
+  setActiveScreen(Screen.GameOver);
+};
+
+export const handleGameWon = () => {
+  const { setIsGameStarted, setActiveScreen } = engine;
+  setIsGameStarted(false);
+  handleEscape();
+  const levelStatus = {
+    levelNumber: game.level.levelNumber,
+    isUnlocked: true,
+    wavesWon: game.level.waves.length,
+  };
+  user.awardCredits(levelStatus);
+  user.setLevelStatus(levelStatus);
+  user.syncUserWithLocalStorage();
+  setActiveScreen(Screen.GameWon);
 };
 
 export const getDistanceBetweenPositions = (positionA: PositionType, positionB: PositionType) =>
   Math.abs(positionA.x !== positionB.x ? positionB.x - positionA.x : positionB.y - positionA.y);
 
+export const checkGameState = () => {
+  checkForGameWin();
+  checkForGameOver();
+};
+
 export const checkForGameWin = () => {
   const { currentWaveGroup, level, enemies } = game;
   if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
+    handleGameWon();
+  }
+};
+
+export const checkForGameOver = () => {
+  const { activeScreen } = engine;
+  const { health } = game;
+  if (health <= 0 && activeScreen !== Screen.GameOver) {
+    const { setActiveScreen } = engine;
+    setActiveScreen(Screen.GameOver);
+    handleEscape();
     handleGameOver();
   }
 };
 
 export const callNextWaveForRewardInSeconds = () => {
   const { startNextWave, nextWaveInNSeconds } = engine;
-  const { increaseMoneyBy } = game;
-  increaseMoneyBy(nextWaveInNSeconds);
+  const { setMoney, money } = game;
+  setMoney(money + nextWaveInNSeconds);
   startNextWave();
 };

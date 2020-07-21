@@ -60,7 +60,7 @@ export const towerBlueprints: TowerBlueprint[] = [
   {
     type: "anti-air",
     label: "Anti-Air",
-    damagePerShot: 50,
+    damagePerShot: 80,
     fireRate: 2,
     radius: 2,
     price: 60,

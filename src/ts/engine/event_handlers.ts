@@ -9,6 +9,8 @@ import { towerBlueprints } from "../towers/blueprints";
 import { constructTower } from "../towers/update";
 import { arePositionsEqual, getValueAtPosition } from "../utils";
 
+import { getPrice } from "../research/effects";
+
 export const handleConstructionPreview = (blueprint: TowerBlueprint) => {
   const { setBlueprint, setIsVisible, setActiveTower } = construction;
   const { money } = game;
@@ -55,7 +57,7 @@ const handleMouseClick = () => {
   const { position } = mouse;
   const { activeScreen } = engine;
   const { blueprint, isVisible, setIsVisible, setActiveTower } = construction;
-  const { level, towers, decreaseMoneyBy } = game;
+  const { level, towers, setMoney, money } = game;
 
   if (!position || activeScreen === Screen.Menu) {
     return;
@@ -75,8 +77,7 @@ const handleMouseClick = () => {
   }
 
   // Construction click
-  const { price } = blueprint;
-  decreaseMoneyBy(price);
+  setMoney(money - getPrice(blueprint));
   constructTower(blueprint);
 
   construction.setPosition(null);
