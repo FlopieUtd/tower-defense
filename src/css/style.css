@@ -298,15 +298,17 @@ canvas {
 .active-tower-dialog {
   background: #111;
   position: absolute;
-  width: 100px;
+  width: 120px;
 }
 
 .active-tower-title {
-  padding: 2px 8px;
+  padding: 4px 8px;
+  font-weight: bold;
+  color: #111;
 }
 
 .active-tower-button {
-  padding: 2px 8px;
+  padding: 4px 8px;
 }
 
 .active-tower-button:hover {

@@ -13,7 +13,7 @@ export const towerBlueprints: TowerBlueprint[] = [
     targets: ["air", "ground"],
     rotationSpeed: 3,
     barrelWidth: 3,
-    barrelLength: 10,
+    barrelLength: 9,
   },
   {
     type: "flamethrower",
