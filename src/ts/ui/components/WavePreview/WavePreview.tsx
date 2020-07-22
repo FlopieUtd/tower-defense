@@ -6,18 +6,18 @@ import { WaveLine } from "./WaveLine";
 
 export const WavePreview = observer(() => {
   const { waves } = game.level;
-  const { currentWaveGroup } = game;
+  const { defeatedWaveNumber } = game;
 
   return (
     <div className="wave-preview-container">
       <div className="wave-preview">
-        {waves[currentWaveGroup].map((wave, index) => {
+        {waves[defeatedWaveNumber].map((wave, index) => {
           const color = enemyBlueprints.find(enemy => enemy.type === wave.type).color;
           return <WaveLine {...wave} color={color} key={index} />;
         })}
       </div>
       <div className="wave-preview-dropdown">
-        {waves.slice(currentWaveGroup + 1).map((waveGroup, i) => (
+        {waves.slice(defeatedWaveNumber + 1).map((waveGroup, i) => (
           <div className="wave-preview" key={i}>
             {waveGroup.map((wave, j) => {
               const typeColor =

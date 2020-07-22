@@ -1,10 +1,10 @@
-import { LevelType, Map, PositionType, WaveGroup } from "../levels/types";
-import { Wave } from "./Wave";
+import { LevelType, Map, PositionType, Wave } from "../levels/types";
+import { SubWave } from "./Wave";
 
 export class Level {
   public levelNumber = 1;
   public map: Map;
-  public waves: WaveGroup[];
+  public waves: Wave[];
   public startingMoney: number;
   constructor(level: LevelType) {
     const { map, waves, startingMoney, levelNumber } = level;
@@ -13,7 +13,7 @@ export class Level {
     this.map = JSON.parse(JSON.stringify(map));
     this.waves = waves.map(wave => {
       return wave.map(subwave => {
-        return new Wave(subwave);
+        return new SubWave(subwave);
       });
     });
     this.startingMoney = startingMoney;

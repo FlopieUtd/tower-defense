@@ -1,7 +1,5 @@
 import { Tower } from "../state/Tower";
-import { user } from "../state/User";
 
-import { TowerBlueprint } from "../state/TowerBlueprint";
 import { getDamagePerShot, getFireRate, getRange } from "./effects";
 
 export interface ResearchType {

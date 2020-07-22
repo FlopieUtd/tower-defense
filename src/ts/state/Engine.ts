@@ -12,7 +12,6 @@ export class Engine {
   @observable public isPaused = false;
   @observable public activeScreen: Screen = Screen.Menu;
   @observable public isFastForward = false;
-  @observable public isGameStarted = false;
   @observable public nextWaveInNSeconds = 0;
   public tick = 0;
   public waveTick = 0;
@@ -27,7 +26,6 @@ export class Engine {
     this.startNextWave = this.startNextWave.bind(this);
     this.resetTicks = this.resetTicks.bind(this);
     this.setActiveLevel = this.setActiveLevel.bind(this);
-    this.setIsGameStarted = this.setIsGameStarted.bind(this);
   }
 
   public setIsPaused(isPaused: boolean) {
@@ -57,9 +55,6 @@ export class Engine {
   }
   public setActiveLevel(activeLevel: number) {
     this.activeLevel = activeLevel;
-  }
-  public setIsGameStarted(isGameStarted: boolean) {
-    this.isGameStarted = isGameStarted;
   }
 }
 

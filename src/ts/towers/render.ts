@@ -75,7 +75,6 @@ export const renderConstructionUI = () => {
   if (!blueprint) {
     return;
   }
-  const { radius } = blueprint;
   const radiusWithResearchEffect = getRange(blueprint);
   const reducedPrice = getPrice(blueprint);
   const { position } = mouse;

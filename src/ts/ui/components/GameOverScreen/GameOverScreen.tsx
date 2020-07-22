@@ -6,7 +6,7 @@ import { engine, Screen } from "../../../state/Engine";
 import { game } from "../../../state/Game";
 
 export const GameOverScreen = observer(() => {
-  const { currentWaveGroup } = game;
+  const { defeatedWaveNumber } = game;
 
   const handleTryAgain = () => {
     const { level } = game;
@@ -22,7 +22,7 @@ export const GameOverScreen = observer(() => {
   return (
     <div className="lose-screen">
       <h1>Game over!</h1>
-      <div className="waves-won">{currentWaveGroup}/40</div>
+      <div className="waves-won">{defeatedWaveNumber}/40</div>
       <div className="button-wrapper">
         <button onClick={handleTryAgain}>Try again</button>
         <button onClick={handleContinue}>Menu</button>

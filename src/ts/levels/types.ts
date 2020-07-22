@@ -1,4 +1,4 @@
-import { Wave } from "../state/Wave";
+import { SubWave } from "../state/Wave";
 
 export interface PositionType {
   x: number;
@@ -6,17 +6,17 @@ export interface PositionType {
 }
 export type Map = number[][];
 
+export type Wave = SubWave[];
+
 export interface LevelType {
   levelNumber: number;
   map: Map;
-  waves: WaveGroup[];
+  waves: Wave[];
   startingMoney: number;
 }
 
-export interface WaveType {
+export interface SubWaveBlueprint {
   amount: number;
   type: string;
   spawnLocation: number;
 }
-
-export type WaveGroup = Wave[];

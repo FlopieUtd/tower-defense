@@ -13,10 +13,11 @@ export class Enemy extends EnemyBlueprint {
     x: number;
     y: number;
   };
+  public waveNumber: number;
 
   constructor(blueprint: Omit<Enemy, "setRoute">) {
     super(blueprint);
-    const { position, route, isUnderFire, health, deviation } = blueprint;
+    const { position, route, isUnderFire, health, deviation, waveNumber } = blueprint;
 
     this.id = uuid();
     this.position = position;
@@ -24,7 +25,7 @@ export class Enemy extends EnemyBlueprint {
     this.isUnderFire = isUnderFire;
     this.health = health;
     this.deviation = deviation;
-
+    this.waveNumber = waveNumber;
     this.setRoute = this.setRoute.bind(this);
   }
 

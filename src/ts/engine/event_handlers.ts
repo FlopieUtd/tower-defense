@@ -1,4 +1,4 @@
-import { callNextWaveForRewardInSeconds } from ".";
+import { callNextWaveForRewardInSeconds, startGame } from ".";
 import { TILE_SIZE } from "../consts";
 import { construction } from "../state/Construction";
 import { engine, Screen } from "../state/Engine";
@@ -89,11 +89,12 @@ const handleKeyDown = (e: KeyboardEvent) => {
     setIsFastForward,
     isPaused,
     setIsPaused,
-    setIsGameStarted,
-    isGameStarted,
     activeScreen,
     nextWaveInNSeconds,
   } = engine;
+
+  const { currentWaveNumber } = game;
+
   if (e.key === "Escape") {
     handleEscape();
   }
@@ -111,12 +112,11 @@ const handleKeyDown = (e: KeyboardEvent) => {
   }
   if (e.code === "Space") {
     if (activeScreen === Screen.Game) {
-      setIsGameStarted(true);
-      if (nextWaveInNSeconds !== 0 && isGameStarted) {
+      if (nextWaveInNSeconds !== 0 && !!currentWaveNumber) {
         callNextWaveForRewardInSeconds();
       }
-      if (!isGameStarted) {
-        setIsGameStarted(true);
+      if (currentWaveNumber === 0) {
+        startGame();
       }
     }
   }

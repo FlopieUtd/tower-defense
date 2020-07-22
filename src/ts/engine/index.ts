@@ -20,6 +20,7 @@ import { researchTypes } from "../research";
 const update = () => {
   const { incrementTick } = engine;
   const { towers, enemies } = game;
+
   incrementTick();
   spawnEnemies();
   updateEnemies(enemies);
@@ -29,6 +30,7 @@ const update = () => {
 const render = () => {
   const { activeTower } = construction;
   const { towers, level, enemies } = game;
+
   renderMap(level.map);
   renderBuildings(level.map);
   renderTowers(towers);
@@ -46,6 +48,7 @@ let delta = 0;
 
 export const frame = () => {
   const { isPaused, isFastForward, activeScreen } = engine;
+
   const now = timestamp();
   const step = isFastForward ? 1 / 240 : 1 / 60;
   delta = delta + Math.min(1, (now - last) / 1000);
@@ -65,6 +68,7 @@ export const frame = () => {
 
 const initializeCanvas = canvas => {
   const { activeLevel } = engine;
+
   canvas.width = levels[activeLevel].map[0].length * TILE_SIZE;
   canvas.style.width = `${levels[activeLevel].map[0].length * TILE_SIZE}px`;
   canvas.height = levels[activeLevel].map.length * TILE_SIZE;
@@ -72,21 +76,21 @@ const initializeCanvas = canvas => {
 };
 
 export const resetGameState = () => {
-  const { setHealth, setCurrentWave, setTowers, setEnemies } = game;
-  const { resetTicks, setIsFastForward, setIsGameStarted } = engine;
+  const { setHealth, setCurrentWaveNumber, setTowers, setEnemies } = game;
+  const { resetTicks, setIsFastForward } = engine;
 
   setTowers([]);
   setEnemies([]);
 
-  setIsGameStarted(false);
   setIsFastForward(false);
-  setCurrentWave(0);
+  setCurrentWaveNumber(0);
   setHealth(20);
   resetTicks();
 };
 
 export const instantiateResearch = () => {
   const { setResearch } = user;
+
   const researchObject = researchTypes.reduce(
     (a, b) => ((a[b.name] = { level: 0, effect: 0 }), a),
     {},
@@ -100,13 +104,13 @@ export const instantiateResearch = () => {
 
 export const startLevel = (level: Level) => {
   const { startingMoney } = level;
-  const { setCurrentWave, setMoney, setLevel } = game;
+  const { setCurrentWaveNumber, setMoney, setLevel } = game;
   const { setActiveScreen } = engine;
 
   resetGameState();
 
   setLevel(level);
-  setCurrentWave(0);
+  setCurrentWaveNumber(0);
   setMoney(startingMoney);
 
   setActiveScreen(Screen.Game);
@@ -127,14 +131,15 @@ export const initializeGame = () => {
 };
 
 export const startNextWave = () => {
-  const { currentWaveGroup, setCurrentWave, level } = game;
-  if (currentWaveGroup < level.waves.length - 1) {
-    setCurrentWave(currentWaveGroup + 1);
+  const { currentWaveNumber, setCurrentWaveNumber, level } = game;
+
+  if (currentWaveNumber < level.waves.length) {
+    setCurrentWaveNumber(currentWaveNumber + 1);
   }
   const levelStatus = {
     levelNumber: game.level.levelNumber,
     isUnlocked: true,
-    wavesWon: game.currentWaveGroup,
+    wavesWon: game.defeatedWaveNumber,
   };
   user.awardCredits(levelStatus);
   user.setLevelStatus(levelStatus);
@@ -142,13 +147,15 @@ export const startNextWave = () => {
 };
 
 export const handleGameOver = () => {
-  const { setIsGameStarted, setActiveScreen } = engine;
-  setIsGameStarted(false);
+  const { setActiveScreen } = engine;
+  const { setCurrentWaveNumber } = game;
+
+  setCurrentWaveNumber(0);
   handleEscape();
   const levelStatus = {
     levelNumber: game.level.levelNumber,
     isUnlocked: true,
-    wavesWon: game.currentWaveGroup,
+    wavesWon: game.defeatedWaveNumber,
   };
   user.awardCredits(levelStatus);
   user.setLevelStatus(levelStatus);
@@ -157,13 +164,15 @@ export const handleGameOver = () => {
 };
 
 export const handleGameWon = () => {
-  const { setIsGameStarted, setActiveScreen } = engine;
-  setIsGameStarted(false);
+  const { setActiveScreen } = engine;
+  const { setCurrentWaveNumber } = game;
+
+  setCurrentWaveNumber(0);
   handleEscape();
   const levelStatus = {
     levelNumber: game.level.levelNumber,
     isUnlocked: true,
-    wavesWon: game.level.waves.length,
+    wavesWon: game.defeatedWaveNumber,
   };
   user.awardCredits(levelStatus);
   user.setLevelStatus(levelStatus);
@@ -174,14 +183,10 @@ export const handleGameWon = () => {
 export const getDistanceBetweenPositions = (positionA: PositionType, positionB: PositionType) =>
   Math.abs(positionA.x !== positionB.x ? positionB.x - positionA.x : positionB.y - positionA.y);
 
-export const checkGameState = () => {
-  checkForGameWin();
-  checkForGameOver();
-};
-
 export const checkForGameWin = () => {
-  const { currentWaveGroup, level, enemies } = game;
-  if (currentWaveGroup === level.waves.length - 1 && enemies.length === 0 && game.health > 0) {
+  const { currentWaveNumber, level, enemies } = game;
+
+  if (currentWaveNumber === level.waves.length && enemies.length === 0 && game.health > 0) {
     handleGameWon();
   }
 };
@@ -189,6 +194,7 @@ export const checkForGameWin = () => {
 export const checkForGameOver = () => {
   const { activeScreen } = engine;
   const { health } = game;
+
   if (health <= 0 && activeScreen !== Screen.GameOver) {
     const { setActiveScreen } = engine;
     setActiveScreen(Screen.GameOver);
@@ -200,6 +206,13 @@ export const checkForGameOver = () => {
 export const callNextWaveForRewardInSeconds = () => {
   const { startNextWave, nextWaveInNSeconds } = engine;
   const { setMoney, money } = game;
+
   setMoney(money + nextWaveInNSeconds);
   startNextWave();
+};
+
+export const startGame = () => {
+  const { setCurrentWaveNumber, setDefeatedWaveNumber } = game;
+  setDefeatedWaveNumber(0);
+  setCurrentWaveNumber(1);
 };

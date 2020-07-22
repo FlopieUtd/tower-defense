@@ -1,24 +1,14 @@
 import { observer } from "mobx-react";
 import React from "react";
+import { startGame } from "../../../engine";
 import { engine } from "../../../state/Engine";
 import { game } from "../../../state/Game";
 
 export const TopBar = observer(() => {
-  const {
-    isFastForward,
-    setIsFastForward,
-    isGameStarted,
-    nextWaveInNSeconds,
-    startNextWave,
-    setIsGameStarted,
-  } = engine;
-  const { money, currentWaveGroup, level } = game;
+  const { isFastForward, setIsFastForward, nextWaveInNSeconds, startNextWave } = engine;
+  const { money, currentWaveNumber, level } = game;
   const handleFastForwardToggle = () => {
     setIsFastForward(!isFastForward);
-  };
-
-  const handleGameStart = () => {
-    setIsGameStarted(true);
   };
 
   const handleEscape = () => {
@@ -37,7 +27,7 @@ export const TopBar = observer(() => {
           esc
         </div>
         <div className="game-status">
-          <div>{level && `Wave: ${currentWaveGroup + 1} / ${level.waves.length}`}</div>
+          <div>{level && `Wave: ${currentWaveNumber} / ${level.waves.length}`}</div>
           <div>
             Money: <span className="coin-num">{money}</span>
           </div>
@@ -47,7 +37,7 @@ export const TopBar = observer(() => {
         <div className="topbar-button" onClick={handleFastForwardToggle}>
           {isFastForward ? ">" : ">>"}
         </div>
-        {isGameStarted ? (
+        {currentWaveNumber ? (
           <div
             className="topbar-button"
             onClick={nextWaveInNSeconds === 0 ? null : handleStartNextWave}
@@ -55,7 +45,7 @@ export const TopBar = observer(() => {
             {nextWaveInNSeconds === 0 ? "..." : nextWaveInNSeconds}
           </div>
         ) : (
-          <div className="topbar-button" onClick={handleGameStart}>
+          <div className="topbar-button" onClick={startGame}>
             go
           </div>
         )}

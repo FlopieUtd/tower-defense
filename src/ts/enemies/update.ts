@@ -1,6 +1,11 @@
 import { uuid } from "uuidv4";
 import { TILE_SIZE } from "../consts";
-import { checkGameState, getDistanceBetweenPositions, startNextWave } from "../engine";
+import {
+  checkForGameOver,
+  checkForGameWin,
+  getDistanceBetweenPositions,
+  startNextWave,
+} from "../engine";
 import { Enemy } from "../state/Enemy";
 import { EnemyBlueprint } from "../state/EnemyBlueprint";
 import { engine, Screen } from "../state/Engine";
@@ -15,7 +20,22 @@ const ADDITIONAL_HEALTH_PER_WAVE_IN_PERCENTS = 5;
 
 const removeEnemy = (enemy: Enemy) => {
   const { enemies, setEnemies } = game;
+
   setEnemies(enemies.filter(e => e !== enemy));
+};
+
+const checkIfWaveIsDefeated = (enemy: Enemy) => {
+  const { enemies, setDefeatedWaveNumber } = game;
+  if (enemies.filter(e => e.waveNumber === enemy.waveNumber).length === 0) {
+    setDefeatedWaveNumber(enemy.waveNumber);
+  }
+};
+
+const removeEnemyWithSideEffects = (enemy: Enemy) => {
+  removeEnemy(enemy);
+  checkIfWaveIsDefeated(enemy);
+  checkForGameWin();
+  checkForGameOver();
 };
 
 export const enemyReachedHq = (enemyPosition: PositionType, level: Level) =>
@@ -25,24 +45,21 @@ export const updateEnemies = (enemies: Enemy[]) => {
   enemies.forEach(enemy => {
     const { position, route, setRoute, health, reward, speed, drops, damage } = enemy;
     const { setMoney, money, setHealth, health: hqHealth, level } = game;
+    // Enemy is defeated
     if (health <= 0) {
       setMoney(money + reward);
-    }
-
-    if (enemyReachedHq(position, level)) {
-      setHealth(hqHealth - damage);
-      removeEnemy(enemy);
-      checkGameState();
-      return null;
-    }
-
-    if (health <= 0) {
       drops.forEach(drop => {
         const blueprint = enemyBlueprints.find(enemy => enemy.type === drop);
         spawnEnemy(blueprint, [...route], position);
       });
-      removeEnemy(enemy);
-      checkGameState();
+      removeEnemyWithSideEffects(enemy);
+      return null;
+    }
+
+    // Enemy reached HQ
+    if (enemyReachedHq(position, level)) {
+      setHealth(Math.max(hqHealth - damage, 0));
+      removeEnemyWithSideEffects(enemy);
       return null;
     }
 
@@ -58,8 +75,7 @@ export const updateEnemies = (enemies: Enemy[]) => {
       // Enemy reaches HQ
       if (!route[1]) {
         setHealth(hqHealth - damage);
-        removeEnemy(enemy);
-        checkGameState();
+        removeEnemyWithSideEffects(enemy);
         return null;
       }
 
@@ -89,39 +105,39 @@ export const move = (current: PositionType, next: PositionType, moveDistance: nu
 };
 
 export const spawnEnemies = () => {
-  const { isGameStarted, tick, waveTick, incrementWaveTick, resetTicks, activeScreen } = engine;
-  const { currentWaveGroup, level } = game;
-  if (level.waves[currentWaveGroup]) {
-    const waveGroup = level.waves[currentWaveGroup];
-    waveGroup.forEach(wave => {
-      const { intervalInTicks } = wave;
-      if (isGameStarted && tick % intervalInTicks === 0) {
-        if (wave.amount) {
-          wave.decreaseAmount();
-          const blueprint = enemyBlueprints.find(enemy => enemy.type === wave.type);
+  const { tick, waveTick, incrementWaveTick, resetTicks, activeScreen } = engine;
+  const { currentWaveNumber, level } = game;
+  if (level.waves[currentWaveNumber - 1]) {
+    const wave = level.waves[currentWaveNumber - 1];
+    wave.forEach(subWave => {
+      const { intervalInTicks } = subWave;
+      if (!!currentWaveNumber && tick % intervalInTicks === 0) {
+        if (subWave.amount) {
+          subWave.decreaseAmount();
+          const blueprint = enemyBlueprints.find(enemy => enemy.type === subWave.type);
 
           const route = breadthFirstSearch({
             end: getUniquePosition(level.map, 4),
             map: level.map,
-            start: getUniquePosition(level.map, wave.spawnLocation),
+            start: getUniquePosition(level.map, subWave.spawnLocation),
           });
 
-          spawnEnemy(blueprint, route, getUniquePosition(level.map, wave.spawnLocation));
+          spawnEnemy(blueprint, route, getUniquePosition(level.map, subWave.spawnLocation));
         }
       }
     });
-  }
-  if (
-    // All enemies in the current wave are spawned
-    level.waves[currentWaveGroup].every(wave => wave.amount < 1) &&
-    // There is a next wave
-    level.waves[currentWaveGroup + 1]
-  ) {
-    incrementWaveTick();
-    if (waveTick > 1 && waveTick % 1200 === 0) {
-      resetTicks();
-      if (activeScreen === Screen.Game) {
-        startNextWave();
+    if (
+      // All enemies in the current wave are spawned
+      level.waves[currentWaveNumber - 1].every(wave => wave.amount < 1) &&
+      // There is a next wave
+      level.waves[currentWaveNumber]
+    ) {
+      incrementWaveTick();
+      if (waveTick > 1 && waveTick % 1200 === 0) {
+        resetTicks();
+        if (activeScreen === Screen.Game) {
+          startNextWave();
+        }
       }
     }
   }
@@ -132,9 +148,11 @@ export const spawnEnemy = (
   route: PositionType[],
   position: PositionType,
 ) => {
-  const { setEnemies, enemies, currentWaveGroup } = game;
+  const { setEnemies, enemies, currentWaveNumber } = game;
   const additionalHealth =
-    (currentWaveGroup * ADDITIONAL_HEALTH_PER_WAVE_IN_PERCENTS * enemyBlueprint.originalHealth) /
+    ((currentWaveNumber - 1) *
+      ADDITIONAL_HEALTH_PER_WAVE_IN_PERCENTS *
+      enemyBlueprint.originalHealth) /
     100;
   const newEnemy = {
     ...enemyBlueprint,
@@ -147,6 +165,7 @@ export const spawnEnemy = (
       x: Math.floor(Math.random() * (TILE_SIZE / 2) - TILE_SIZE / 4),
       y: Math.floor(Math.random() * (TILE_SIZE / 2) - TILE_SIZE / 4),
     },
+    waveNumber: currentWaveNumber,
   };
   setEnemies([...enemies, new Enemy(newEnemy)]);
 };

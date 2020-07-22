@@ -1,7 +1,7 @@
 import React from "react";
-import { WaveType } from "../../../levels/types";
+import { SubWaveBlueprint } from "../../../levels/types";
 
-export interface Props extends WaveType {
+export interface Props extends SubWaveBlueprint {
   color: string;
 }
 

@@ -1,14 +1,14 @@
 import { enemyBlueprints } from "../enemies/blueprints";
-import { WaveType } from "../levels/types";
+import { SubWaveBlueprint } from "../levels/types";
 
-export class Wave {
+export class SubWave {
   public amount: number;
   public intervalInTicks: number;
   public type: string;
   public spawnLocation: number;
 
-  constructor(waveBlueprint: WaveType) {
-    const { amount, type, spawnLocation } = waveBlueprint;
+  constructor(subWaveBlueprint: SubWaveBlueprint) {
+    const { amount, type, spawnLocation } = subWaveBlueprint;
     this.amount = amount;
     this.type = type;
     this.intervalInTicks = enemyBlueprints.find(
